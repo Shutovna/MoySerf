@@ -1,4 +1,4 @@
-package ru.shutovna.myserf;
+package ru.shutovna.myserf.entity;
 
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.Test;
@@ -39,19 +39,19 @@ public class JpaEntityTests {
 
     @Test
     public void testOrderEntity() {
-        Person person = getPerson();
+        User user = getUser();
 
-        Site site = getSite(person);
+        Site site = getSite(user);
 
         TransactionType transactionType = getTransactionType();
 
-        Wallet wallet = getWallet(person);
+        Wallet wallet = getWallet(user);
 
         Transaction transaction = getTransaction(transactionType, wallet);
 
-        Order order = getOrder(person, site, transaction);
+        Order order = getOrder(user, site, transaction);
 
-        entityManager.persist(person);
+        entityManager.persist(user);
         entityManager.persist(site);
         entityManager.persist(wallet);
         entityManager.persist(transactionType);
@@ -62,26 +62,26 @@ public class JpaEntityTests {
         Order found = entityManager.find(Order.class, order.getId());
         assertThat(found).isNotNull();
         assertThat(found.getViewCount()).isEqualTo(order.getViewCount());
-        assertThat(found.getPerson().getId()).isEqualTo(person.getId());
+        assertThat(found.getUser().getId()).isEqualTo(user.getId());
     }
 
     @Test
-    public void testPersonEntity() {
-        Person person = getPerson();
+    public void testUserEntity() {
+        User user = getUser();
 
-        entityManager.persist(person);
+        entityManager.persist(user);
         entityManager.flush();
 
-        Person found = entityManager.find(Person.class, person.getId());
+        User found = entityManager.find(User.class, user.getId());
         assertThat(found).isNotNull();
-        assertThat(found.getName()).isEqualTo(person.getName());
+        assertThat(found.getName()).isEqualTo(user.getName());
     }
 
 
 
     @Test
     public void testSiteEntity() {
-        Person owner = getPerson();
+        User owner = getUser();
 
         Site site = getSite(owner);
 
@@ -98,14 +98,14 @@ public class JpaEntityTests {
     public void testTransactionEntity() {
         TransactionType type = getTransactionType();
 
-        Person person = getPerson();
+        User user = getUser();
 
-        Wallet wallet = getWallet(person);
+        Wallet wallet = getWallet(user);
 
         Transaction transaction = getTransaction(type, wallet);
 
         entityManager.persist(type);
-        entityManager.persist(person);
+        entityManager.persist(user);
         entityManager.persist(wallet);
         entityManager.persist(transaction);
         entityManager.flush();
@@ -121,23 +121,23 @@ public class JpaEntityTests {
 
     @Test
     public void testViewEntity() {
-        Person person = getPerson();
+        User user = getUser();
 
-        Site site = getSite(person);
+        Site site = getSite(user);
 
         TransactionType transactionType = getTransactionType();
 
-        Wallet wallet = getWallet(person);
+        Wallet wallet = getWallet(user);
 
         Transaction transaction = getTransaction(transactionType, wallet);
 
         View view = new View();
-        view.setPerson(person);
+        view.setUser(user);
         view.setSite(site);
         view.setViewedAt(LocalDateTime.now());
         view.setTransaction(transaction);
 
-        entityManager.persist(person);
+        entityManager.persist(user);
         entityManager.persist(site);
         entityManager.persist(wallet);
         entityManager.persist(transactionType);
@@ -147,41 +147,41 @@ public class JpaEntityTests {
 
         View found = entityManager.find(View.class, view.getId());
         assertThat(found).isNotNull();
-        assertThat(found.getPerson().getId()).isEqualTo(person.getId());
+        assertThat(found.getUser().getId()).isEqualTo(user.getId());
         assertThat(found.getSite().getId()).isEqualTo(site.getId());
     }
 
     @Test
     public void testWalletEntity() {
-        Person person = getPerson();
+        User user = getUser();
 
-        Wallet wallet = getWallet(person);
+        Wallet wallet = getWallet(user);
 
-        entityManager.persist(person);
+        entityManager.persist(user);
         entityManager.persist(wallet);
         entityManager.flush();
 
         Wallet found = entityManager.find(Wallet.class, wallet.getId());
         assertThat(found).isNotNull();
         assertThat(found.getSum()).isEqualTo(wallet.getSum());
-        assertThat(found.getPerson().getId()).isEqualTo(person.getId());
+        assertThat(found.getUser().getId()).isEqualTo(user.getId());
     }
 
-    private Order getOrder(Person person, Site site, Transaction transaction) {
+    private Order getOrder(User user, Site site, Transaction transaction) {
         Order order = new Order();
         order.setViewCount(100);
         order.setCreatedAt(LocalDateTime.now());
         order.setClosed(false);
-        order.setPerson(person);
+        order.setUser(user);
         order.setSite(site);
         order.setTransaction(transaction);
         return order;
     }
 
-    private Wallet getWallet(Person person) {
+    private Wallet getWallet(User user) {
         Wallet wallet = new Wallet();
         wallet.setSum(1000);
-        wallet.setPerson(person);
+        wallet.setUser(user);
         return wallet;
     }
 
@@ -196,7 +196,7 @@ public class JpaEntityTests {
         return transaction;
     }
 
-    private Site getSite(Person owner) {
+    private Site getSite(User owner) {
         Site site = new Site();
         site.setName("My Site");
         site.setDescription("Description of my site");
@@ -206,13 +206,13 @@ public class JpaEntityTests {
         return site;
     }
 
-    private Person getPerson() {
-        Person person = new Person();
-        person.setName("Jane Doe");
-        person.setEmail("jane.doe@example.com");
-        person.setPassword("password");
-        person.setRegisteredAt(LocalDateTime.now());
-        return person;
+    private User getUser() {
+        User user = new User();
+        user.setName("Jane Doe");
+        user.setEmail("jane.doe@example.com");
+        user.setPassword("password");
+        user.setRegisteredAt(LocalDateTime.now());
+        return user;
     }
 
     private TransactionType getTransactionType() {

@@ -8,7 +8,7 @@ import lombok.Setter;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "Orders")
+@Table(name = "ORDERS")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -27,8 +27,8 @@ public class Order {
     private boolean closed;
 
     @ManyToOne
-    @JoinColumn(name = "person_id", nullable = false)
-    private Person person;
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
     @ManyToOne
     @JoinColumn(name = "site_id", nullable = false)
@@ -45,7 +45,7 @@ public class Order {
                 ", viewCount=" + viewCount +
                 ", createdAt=" + createdAt +
                 ", closed=" + closed +
-                ", person=" + person.getEmail() +
+                ", user=" + user.getEmail() +
                 ", site=" + site +
                 ", transaction=" + transaction.getId() +
                 '}';

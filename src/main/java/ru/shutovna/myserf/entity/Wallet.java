@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "Wallet")
+@Table(name = "WALLETS")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -19,15 +19,15 @@ public class Wallet {
     private long sum;
 
     @ManyToOne
-    @JoinColumn(name = "person_id", nullable = false)
-    private Person person;
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
     @Override
     public String toString() {
         return "Wallet{" +
                 "id=" + id +
                 ", sum=" + sum +
-                ", person=" + person.getEmail() +
+                ", user=" + user.getEmail() +
                 '}';
     }
 }

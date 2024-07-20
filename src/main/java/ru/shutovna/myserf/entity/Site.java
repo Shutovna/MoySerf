@@ -8,7 +8,7 @@ import lombok.Setter;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "Site")
+@Table(name = "SITES")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -29,7 +29,7 @@ public class Site {
 
     @ManyToOne
     @JoinColumn(name = "owner_id", nullable = false)
-    private Person owner;
+    private User owner;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;

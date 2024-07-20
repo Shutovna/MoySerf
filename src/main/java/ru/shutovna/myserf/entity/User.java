@@ -6,13 +6,14 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Entity
-@Table(name = "Person")
+@Table(name = "USERS")
 @Getter
 @Setter
 @NoArgsConstructor
-public class Person {
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
@@ -31,9 +32,15 @@ public class Person {
     @Column(name = "registered_at", nullable = false)
     private LocalDateTime registeredAt;
 
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(name = "USER_ROLES",
+            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
+    private Set<Role> roles;
+
     @Override
     public String toString() {
-        return "Person{" +
+        return "User{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +

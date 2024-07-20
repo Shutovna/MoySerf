@@ -8,7 +8,7 @@ import lombok.Setter;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "Views")
+@Table(name = "VIEWS")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -18,8 +18,8 @@ public class View {
     private int id;
 
     @ManyToOne
-    @JoinColumn(name = "person_id", nullable = false)
-    private Person person;
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
     @ManyToOne
     @JoinColumn(name = "site_id", nullable = false)
@@ -36,7 +36,7 @@ public class View {
     public String toString() {
         return "View{" +
                 "id=" + id +
-                ", person=" + person.getEmail() +
+                ", user=" + user.getEmail() +
                 ", site=" + site.getUrl() +
                 ", viewedAt=" + viewedAt +
                 ", transaction=" + transaction.getId() +

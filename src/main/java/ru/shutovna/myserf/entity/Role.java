@@ -2,28 +2,26 @@ package ru.shutovna.myserf.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Entity
-@Table(name = "TRANSACTION_TYPES")
-@Getter
 @Setter
-@NoArgsConstructor
-public class TransactionType {
+@Getter
+@Entity
+@Table(name = "ROLES")
+public class Role {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+    private long id;
 
-    @Column(nullable = false)
+    @Column(length = 60)
     private String name;
 
     @Override
     public String toString() {
-        return "TransactionType{" +
+        return "Role{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 '}';
     }
 }
-

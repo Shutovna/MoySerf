@@ -6,7 +6,7 @@ import lombok.Setter;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "Log")
+@Table(name = "LOG_MESSAGES")
 @Getter
 @Setter
 public class Log {
