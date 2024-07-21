@@ -13,7 +13,7 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class RegistrationPasswordLiveTest {
-    private final String BASE_URI = "http://localhost:8080/";
+    private final String BASE_URI = "http://localhost:8081/";
 
     @Test
     public void givenInvalidPassword_thenBadRequest() {
@@ -39,8 +39,7 @@ public class RegistrationPasswordLiveTest {
         assertEquals(HttpStatus.BAD_REQUEST.value(), getResponseForPassword("123_zqrtU"));
 
         // valid password
-       //todo fix
-        // assertEquals(HttpStatus.OK.value(), getResponseForPassword("12_zwRHIPKA"));
+        assertEquals(HttpStatus.OK.value(), getResponseForPassword("12_zwRHIPKA"));
     }
 
     private int getResponseForPassword(String pass) {

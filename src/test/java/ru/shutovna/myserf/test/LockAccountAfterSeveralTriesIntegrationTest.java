@@ -17,6 +17,7 @@ import ru.shutovna.myserf.persistence.model.User;
 import ru.shutovna.myserf.spring.TestDbConfig;
 import ru.shutovna.myserf.spring.TestIntegrationConfig;
 
+
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.not;
 import static ru.shutovna.myserf.security.LoginAttemptService.MAX_ATTEMPT;

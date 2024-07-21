@@ -15,7 +15,6 @@ import org.springframework.security.web.WebAttributes;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 import ru.shutovna.myserf.persistence.model.User;
-import ru.shutovna.myserf.service.DeviceService;
 
 import java.io.IOException;
 import java.util.Collection;
@@ -24,13 +23,10 @@ import java.util.Collection;
 public class MySimpleUrlAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
-    private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
+    private final RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
 
     @Autowired
     ActiveUserStore activeUserStore;
-
-    @Autowired
-    private DeviceService deviceService;
 
     @Autowired
     private Environment env;
@@ -53,19 +49,6 @@ public class MySimpleUrlAuthenticationSuccessHandler implements AuthenticationSu
             session.setAttribute("user", user);
         }
         clearAuthenticationAttributes(request);
-
-        loginNotification(authentication, request);
-    }
-
-    private void loginNotification(Authentication authentication, HttpServletRequest request) {
-        try {
-            if (authentication.getPrincipal() instanceof User && isGeoIpLibEnabled()) {
-                deviceService.verifyDevice(((User)authentication.getPrincipal()), request);
-            }
-        } catch (Exception e) {
-            logger.error("An error occurred while verifying device or location", e);
-            throw new RuntimeException(e);
-        }
 
     }
 
@@ -115,17 +98,5 @@ public class MySimpleUrlAuthenticationSuccessHandler implements AuthenticationSu
             return;
         }
         session.removeAttribute(WebAttributes.AUTHENTICATION_EXCEPTION);
-    }
-
-    public void setRedirectStrategy(final RedirectStrategy redirectStrategy) {
-        this.redirectStrategy = redirectStrategy;
-    }
-
-    protected RedirectStrategy getRedirectStrategy() {
-        return redirectStrategy;
-    }
-
-    private boolean isGeoIpLibEnabled() {
-        return Boolean.parseBoolean(env.getProperty("geo.ip.lib.enabled"));
     }
 }

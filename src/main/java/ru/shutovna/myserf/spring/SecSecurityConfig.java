@@ -1,7 +1,5 @@
 package ru.shutovna.myserf.spring;
 
-import com.maxmind.geoip2.DatabaseReader;
-import com.maxmind.geoip2.exception.GeoIp2Exception;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -35,10 +33,6 @@ import ru.shutovna.myserf.persistence.dao.UserRepository;
 import ru.shutovna.myserf.security.CustomRememberMeServices;
 import ru.shutovna.myserf.security.google2fa.CustomAuthenticationProvider;
 import ru.shutovna.myserf.security.google2fa.CustomWebAuthenticationDetailsSource;
-import ru.shutovna.myserf.security.location.DifferentLocationChecker;
-
-import java.io.File;
-import java.io.IOException;
 
 
 @EnableWebSecurity
@@ -127,7 +121,6 @@ public class SecSecurityConfig {
         final CustomAuthenticationProvider authProvider = new CustomAuthenticationProvider();
         authProvider.setUserDetailsService(userDetailsService);
         authProvider.setPasswordEncoder(passwordEncoder());
-        authProvider.setPostAuthenticationChecks(differentLocationChecker());
         return authProvider;
     }
 
@@ -147,15 +140,6 @@ public class SecSecurityConfig {
         return rememberMeServices;
     }
 
-    @Bean(name = "GeoIPCountry")
-    public DatabaseReader databaseReader() throws IOException, GeoIp2Exception {
-        final File resource = new File(this.getClass()
-            .getClassLoader()
-            .getResource("maxmind/GeoLite2-Country.mmdb")
-            .getFile());
-        return new DatabaseReader.Builder(resource).build();
-    }
-
     @Bean
     public RoleHierarchy roleHierarchy() {
         RoleHierarchyImpl roleHierarchy = new RoleHierarchyImpl();
@@ -169,8 +153,4 @@ public class SecSecurityConfig {
         return new HttpSessionEventPublisher();
     }
 
-    @Bean
-    public DifferentLocationChecker differentLocationChecker() {
-        return new DifferentLocationChecker();
-    }
 }

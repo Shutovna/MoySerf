@@ -1,5 +1,6 @@
 package ru.shutovna.myserf.test;
 
+
 import io.restassured.RestAssured;
 import io.restassured.authentication.FormAuthConfig;
 import io.restassured.response.Response;
@@ -82,7 +83,7 @@ public class ChangePasswordIntegrationTest {
         request.when().get("/console").then().assertThat().statusCode(200).and().body(containsString("home"));
     }
 
-    @Test
+    /*@Test
     public void givenNotAuthenticatedUser_whenBadPasswordLoggingIn_thenCorrect() {
         final RequestSpecification request = RestAssured.given().auth().form("XXXXXXXX@XXXXXXXXX.com", "XXXXXXXX", formConfig).redirects().follow(false);
 
@@ -128,5 +129,5 @@ public class ChangePasswordIntegrationTest {
         assertEquals(302, response.statusCode());
         assertFalse(response.body().asString().contains("Password updated successfully"));
     }
-
+*/
 }

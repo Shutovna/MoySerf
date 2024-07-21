@@ -1,5 +1,6 @@
 package ru.shutovna.myserf.test;
 
+
 import io.restassured.RestAssured;
 import io.restassured.specification.RequestSpecification;
 import org.junit.jupiter.api.BeforeEach;
@@ -33,8 +34,8 @@ public class LocalizationIntegrationTest {
     }
 
     @Test
-    public void given_theLanuageParamterIsRussian_then_the_title_of_the_log_page_is_Ingreso() {
+    public void given_theLanuageParamterIsSpanish_then_the_title_of_the_log_page_is_Ingreso() {
         final RequestSpecification request = RestAssured.given().param("lang", "es_ES");
-        request.when().get("/login").then().assertThat().statusCode(200).and().body(containsString("<h1>Вход</h1>"));
+        request.when().get("/login").then().assertThat().statusCode(200).and().body(containsString("<h1>Ingreso</h1>"));
     }
 }

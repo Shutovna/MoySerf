@@ -1,6 +1,5 @@
 package ru.shutovna.myserf.test;
 
-
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.junit.jupiter.api.AfterEach;

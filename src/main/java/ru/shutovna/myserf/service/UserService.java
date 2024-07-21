@@ -1,6 +1,5 @@
 package ru.shutovna.myserf.service;
 
-import com.maxmind.geoip2.DatabaseReader;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -46,14 +45,7 @@ public class UserService implements IUserService {
     private SessionRegistry sessionRegistry;
 
     @Autowired
-    @Qualifier("GeoIPCountry")
-    private DatabaseReader databaseReader;
-
-    @Autowired
     private UserLocationRepository userLocationRepository;
-
-    @Autowired
-    private NewLocationTokenRepository newLocationTokenRepository;
 
     @Autowired
     private Environment env;
@@ -230,7 +222,6 @@ public class UserService implements IUserService {
     private boolean emailExists(final String email) {
         return userRepository.findByEmail(email) != null;
     }
-
     @Override
     public List<String> getUsersFromSessionRegistry() {
         return sessionRegistry.getAllPrincipals()
@@ -247,73 +238,5 @@ public class UserService implements IUserService {
                 }).collect(Collectors.toList());
     }
 
-    @Override
-    public NewLocationToken isNewLoginLocation(String username, String ip) {
 
-        if (!isGeoIpLibEnabled()) {
-            return null;
-        }
-
-        try {
-            final InetAddress ipAddress = InetAddress.getByName(ip);
-            final String country = databaseReader.country(ipAddress)
-                    .getCountry()
-                    .getName();
-            System.out.println(country + "====****");
-            final User user = userRepository.findByEmail(username);
-            final UserLocation loc = userLocationRepository.findByCountryAndUser(country, user);
-            if ((loc == null) || !loc.isEnabled()) {
-                return createNewLocationToken(country, user);
-            }
-        } catch (final Exception e) {
-            return null;
-        }
-        return null;
-    }
-
-    @Override
-    public String isValidNewLocationToken(String token) {
-        final NewLocationToken locToken = newLocationTokenRepository.findByToken(token);
-        if (locToken == null) {
-            return null;
-        }
-        UserLocation userLoc = locToken.getUserLocation();
-        userLoc.setEnabled(true);
-        userLoc = userLocationRepository.save(userLoc);
-        newLocationTokenRepository.delete(locToken);
-        return userLoc.getCountry();
-    }
-
-    @Override
-    public void addUserLocation(User user, String ip) {
-
-        if (!isGeoIpLibEnabled()) {
-            return;
-        }
-
-        try {
-            final InetAddress ipAddress = InetAddress.getByName(ip);
-            final String country = databaseReader.country(ipAddress)
-                    .getCountry()
-                    .getName();
-            UserLocation loc = new UserLocation(country, user);
-            loc.setEnabled(true);
-            userLocationRepository.save(loc);
-        } catch (final Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    private boolean isGeoIpLibEnabled() {
-        return Boolean.parseBoolean(env.getProperty("geo.ip.lib.enabled"));
-    }
-
-    private NewLocationToken createNewLocationToken(String country, User user) {
-        UserLocation loc = new UserLocation(country, user);
-        loc = userLocationRepository.save(loc);
-
-        final NewLocationToken token = new NewLocationToken(UUID.randomUUID()
-                .toString(), loc);
-        return newLocationTokenRepository.save(token);
-    }
 }

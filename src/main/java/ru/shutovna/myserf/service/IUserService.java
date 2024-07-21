@@ -1,6 +1,5 @@
 package ru.shutovna.myserf.service;
 
-import ru.shutovna.myserf.persistence.model.NewLocationToken;
 import ru.shutovna.myserf.persistence.model.PasswordResetToken;
 import ru.shutovna.myserf.persistence.model.User;
 import ru.shutovna.myserf.persistence.model.VerificationToken;
@@ -52,10 +51,4 @@ public interface IUserService {
     User updateUser2FA(boolean use2FA);
 
     List<String> getUsersFromSessionRegistry();
-
-    NewLocationToken isNewLoginLocation(String username, String ip);
-
-    String isValidNewLocationToken(String token);
-
-    void addUserLocation(User user, String ip);
 }

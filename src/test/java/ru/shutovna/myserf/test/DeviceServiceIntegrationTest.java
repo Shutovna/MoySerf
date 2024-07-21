@@ -15,9 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 import ru.shutovna.myserf.MySerfApplication;
-import ru.shutovna.myserf.persistence.dao.DeviceMetadataRepository;
 import ru.shutovna.myserf.persistence.dao.UserRepository;
-import ru.shutovna.myserf.persistence.model.DeviceMetadata;
 import ru.shutovna.myserf.persistence.model.User;
 import ru.shutovna.myserf.spring.TestDbConfig;
 import ru.shutovna.myserf.spring.TestIntegrationConfig;
@@ -38,9 +36,6 @@ public class DeviceServiceIntegrationTest {
 
     @Autowired
     private UserRepository userRepository;
-
-    @MockBean
-    private DeviceMetadataRepository deviceMetadataRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -89,64 +84,6 @@ public class DeviceServiceIntegrationTest {
         verify(mailSender, times(1)).send(any(SimpleMailMessage.class));
     }
 
-    @Test
-    public void givenValidLoginRequest_whenUsingKnownDevice_shouldNotSendLoginNotification() {
-        DeviceMetadata existingDeviceMetadata = new DeviceMetadata();
-        existingDeviceMetadata.setUserId(userId);
-        existingDeviceMetadata.setLastLoggedIn(new Date());
-        existingDeviceMetadata.setLocation("Nuremberg");
-        existingDeviceMetadata.setDeviceDetails("Chrome 71.0 - Mac OS X 10.14");
-        when(deviceMetadataRepository.findByUserId(userId)).thenReturn(Collections.singletonList(existingDeviceMetadata));
 
-        final Response response = given()
-                .header("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36")
-                .header("X-Forwarded-For", "88.198.50.103") // Nuremberg
-                .formParams("username", "test@test.com", "password", "test")
-                .post("/login");
-
-        assertEquals(302, response.statusCode());
-        assertEquals("http://localhost:" + port + "/console", response.getHeader("Location"));
-        verify(mailSender, times(0)).send(any(SimpleMailMessage.class));
-    }
-
-    @Test
-    public void givenValidLoginRequest_whenUsingNewDevice_shouldSendLoginNotification() {
-        DeviceMetadata existingDeviceMetadata = new DeviceMetadata();
-        existingDeviceMetadata.setUserId(userId);
-        existingDeviceMetadata.setLastLoggedIn(new Date());
-        existingDeviceMetadata.setLocation("Nuremberg");
-        existingDeviceMetadata.setDeviceDetails("Chrome 71.0 - Mac OS X 10.14");
-        when(deviceMetadataRepository.findByUserId(userId)).thenReturn(Collections.singletonList(existingDeviceMetadata));
-
-        final Response response = given()
-                .header("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.0 Safari/605.1.15")
-                .header("X-Forwarded-For", "88.198.50.103") // Nuremberg
-                .formParams("username", "test@test.com", "password", "test")
-                .post("/login");
-
-        assertEquals(302, response.statusCode());
-        assertEquals("http://localhost:" + port + "/console", response.getHeader("Location"));
-        verify(mailSender, times(1)).send(any(SimpleMailMessage.class));
-    }
-
-    @Test
-    public void givenValidLoginRequest_whenUsingKnownDeviceFromDifferentLocation_shouldSendLoginNotification() {
-        DeviceMetadata existingDeviceMetadata = new DeviceMetadata();
-        existingDeviceMetadata.setUserId(userId);
-        existingDeviceMetadata.setLastLoggedIn(new Date());
-        existingDeviceMetadata.setLocation("Nuremberg");
-        existingDeviceMetadata.setDeviceDetails("Chrome 71.0 - Mac OS X 10.14");
-        when(deviceMetadataRepository.findByUserId(userId)).thenReturn(Collections.singletonList(existingDeviceMetadata));
-
-        final Response response = given()
-                .header("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36")
-                .header("X-Forwarded-For", "81.47.169.143") // Barcelona
-                .formParams("username", "test@test.com", "password", "test")
-                .post("/login");
-
-        assertEquals(302, response.statusCode());
-        assertEquals("http://localhost:" + port + "/console", response.getHeader("Location"));
-        verify(mailSender, times(1)).send(any(SimpleMailMessage.class));
-    }
 
 }
