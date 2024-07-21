@@ -20,6 +20,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import ru.shutovna.myserf.persistence.dao.RoleRepository;
 import ru.shutovna.myserf.persistence.dao.UserRepository;
+import ru.shutovna.myserf.persistence.model.PasswordResetToken;
 import ru.shutovna.myserf.persistence.model.User;
 import ru.shutovna.myserf.persistence.model.VerificationToken;
 import ru.shutovna.myserf.registration.OnRegistrationCompleteEvent;
@@ -91,8 +92,15 @@ public class RegistrationRestController {
         final User user = userService.findUserByEmail(userEmail);
         if (user != null) {
             final String token = UUID.randomUUID().toString();
-            userService.createPasswordResetTokenForUser(user, token);
+
+            Optional<PasswordResetToken> oldToken = userService.getPasswordResetTokenByUser(user);
+            if(oldToken.isPresent()) {
+                String val = oldToken.get().getToken();
+                userService.deletePasswordResetToken(val);
+            }
+
             mailSender.send(constructResetTokenEmail(getAppUrl(request), request.getLocale(), token, user));
+            userService.createPasswordResetTokenForUser(user, token);
         }
         return new GenericResponse(messages.getMessage("message.resetPasswordEmail", null, request.getLocale()));
     }

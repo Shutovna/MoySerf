@@ -20,6 +20,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.InetAddress;
 import java.net.URLEncoder;
 import java.util.*;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 @Service
@@ -157,6 +158,17 @@ public class UserService implements IUserService {
     @Override
     public Optional<User> getUserByPasswordResetToken(final String token) {
         return Optional.ofNullable(passwordTokenRepository.findByToken(token).getUser());
+    }
+
+    @Override
+    public Optional<PasswordResetToken> getPasswordResetTokenByUser(User user) {
+        return Optional.ofNullable(passwordTokenRepository.findByUser(user));
+    }
+
+    @Override
+    public Consumer<? super PasswordResetToken> deletePasswordResetToken(String token) {
+        passwordTokenRepository.deleteByToken(token);
+        return null;
     }
 
     @Override

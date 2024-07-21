@@ -9,6 +9,7 @@ import ru.shutovna.myserf.web.dto.UserDto;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 public interface IUserService {
 
@@ -33,6 +34,10 @@ public interface IUserService {
     PasswordResetToken getPasswordResetToken(String token);
 
     Optional<User> getUserByPasswordResetToken(String token);
+
+    Optional<PasswordResetToken> getPasswordResetTokenByUser(User user);
+
+    public Consumer<? super PasswordResetToken> deletePasswordResetToken(String token);
 
     Optional<User> getUserByID(long id);
 
