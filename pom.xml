@@ -166,7 +166,7 @@
 	</dependencies>
 
 	<build>
-		<finalName>spring-security-login-and-registration</finalName>
+		<finalName>myserf</finalName>
 		<resources>
 			<resource>
 				<directory>src/main/resources</directory>

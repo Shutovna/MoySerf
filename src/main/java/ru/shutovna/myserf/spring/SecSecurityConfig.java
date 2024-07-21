@@ -40,7 +40,7 @@ import ru.shutovna.myserf.security.location.DifferentLocationChecker;
 import java.io.File;
 import java.io.IOException;
 
-// @ImportResource({ "classpath:webSecurityConfig.xml" })
+
 @EnableWebSecurity
 @Configuration
 public class SecSecurityConfig {
