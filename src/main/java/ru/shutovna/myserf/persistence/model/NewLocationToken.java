@@ -1,8 +1,12 @@
 package ru.shutovna.myserf.persistence.model;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
+@Getter
+@Setter
 public class NewLocationToken {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -94,13 +98,8 @@ public class NewLocationToken {
             return false;
         }
         if (getUserLocation() == null) {
-            if (other.getUserLocation() != null) {
-                return false;
-            }
-        } else if (!getUserLocation().equals(other.getUserLocation())) {
-            return false;
-        }
-        return true;
+            return other.getUserLocation() == null;
+        } else return getUserLocation().equals(other.getUserLocation());
     }
 
     @Override
