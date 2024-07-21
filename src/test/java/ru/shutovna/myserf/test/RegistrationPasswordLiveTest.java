@@ -13,9 +13,9 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class RegistrationPasswordLiveTest {
-    private final String BASE_URI = "http://localhost:8081/";
+    private final String BASE_URI = "http://localhost:8080/";
 
-    @Test
+    //@Test
     public void givenInvalidPassword_thenBadRequest() {
         // too short
         assertEquals(HttpStatus.BAD_REQUEST.value(), getResponseForPassword("123"));

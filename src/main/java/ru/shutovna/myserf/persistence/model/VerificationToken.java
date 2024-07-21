@@ -1,11 +1,15 @@
 package ru.shutovna.myserf.persistence.model;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Calendar;
 import java.util.Date;
 
 @Entity
+@Getter
+@Setter
 public class VerificationToken {
 
     private static final int EXPIRATION = 60 * 24;
@@ -35,38 +39,9 @@ public class VerificationToken {
 
     public VerificationToken(final String token, final User user) {
         super();
-
         this.token = token;
         this.user = user;
         this.expiryDate = calculateExpiryDate(EXPIRATION);
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(final String token) {
-        this.token = token;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(final User user) {
-        this.user = user;
-    }
-
-    public Date getExpiryDate() {
-        return expiryDate;
-    }
-
-    public void setExpiryDate(final Date expiryDate) {
-        this.expiryDate = expiryDate;
     }
 
     private Date calculateExpiryDate(final int expiryTimeInMinutes) {
@@ -120,20 +95,13 @@ public class VerificationToken {
             return false;
         }
         if (getUser() == null) {
-            if (other.getUser() != null) {
-                return false;
-            }
-        } else if (!getUser().equals(other.getUser())) {
-            return false;
-        }
-        return true;
+            return other.getUser() == null;
+        } else return getUser().equals(other.getUser());
     }
 
     @Override
     public String toString() {
-        final StringBuilder builder = new StringBuilder();
-        builder.append("Token [String=").append(token).append("]").append("[Expires").append(expiryDate).append("]");
-        return builder.toString();
+        return "Token [String=" + token + "]" + "[Expires" + expiryDate + "]";
     }
 
 }

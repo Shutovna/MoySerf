@@ -45,9 +45,6 @@ public class UserService implements IUserService {
     private SessionRegistry sessionRegistry;
 
     @Autowired
-    private UserLocationRepository userLocationRepository;
-
-    @Autowired
     private Environment env;
 
     public static final String TOKEN_INVALID = "invalidToken";

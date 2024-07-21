@@ -35,7 +35,7 @@ public class LocalizationIntegrationTest {
 
     @Test
     public void given_theLanuageParamterIsSpanish_then_the_title_of_the_log_page_is_Ingreso() {
-        final RequestSpecification request = RestAssured.given().param("lang", "es_ES");
-        request.when().get("/login").then().assertThat().statusCode(200).and().body(containsString("<h1>Ingreso</h1>"));
+        final RequestSpecification request = RestAssured.given().param("lang", "ru_RU");
+        request.when().get("/login").then().assertThat().statusCode(200).and().body(containsString("<h1>Вход</h1>"));
     }
 }

@@ -7,7 +7,6 @@ import org.junit.runner.RunWith;
 @RunWith(JUnitPlatform.class)
 @SelectClasses({ // @formatter:off
     ChangePasswordIntegrationTest.class,
-    DeviceServiceIntegrationTest.class,
     TokenExpirationIntegrationTest.class,
     RegistrationControllerIntegrationTest.class,
     GetLoggedUsersIntegrationTest.class,
