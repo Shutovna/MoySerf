@@ -1,30 +1,22 @@
 package ru.shutovna.myserf.web.controller;
 
+import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.MessageSource;
 import org.springframework.core.env.Environment;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-import ru.shutovna.myserf.persistence.dao.RoleRepository;
-import ru.shutovna.myserf.persistence.dao.UserRepository;
 import ru.shutovna.myserf.persistence.model.PasswordResetToken;
 import ru.shutovna.myserf.persistence.model.User;
 import ru.shutovna.myserf.persistence.model.VerificationToken;
 import ru.shutovna.myserf.registration.OnRegistrationCompleteEvent;
 import ru.shutovna.myserf.security.ISecurityUserService;
+import ru.shutovna.myserf.service.EmailService;
 import ru.shutovna.myserf.service.IUserService;
 import ru.shutovna.myserf.web.dto.PasswordDto;
 import ru.shutovna.myserf.web.dto.UserDto;
@@ -32,16 +24,13 @@ import ru.shutovna.myserf.web.error.InvalidOldPasswordException;
 import ru.shutovna.myserf.web.util.GenericResponse;
 
 import java.io.UnsupportedEncodingException;
-import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.UUID;
 
 @RestController
+@Slf4j
 public class RegistrationRestController {
-    private final Logger LOGGER = LoggerFactory.getLogger(getClass());
-
     @Autowired
     private IUserService userService;
 
@@ -52,24 +41,20 @@ public class RegistrationRestController {
     private MessageSource messages;
 
     @Autowired
-    private JavaMailSender mailSender;
-
-    @Autowired
     private ApplicationEventPublisher eventPublisher;
-
     @Autowired
-    private Environment env;
+    private EmailService emailService;
 
     public RegistrationRestController() {
         super();
     }
 
 
-
     // Registration
     @PostMapping("/user/registration")
-    public GenericResponse registerUserAccount(@Valid final UserDto accountDto, final HttpServletRequest request) {
-        LOGGER.debug("Registering user account with information: {}", accountDto);
+    @Transactional
+    public GenericResponse registerUserAccount(@Valid @RequestBody final UserDto accountDto, final HttpServletRequest request) {
+        log.debug("Registering user account with information: {}", accountDto);
 
         final User registered = userService.registerNewUserAccount(accountDto);
         eventPublisher.publishEvent(new OnRegistrationCompleteEvent(registered, request.getLocale(), getAppUrl(request)));
@@ -79,9 +64,16 @@ public class RegistrationRestController {
     // User activation - verification
     @GetMapping("/user/resendRegistrationToken")
     public GenericResponse resendRegistrationToken(final HttpServletRequest request, @RequestParam("token") final String existingToken) {
+        log.debug("resendRegistrationToken");
         final VerificationToken newToken = userService.generateNewVerificationToken(existingToken);
         final User user = userService.getUser(newToken.getToken());
-        mailSender.send(constructResendVerificationTokenEmail(getAppUrl(request), request.getLocale(), newToken, user));
+
+        final String confirmationUrl = getAppUrl(request) + "/registrationConfirm.html?token=" + newToken.getToken();
+        try {
+            emailService.reSendConfirmationEmail(user.getEmail(), confirmationUrl);
+        } catch (MessagingException e) {
+            log.error("Error resendingRegistrationToken", e);
+        }
         return new GenericResponse(messages.getMessage("message.resendToken", null, request.getLocale()));
     }
 
@@ -93,13 +85,20 @@ public class RegistrationRestController {
             final String token = UUID.randomUUID().toString();
 
             Optional<PasswordResetToken> oldToken = userService.getPasswordResetTokenByUser(user);
-            if(oldToken.isPresent()) {
+            if (oldToken.isPresent()) {
                 String val = oldToken.get().getToken();
                 userService.deletePasswordResetToken(val);
             }
 
-            mailSender.send(constructResetTokenEmail(getAppUrl(request), request.getLocale(), token, user));
-            userService.createPasswordResetTokenForUser(user, token);
+            final String url = getAppUrl(request) + "/user/changePassword?token=" + token;
+            try {
+                emailService.sendResetPasswordEmail(user.getEmail(), url);
+                userService.createPasswordResetTokenForUser(user, token);
+            } catch (MessagingException e) {
+                log.error("Error sending password reset email", e);
+                return new GenericResponse("", messages.getMessage("message.error", null, request.getLocale()));
+            }
+
         }
         return new GenericResponse(messages.getMessage("message.resetPasswordEmail", null, request.getLocale()));
     }
@@ -110,12 +109,12 @@ public class RegistrationRestController {
 
         final String result = securityUserService.validatePasswordResetToken(passwordDto.getToken());
 
-        if(result != null) {
+        if (result != null) {
             return new GenericResponse(messages.getMessage("auth.message." + result, null, locale));
         }
 
         Optional<User> user = userService.getUserByPasswordResetToken(passwordDto.getToken());
-        if(user.isPresent()) {
+        if (user.isPresent()) {
             userService.changeUserPassword(user.get(), passwordDto.getNewPassword());
             return new GenericResponse(messages.getMessage("message.resetPasswordSuc", null, locale));
         } else {
@@ -146,36 +145,7 @@ public class RegistrationRestController {
 
     // ============== NON-API ============
 
-    private SimpleMailMessage constructResendVerificationTokenEmail(final String contextPath, final Locale locale, final VerificationToken newToken, final User user) {
-        final String confirmationUrl = contextPath + "/registrationConfirm.html?token=" + newToken.getToken();
-        final String message = messages.getMessage("message.resendToken", null, locale);
-        return constructEmail("Resend Registration Token", message + " \r\n" + confirmationUrl, user);
-    }
-
-    private SimpleMailMessage constructResetTokenEmail(final String contextPath, final Locale locale, final String token, final User user) {
-        final String url = contextPath + "/user/changePassword?token=" + token;
-        final String message = messages.getMessage("message.resetPassword", null, locale);
-        return constructEmail("Reset Password", message + " \r\n" + url, user);
-    }
-
-    private SimpleMailMessage constructEmail(String subject, String body, User user) {
-        final SimpleMailMessage email = new SimpleMailMessage();
-        email.setSubject(subject);
-        email.setText(body);
-        email.setTo(user.getEmail());
-        email.setFrom(env.getProperty("support.email"));
-        return email;
-    }
-
     private String getAppUrl(HttpServletRequest request) {
         return "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
-    }
-
-    private String getClientIP(HttpServletRequest request) {
-        final String xfHeader = request.getHeader("X-Forwarded-For");
-        if (xfHeader == null || xfHeader.isEmpty() || !xfHeader.contains(request.getRemoteAddr())) {
-            return request.getRemoteAddr();
-        }
-        return xfHeader.split(",")[0];
     }
 }

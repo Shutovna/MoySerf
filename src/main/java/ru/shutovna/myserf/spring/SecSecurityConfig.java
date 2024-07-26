@@ -77,8 +77,14 @@ public class SecSecurityConfig {
             .authorizeHttpRequests(authz -> {
                 authz.requestMatchers(HttpMethod.GET, "/roleHierarchy")
                     .hasRole("STAFF")
-                    .requestMatchers("/login*", "/logout*", "/signin/**", "/signup/**", "/customLogin", "/user/registration*", "/registrationConfirm*", "/expiredAccount*", "/registration*", "/badUser*", "/user/resendRegistrationToken*", "/forgetPassword*",
-                        "/user/resetPassword*", "/user/savePassword*", "/updatePassword*", "/user/changePassword*", "/emailError*", "/resources/**", "/old/user/registration*", "/successRegister*", "/qrcode*", "/user/enableNewLoc*")
+                    .requestMatchers("/login*", "/logout*", "/signin/**", "/signup/**",
+                            "/customLogin", "/user/registration*", "/registrationConfirm*",
+                            "/expiredAccount*", "/registration*", "/badUser*",
+                            "/user/resendRegistrationToken*", "/forgetPassword*",
+                        "/user/resetPassword*", "/user/savePassword*", "/updatePassword*",
+                            "/user/changePassword*", "/emailError*", "/resources/**",
+                            "/old/user/registration*", "/successRegister*", "/qrcode*",
+                            "/user/enableNewLoc*", "/users")
                     .permitAll()
                     .requestMatchers("/invalidSession*")
                     .anonymous()

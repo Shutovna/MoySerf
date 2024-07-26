@@ -110,7 +110,7 @@ public class RegistrationController {
             return new ModelAndView("redirect:/login", model);
         } else {
             model.addAttribute("token", token);
-            return new ModelAndView("redirect:/updatePassword");
+            return new ModelAndView("redirect:/updatePassword", model);
         }
     }
 

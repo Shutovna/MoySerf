@@ -1,5 +1,8 @@
 package ru.shutovna.myserf.registration.listener;
 
+import jakarta.mail.MessagingException;
+import lombok.extern.flogger.Flogger;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.MessageSource;
@@ -9,20 +12,19 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
 import ru.shutovna.myserf.persistence.model.User;
 import ru.shutovna.myserf.registration.OnRegistrationCompleteEvent;
+import ru.shutovna.myserf.service.EmailService;
 import ru.shutovna.myserf.service.IUserService;
 
 import java.util.UUID;
 
 @Component
+@Slf4j
 public class RegistrationListener implements ApplicationListener<OnRegistrationCompleteEvent> {
     @Autowired
     private IUserService service;
 
     @Autowired
-    private MessageSource messages;
-
-    @Autowired
-    private JavaMailSender mailSender;
+    private EmailService emailService;
 
     @Autowired
     private Environment env;
@@ -39,24 +41,11 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
         final String token = UUID.randomUUID().toString();
         service.createVerificationTokenForUser(user, token);
 
-        final SimpleMailMessage email = constructEmailMessage(event, user, token);
-        mailSender.send(email);
-    }
-
-    //
-
-    private SimpleMailMessage constructEmailMessage(final OnRegistrationCompleteEvent event, final User user, final String token) {
-        final String recipientAddress = user.getEmail();
-        final String subject = "Registration Confirmation";
         final String confirmationUrl = event.getAppUrl() + "/registrationConfirm?token=" + token;
-        final String message = messages.getMessage("message.regSuccLink", null, "You registered successfully. To confirm your registration, please click on the below link.", event.getLocale());
-        final SimpleMailMessage email = new SimpleMailMessage();
-        email.setTo(recipientAddress);
-        email.setSubject(subject);
-        email.setText(message + " \r\n" + confirmationUrl);
-        email.setFrom(env.getProperty("support.email"));
-        return email;
+        try {
+            emailService.sendConfirmationEmail(user.getEmail(), confirmationUrl);
+        } catch (MessagingException e) {
+            log.error("Error sending registration verification email to " + user.getEmail(), e);
+        }
     }
-    
-
 }
