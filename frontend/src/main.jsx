@@ -4,10 +4,7 @@ import App from './pages/App.jsx';
 import './index.scss';
 import {BrowserRouter, Route, Routes} from 'react-router-dom';
 import Authenticationlayout from './pages/authenticationlayout.jsx';
-import Auth from './firebase/auth.jsx';
-import Login from './firebase/login.jsx';
-import Signup from './firebase/signup.jsx';
-import Crm from './container/dashboards/crm/crm.jsx';
+
 import Comingsoon from './container/authentication/comingsoon/comingsoon.jsx';
 import Basic from './container/authentication/createpassword/basic/basic.jsx';
 import Cover from './container/authentication/createpassword/cover/cover.jsx';
@@ -28,94 +25,102 @@ import Error500 from './container/error/500error/500error.jsx';
 import Loader from './components/common/loader/loader.jsx';
 import DevelopingPage from "./_moyserf/pages/DevelopingPage.jsx";
 import Landinglayout from "./pages/landinglayout.jsx";
-import Landing from "./container/pages/landing/landing.jsx";
-import Jobslanding from "./container/pages/jobslanding/jobslanding.jsx";
-import Cart from "./container/pages/ecommerce/cart/cart.jsx";
 import SerfTablePage from "./_moyserf/pages/SerfTablePage.jsx";
 import MainDashboardPage from "./_moyserf/pages/MainDashboardPage.jsx";
 import VIPPage from "./_moyserf/pages/VIPPage.jsx";
 import ReferalPage from "./_moyserf/pages/ReferalPage.jsx";
 import LandingPage from "./_moyserf/pages/LandingPage.jsx";
+import PrivateRoute from "./_moyserf/auth/PrivateRoute.jsx";
+import AuthProvider from "./_moyserf/auth/AuthProvider.jsx";
+import Signin from "./_moyserf/components/Signin.jsx";
+import Signup from "./_moyserf/components/Signup.jsx";
+import Logout from "./_moyserf/components/Logout.jsx";
 
 
 ReactDOM.createRoot(document.getElementById('root')).render(
     <React.Fragment>
         <BrowserRouter>
-            <React.Suspense fallback={<Loader/>}>
-                <Routes>
-                    <Route path="/" element={<Landinglayout/>}>
-                        <Route index element={<LandingPage/>}/>
-                    </Route>
+            <AuthProvider>
+                <React.Suspense fallback={<Loader/>}>
+                    <Routes>
+                        <Route path="/" element={<Landinglayout/>}>
+                            <Route index element={<LandingPage/>}/>
+                        </Route>
 
-                    <Route path={`${import.meta.env.BASE_URL}`} element={<Authenticationlayout/>}>
-                        <Route path={`${import.meta.env.BASE_URL}signin`}
-                               element={<Signinbasic/>}/>
-                        <Route path={`${import.meta.env.BASE_URL}signup`}
-                               element={<Signupbasic/>}/>
-                    </Route>
+                        <Route path={`${import.meta.env.BASE_URL}`} element={<Authenticationlayout/>}>
+                            <Route path={`${import.meta.env.BASE_URL}auth/signin`}
+                                   element={<Signin/>}/>
+                            <Route path={`${import.meta.env.BASE_URL}auth/signup`}
+                                   element={<Signup/>}/>
+                        </Route>
+
+                        <Route element={<PrivateRoute/>}>
+
+                            <Route path={"/cab"} element={<App/>}>
+                                <Route index element={<MainDashboardPage/>}/>
+                                <Route path={`/cab/main`} element={<MainDashboardPage/>}/>
+                                <Route path={`/cab/learning`} element={<DevelopingPage/>}/>
+                                <Route path={`/cab/serf`} element={<SerfTablePage/>}/>
+                                <Route path={`/cab/serf-video`} element={<DevelopingPage/>}/>
+                                <Route path={`/cab/vip`} element={<VIPPage/>}/>
+                                <Route path={`/cab/adv`} element={<DevelopingPage/>}/>
+                                <Route path={`/cab/wallet`} element={<DevelopingPage/>}/>
+                                <Route path={`/cab/referals`} element={<ReferalPage/>}/>
+                                <Route path={`/cab/blog`} element={<DevelopingPage/>}/>
+                                <Route path={`/cab/chat`} element={<DevelopingPage/>}/>
+                                <Route path={`/cab/settings`} element={<DevelopingPage/>}/>
+                                <Route path={`/cab/quit`} element={<Logout/>}/>
+                            </Route>
+
+                            <Route path={`${import.meta.env.BASE_URL}`} element={<Authenticationlayout/>}>
+
+                                <Route path={`${import.meta.env.BASE_URL}authentication/comingsoon`}
+                                       element={<Comingsoon/>}/>
+                                <Route path={`${import.meta.env.BASE_URL}authentication/createpassword/basic`}
+                                       element={<Basic/>}/>
+                                <Route path={`${import.meta.env.BASE_URL}authentication/createpassword/cover`}
+                                       element={<Cover/>}/>
+
+                                <Route path={`${import.meta.env.BASE_URL}authentication/lockscreen/lockscreenbasic`}
+                                       element={<Lockscreenbasic/>}/>
+                                <Route path={`${import.meta.env.BASE_URL}authentication/lockscreen/lockscreencover`}
+                                       element={<Lockscreencover/>}/>
+
+                                <Route path={`${import.meta.env.BASE_URL}authentication/resetpassword/resetbasic`}
+                                       element={<Resetbasic/>}/>
+                                <Route path={`${import.meta.env.BASE_URL}authentication/resetpassword/resetcover`}
+                                       element={<Resetcover/>}/>
+
+                                <Route path={`${import.meta.env.BASE_URL}authentication/signup/signupbasic`}
+                                       element={<Signupbasic/>}/>
+                                <Route path={`${import.meta.env.BASE_URL}authentication/signup/signupcover`}
+                                       element={<Signupcover/>}/>
+
+                                <Route path={`${import.meta.env.BASE_URL}authentication/signin/signinbasic`}
+                                       element={<Signinbasic/>}/>
+                                <Route path={`${import.meta.env.BASE_URL}authentication/signin/signincover`}
+                                       element={<Signincover/>}/>
+
+                                <Route
+                                    path={`${import.meta.env.BASE_URL}authentication/twostepverification/twostepbasic`}
+                                    element={<Twostepbasic/>}/>
+                                <Route
+                                    path={`${import.meta.env.BASE_URL}authentication/twostepverification/twostepcover`}
+                                    element={<Twostepcover/>}/>
+
+                                <Route path={`${import.meta.env.BASE_URL}authentication/undermaintenance`}
+                                       element={<Undermaintenance/>}/>
+                            </Route>
+
+                            <Route path={`${import.meta.env.BASE_URL}error/401error`} element={<Error401/>}/>
+                            <Route path={`${import.meta.env.BASE_URL}error/404error`} element={<Error404/>}/>
+                            <Route path={`${import.meta.env.BASE_URL}error/500error`} element={<Error500/>}/>
+                        </Route>
 
 
-                    <Route path={"/cab"} element={<App/>}>
-                        <Route index element={<MainDashboardPage/>}/>
-                        <Route path={`/cab/main`} element={<MainDashboardPage/>}/>
-                        <Route path={`/cab/learning`} element={<DevelopingPage/>}/>
-                        <Route path={`/cab/serf`} element={<SerfTablePage/>}/>
-                        <Route path={`/cab/serf-video`} element={<DevelopingPage/>}/>
-                        <Route path={`/cab/vip`} element={<VIPPage/>}/>
-                        <Route path={`/cab/adv`} element={<DevelopingPage/>}/>
-                        <Route path={`/cab/wallet`} element={<DevelopingPage/>}/>
-                        <Route path={`/cab/referals`} element={<ReferalPage/>}/>
-                        <Route path={`/cab/blog`} element={<DevelopingPage/>}/>
-                        <Route path={`/cab/chat`} element={<DevelopingPage/>}/>
-                        <Route path={`/cab/settings`} element={<DevelopingPage/>}/>
-                        <Route path={`/cab/quit`} element={<DevelopingPage/>}/>
-                    </Route>
-
-                    <Route path={`${import.meta.env.BASE_URL}`} element={<Authenticationlayout/>}>
-
-                        <Route path={`${import.meta.env.BASE_URL}authentication/comingsoon`} element={<Comingsoon/>}/>
-                        <Route path={`${import.meta.env.BASE_URL}authentication/createpassword/basic`}
-                               element={<Basic/>}/>
-                        <Route path={`${import.meta.env.BASE_URL}authentication/createpassword/cover`}
-                               element={<Cover/>}/>
-
-                        <Route path={`${import.meta.env.BASE_URL}authentication/lockscreen/lockscreenbasic`}
-                               element={<Lockscreenbasic/>}/>
-                        <Route path={`${import.meta.env.BASE_URL}authentication/lockscreen/lockscreencover`}
-                               element={<Lockscreencover/>}/>
-
-                        <Route path={`${import.meta.env.BASE_URL}authentication/resetpassword/resetbasic`}
-                               element={<Resetbasic/>}/>
-                        <Route path={`${import.meta.env.BASE_URL}authentication/resetpassword/resetcover`}
-                               element={<Resetcover/>}/>
-
-                        <Route path={`${import.meta.env.BASE_URL}authentication/signup/signupbasic`}
-                               element={<Signupbasic/>}/>
-                        <Route path={`${import.meta.env.BASE_URL}authentication/signup/signupcover`}
-                               element={<Signupcover/>}/>
-
-                        <Route path={`${import.meta.env.BASE_URL}authentication/signin/signinbasic`}
-                               element={<Signinbasic/>}/>
-                        <Route path={`${import.meta.env.BASE_URL}authentication/signin/signincover`}
-                               element={<Signincover/>}/>
-
-                        <Route path={`${import.meta.env.BASE_URL}authentication/twostepverification/twostepbasic`}
-                               element={<Twostepbasic/>}/>
-                        <Route path={`${import.meta.env.BASE_URL}authentication/twostepverification/twostepcover`}
-                               element={<Twostepcover/>}/>
-
-                        <Route path={`${import.meta.env.BASE_URL}authentication/undermaintenance`}
-                               element={<Undermaintenance/>}/>
-
-
-                        <Route path={`${import.meta.env.BASE_URL}error/401error`} element={<Error401/>}/>
-                        <Route path={`${import.meta.env.BASE_URL}error/404error`} element={<Error404/>}/>
-                        <Route path={`${import.meta.env.BASE_URL}error/500error`} element={<Error500/>}/>
-                    </Route>
-
-
-                </Routes>
-            </React.Suspense>
+                    </Routes>
+                </React.Suspense>
+            </AuthProvider>
         </BrowserRouter>
     </React.Fragment>
 );

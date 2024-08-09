@@ -1,6 +1,7 @@
 package ru.shutovna.moyserf.service;
 
-import jakarta.mail.MessagingException;
+
+import javax.mail.MessagingException;
 
 public interface EmailService {
     void sendConfirmationEmail(String recipientEmail, String confirmationLink) throws MessagingException;

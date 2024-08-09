@@ -230,9 +230,9 @@ const LandingPage = ({ThemeChanger}) => {
                     <div className="container text-center">
                         <div className="row justify-content-center">
                             <div className="d-flex gap-3 mt-4 justify-content-center">
-                                <Link to={`${import.meta.env.BASE_URL}signin`} className="btn btn-lg btn-primary">Начать
+                                <Link to={`${import.meta.env.BASE_URL}auth/signin`} className="btn btn-lg btn-primary">Начать
                                     зарабатывать</Link>
-                                <Link to={`${import.meta.env.BASE_URL}signin/`}
+                                <Link to={`${import.meta.env.BASE_URL}auth/signin/`}
                                       className="btn btn-lg btn-primary">Рекламировать</Link>
                             </div>
                         </div>

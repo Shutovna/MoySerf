@@ -1,16 +1,18 @@
 package ru.shutovna.moyserf.registration.listener;
 
-import jakarta.mail.MessagingException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
-import ru.shutovna.moyserf.persistence.model.User;
+
+import ru.shutovna.moyserf.model.User;
 import ru.shutovna.moyserf.registration.OnRegistrationCompleteEvent;
 import ru.shutovna.moyserf.service.EmailService;
 import ru.shutovna.moyserf.service.IUserService;
 
+
+import javax.mail.MessagingException;
 import java.util.UUID;
 
 @Component

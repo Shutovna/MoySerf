@@ -1,7 +1,7 @@
 import { useContext, createContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const AuthContext = createContext();
+const AuthContext = createContext(null);
 
 const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
@@ -17,10 +17,10 @@ const AuthProvider = ({ children }) => {
                 body: JSON.stringify(data),
             });
             const res = await response.json();
-            if (res.data) {
-                setUser(res.data.user);
-                setToken(res.token);
-                localStorage.setItem("site", res.token);
+            if (res.accessToken) {
+                //setUser(res.data.user);
+                setToken(res.accessToken);
+                localStorage.setItem("site", res.accessToken);
                 navigate("/cab/main");
                 return;
             }
@@ -34,7 +34,7 @@ const AuthProvider = ({ children }) => {
         setUser(null);
         setToken("");
         localStorage.removeItem("site");
-        navigate("/login");
+        navigate("/auth/signin");
     };
 
     return (

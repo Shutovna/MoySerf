@@ -1,0 +1,126 @@
+server:
+  port: '8080'
+
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG
+      hibernate:
+        SQL: DEBUG
+
+spring:
+  application:
+    name: MoySerf
+  datasource:
+    url: jdbc:postgresql://localhost:5432/moyserf
+    username: postgres
+    password: password
+
+  jpa:
+    generate-ddl: true
+    hibernate:
+      ddl-auto: update
+      dialect: org.hibernate.dialect.PostgreSQLDialect
+      jdbc:
+        lob:
+          non_contextual_creation: 'true'
+    show-sql: true
+
+  mail:
+    username: shutovna1987@gmail.com
+    host: connect.smtp.bz
+    password: Ex4C0ktPAcNR
+    port: '465'
+    properties:
+      mail:
+        smtps:
+          ssl:
+            checkserveridentity: 'true'
+            trust: '*'
+        smtp:
+          ssl:
+            enable: 'true'
+
+
+  security:
+    oauth2:
+      client:
+        registration:
+          ok:
+            client-id: 512002230752
+            client-secret: 60529C71AF29C567DFB086E4
+            scope: email,valuables
+            authorization-grant-type: authorization_code
+            redirect-uri: "{baseUrl}/oauth2/callback/{registrationId}"
+            client-name: Odnoklassniki
+          google:
+            clientId: 756041012337-mh93jidif5qjhggm8a7te6pirfhif1a7.apps.googleusercontent.com
+            clientSecret: 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
+            redirectUri: "{baseUrl}/oauth2/callback/{registrationId}"
+            scope:
+              - email
+              - profile
+          facebook:
+            clientId: 121189305185277
+            clientSecret: 42ffe5aa7379e8326387e0fe16f34132
+            redirectUri: "{baseUrl}/oauth2/callback/{registrationId}"
+            scope:
+              - email
+              - public_profile
+          github:
+            clientId: d3e47fc2ddd966fa4352
+            clientSecret: 3bc0f6b8332f93076354c2a5bada2f5a05aea60d
+            redirectUri: "{baseUrl}/oauth2/callback/{registrationId}"
+            scope:
+              - user:email
+              - read:user
+        provider:
+          facebook:
+            authorizationUri: https://www.facebook.com/v3.0/dialog/oauth
+            tokenUri: https://graph.facebook.com/v3.0/oauth/access_token
+            userInfoUri: https://graph.facebook.com/v3.0/me?fields=id,first_name,middle_name,last_name,name,email,verified,is_verified,picture.width(250).height(250)
+          ok:
+            authorization-uri: https://connect.ok.ru/oauth/authorize
+            token-uri: https://api.ok.ru/oauth/token.do
+            user-info-uri: https://api.ok.ru/api/users/getCurrentUser
+            user-name-attribute: uid
+app:
+  auth:
+    tokenSecret: 04ca023b39512e46d0c2cf4b48d5aac61d34302994c87ed4eff225dcf3b0a218739f3897051a057f9b846a69ea2927a587044164b7bae5e1306219d50b588cb1
+    tokenExpirationMsec: 864000000
+  cors:
+    allowedOrigins: http://localhost:3000,http://localhost:8080,http://localhost:5173
+  oauth2:
+    # After successfully authenticating with the OAuth2 Provider,
+    # we'll be generating an auth token for the user and sending the token to the
+    # redirectUri mentioned by the client in the /oauth2/authorize request.
+    # We're not using cookies because they won't work well in mobile clients.
+    authorizedRedirectUris:
+      - http://localhost:3000/oauth2/redirect
+      - myandroidapp://oauth2/redirect
+      - myiosapp://oauth2/redirect
+
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,mappings,beans
+
+
+google:
+  recaptcha:
+    key:
+      site: 6LefKOAUAAAAAE9c8M_Das3vwhlMPmkFTAzvxokN
+      secret: 6LefKOAUAAAAAGs0hOsCoOBu14TKDGu100LkpnVo
+      threshold: '0.5'
+
+
+support:
+  email: support@moyserf.ru
+
+
+purge:
+  cron:
+    expression: 0 0 5 * * ?

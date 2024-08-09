@@ -1,9 +1,8 @@
 package ru.shutovna.moyserf.service;
-
-import ru.shutovna.moyserf.persistence.model.PasswordResetToken;
-import ru.shutovna.moyserf.persistence.model.User;
-import ru.shutovna.moyserf.persistence.model.VerificationToken;
-import ru.shutovna.moyserf.web.dto.UserDto;
+import ru.shutovna.moyserf.model.PasswordResetToken;
+import ru.shutovna.moyserf.model.User;
+import ru.shutovna.moyserf.model.VerificationToken;
+import ru.shutovna.moyserf.payload.SignUpRequest;
 
 import java.io.UnsupportedEncodingException;
 import java.util.List;
@@ -12,7 +11,7 @@ import java.util.function.Consumer;
 
 public interface IUserService {
 
-    User registerNewUserAccount(UserDto accountDto);
+    User registerNewUserAccount(SignUpRequest signUpRequest);
 
     User getUser(String verificationToken);
 

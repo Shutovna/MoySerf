@@ -1,6 +1,5 @@
 package ru.shutovna.moyserf.service;
 
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -9,11 +8,17 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import ru.shutovna.moyserf.persistence.dao.*;
-import ru.shutovna.moyserf.persistence.model.*;
-import ru.shutovna.moyserf.web.dto.UserDto;
-import ru.shutovna.moyserf.web.error.UserAlreadyExistException;
+import ru.shutovna.moyserf.error.UserAlreadyExistException;
+import ru.shutovna.moyserf.model.PasswordResetToken;
+import ru.shutovna.moyserf.model.User;
+import ru.shutovna.moyserf.model.VerificationToken;
+import ru.shutovna.moyserf.payload.SignUpRequest;
+import ru.shutovna.moyserf.repository.PasswordResetTokenRepository;
+import ru.shutovna.moyserf.repository.RoleRepository;
+import ru.shutovna.moyserf.repository.UserRepository;
+import ru.shutovna.moyserf.repository.VerificationTokenRepository;
 
+import javax.transaction.Transactional;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.*;
@@ -55,17 +60,15 @@ public class UserService implements IUserService {
     // API
 
     @Override
-    public User registerNewUserAccount(final UserDto accountDto) {
-        if (emailExists(accountDto.getEmail())) {
-            throw new UserAlreadyExistException("There is an account with that email address: " + accountDto.getEmail());
+    public User registerNewUserAccount(SignUpRequest signUpRequest) {
+        if (emailExists(signUpRequest.getEmail())) {
+            throw new UserAlreadyExistException("There is an account with that email address: " + signUpRequest.getEmail());
         }
         final User user = new User();
 
-        user.setFirstName(accountDto.getFirstName());
-        user.setLastName(accountDto.getLastName());
-        user.setPassword(passwordEncoder.encode(accountDto.getPassword()));
-        user.setEmail(accountDto.getEmail());
-        user.setUsing2FA(accountDto.isUsing2FA());
+        user.setName(signUpRequest.getName());
+        user.setPassword(passwordEncoder.encode(signUpRequest.getPassword()));
+        user.setEmail(signUpRequest.getEmail());
         user.setRoles(Collections.singletonList(roleRepository.findByName("ROLE_USER")));
         return userRepository.save(user);
     }
@@ -134,7 +137,7 @@ public class UserService implements IUserService {
 
     @Override
     public User findUserByEmail(final String email) {
-        return userRepository.findByEmail(email);
+        return userRepository.findByEmail(email).orElseThrow();
     }
 
     @Override
@@ -190,7 +193,6 @@ public class UserService implements IUserService {
             return TOKEN_EXPIRED;
         }
 
-        user.setEnabled(true);
         // tokenRepository.delete(verificationToken);
         userRepository.save(user);
         return TOKEN_VALID;
@@ -198,7 +200,8 @@ public class UserService implements IUserService {
 
     @Override
     public String generateQRUrl(User user) throws UnsupportedEncodingException {
-        return QR_PREFIX + URLEncoder.encode(String.format("otpauth://totp/%s:%s?secret=%s&issuer=%s", APP_NAME, user.getEmail(), user.getSecret(), APP_NAME), "UTF-8");
+        /*todo*/
+        return QR_PREFIX + URLEncoder.encode(String.format("otpauth://totp/%s:%s?secret=%s&issuer=%s", APP_NAME, user.getEmail(), null /* user.getSecret()*/, APP_NAME), "UTF-8");
     }
 
     @Override
@@ -206,7 +209,6 @@ public class UserService implements IUserService {
         final Authentication curAuth = SecurityContextHolder.getContext()
                 .getAuthentication();
         User currentUser = (User) curAuth.getPrincipal();
-        currentUser.setUsing2FA(use2FA);
         currentUser = userRepository.save(currentUser);
         final Authentication auth = new UsernamePasswordAuthenticationToken(currentUser, currentUser.getPassword(), curAuth.getAuthorities());
         SecurityContextHolder.getContext()
@@ -217,6 +219,7 @@ public class UserService implements IUserService {
     private boolean emailExists(final String email) {
         return userRepository.findByEmail(email) != null;
     }
+
     @Override
     public List<String> getUsersFromSessionRegistry() {
         return sessionRegistry.getAllPrincipals()

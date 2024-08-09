@@ -1,7 +1,7 @@
 package ru.shutovna.moyserf.registration;
 
 import org.springframework.context.ApplicationEvent;
-import ru.shutovna.moyserf.persistence.model.User;
+import ru.shutovna.moyserf.model.User;
 
 import java.util.Locale;
 
