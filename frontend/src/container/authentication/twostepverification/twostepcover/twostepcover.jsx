@@ -61,7 +61,7 @@ const Twostepcover = () => {
                         <Col xxl={6} xl={7} lg={7} md={7} sm={8} className=" col-12">
                             <div className="p-5">
                                 <div className="mb-3">
-                                    <Link to={`${import.meta.env.BASE_URL}dashboards/crm/`}>
+                                    <Link to={`${import.meta.env.BASE_URL}main/`}>
                                         <img src={desktoplogo} alt="" className="authentication-brand desktop-logo" />
                                         <img src={desktopdarklogo} alt="" className="authentication-brand desktop-dark" />
                                     </Link>
@@ -120,7 +120,7 @@ const Twostepcover = () => {
                                         </div>
                                     </Col>
                                     <Col xl={12} className="d-grid">
-                                        <Link to={`${import.meta.env.BASE_URL}dashboards/crm/`} className="btn btn-lg btn-primary">Verify</Link>
+                                        <Link to={`${import.meta.env.BASE_URL}main/`} className="btn btn-lg btn-primary">Verify</Link>
                                     </Col>
                                 </Row>
                                 <div className="text-center">

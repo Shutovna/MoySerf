@@ -14,7 +14,7 @@ const Basic = () => {
         <div className="row justify-content-center authentication authentication-basic align-items-center h-100">
             <Col xxl={4} xl={5} lg={5} md={6} sm={8} className="col-12">
                 <div className="my-5 d-flex justify-content-center">
-                    <Link to={`${import.meta.env.BASE_URL}dashboards/crm/`}>
+                    <Link to={`${import.meta.env.BASE_URL}main/`}>
                         <img src={desktoplogo} alt="logo" className="desktop-logo"/>
                         <img src={desktopdarklogo} alt="logo" className="desktop-dark"/>
                     </Link>
@@ -53,7 +53,7 @@ const Basic = () => {
                             </Col>
                         </div>
                         <div className="text-center">
-                            <p className="fs-12 text-muted mt-3">Back to home ? <Link to={`${import.meta.env.BASE_URL}dashboards/crm/`} className="text-primary">Click Here</Link></p>
+                            <p className="fs-12 text-muted mt-3">Back to home ? <Link to={`${import.meta.env.BASE_URL}main/`} className="text-primary">Click Here</Link></p>
                         </div>
                         <div className="text-center my-3 authentication-barrier">
                             <span>OR</span>

@@ -1,5 +1,5 @@
 // export const Sidebarcomponents = [
-//     { path: `${import.meta.env.BASE_URL}dashboards/crm`, title: 'Crm' },
+//     { path: `${import.meta.env.BASE_URL}main`, title: 'Crm' },
 //     { path: `${import.meta.env.BASE_URL}dashboards/ecommerce`, title: 'Ecommerce' },
 //     { path: `${import.meta.env.BASE_URL}dashboards/crypto`, title: 'Crypto' },
 //     { path: `${import.meta.env.BASE_URL}dashboards/jobs`, title: 'Jobs' },

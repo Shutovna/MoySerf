@@ -62,7 +62,6 @@ const Jobslanding = ({  ThemeChanger }) => {
         }
 
         handleResize(); // Initial check
-
         window.addEventListener('resize', handleResize);
         return () => window.removeEventListener('resize', handleResize);
     }, []);
@@ -120,232 +119,23 @@ const Jobslanding = ({  ThemeChanger }) => {
             <Helmet>
                 <body className="landing-body jobs-landing"></body>
             </Helmet>
-            <header className="app-header">
-                <div className="main-header-container container-fluid">
 
-                    <div className="header-content-left">
 
-                        <div className="header-element">
-                            <div className="horizontal-logo">
-                                <a href={`${import.meta.env.BASE_URL}dashboards/crm/`} className="header-logo">
-                                    <img src={togglelogo} alt="logo" className="toggle-logo" />
-                                    <img src={toggledark} alt="logo" className="toggle-dark" />
-                                </a>
-                            </div>
-                        </div>
-
-                        <div className="header-element">
-                            <Link to="#" className="sidemenu-toggle header-link" data-bs-toggle="sidebar" onClick={toggleNavigation} >
-                                <span className="open-toggle">
-                                    <i className="ri-menu-3-line fs-20"></i>
-                                </span>
-                            </Link>
-                        </div>
-
-                    </div>
-
-                    <div className="header-content-right">
-
-                        <div className="header-element align-items-center">
-                            <div className="btn-list d-lg-none d-block">
-                                <Link to={`${import.meta.env.BASE_URL}authentication/signup/signupbasic/`} className="btn btn-primary-light">
-                                    Sign Up
-                                </Link>
-                                <Button variant='success' className="btn btn-icon btn-success switcher-icon" data-bs-toggle="offcanvas" onClick={() => Switchericon()} data-bs-target="#switcher-canvas">
-                                    <i className="ri-settings-3-line"></i>
-                                </Button>
-                            </div>
-                        </div>
-
-                    </div>
-
-                </div>
-            </header>
-            <aside className="app-sidebar sticky" id="sidebar">
-
-                <div className="container p-0">
-                    <div className="main-sidebar">
-
-                        <nav className="main-menu-container nav nav-pills sub-open">
-                            <div className="landing-logo-container">
-                                <div className="horizontal-logo">
-                                    <Link to={`${import.meta.env.BASE_URL}dashboards/crm/`} className="header-logo">
-                                        <img src={desktoplogo} alt="logo" className="desktop-logo" />
-                                        <img src={desktopwhitelogo} alt="logo" className="desktop-white" />
-                                    </Link>
-                                </div>
-                            </div>
-                            <div className="slide-left" id="slide-left"><svg xmlns="http://www.w3.org/2000/svg" fill="#7b8191" width="24" height="24" viewBox="0 0 24 24"> <path d="M13.293 6.293 7.586 12l5.707 5.707 1.414-1.414L10.414 12l4.293-4.293z"></path> </svg></div>
-                            <Navbar2 />
-                            <div className="slide-right" id="slide-right"><svg xmlns="http://www.w3.org/2000/svg" fill="#7b8191" width="24" height="24" viewBox="0 0 24 24">
-                                <path d="M10.707 17.707 16.414 12l-5.707-5.707-1.414 1.414L13.586 12l-4.293 4.293z"></path> </svg></div>
-                            <div className="d-lg-flex d-none">
-                                <div className="btn-list d-lg-flex d-none mt-lg-2 mt-xl-0 mt-0">
-                                    <Link to={`${import.meta.env.BASE_URL}authentication/signup/signupbasic/`} className="btn btn-wave btn-primary">
-                                        Sign Up
-                                    </Link>
-                                    <Link to={`${import.meta.env.BASE_URL}apps/jobs/jobpost/`} className="btn btn-wave btn-secondary">
-                                        Job Post
-                                    </Link>
-                                    <Button variant='' className="btn btn-wave btn-icon btn-light switcher-icon" onClick={() => Switchericon()} data-bs-toggle="offcanvas" data-bs-target="#switcher-canvas">
-                                        <i className="ri-settings-3-line"></i>
-                                    </Button>
-                                </div>
-                            </div>
-                        </nav>
-
-                    </div>
-                </div>
-
-            </aside>
             <div className="main-content landing-main" onClick={handleClick}>
-                <div className="landing-banner" id="home">
-                    <section className="section pb-0">
-                        <div className="container main-banner-container">
-                            <div className="row justify-content-center text-center">
-                                <Col xxl={7} xl={7} lg={8}>
-                                    <div className="">
-                                        <h5 className="landing-banner-heading mb-3"><span className="text-secondary fw-bold">6000+ </span>Jobs, Find your dream job</h5>
-                                        <p className="fs-18 mb-5 op-8 fw-normal text-fixed-white">Register & get free access to latest openings worldwide. Create & submit your resume with few easy steps.</p>
-                                        <div className="mb-3 custom-form-group">
-                                            <input type="text" className="form-control form-control-lg shadow-sm" placeholder="Job title, Keywords or Company.."
-                                                aria-label="Recipient's username" />
-                                            <div className="custom-form-btn">
-                                                <Link to="#" className="gps-location"><i className="ti ti-current-location"></i></Link>
-                                                <Button variant='' className="btn btn-primary border-0" type="button"><i className="bi bi-search me-2"></i> Search</Button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </Col>
-                            </div>
-                        </div>
-                    </section>
-                </div>
-                <section className="section section-bg " id="jobs">
-                    <div className="container">
-                        <div className="d-flex align-items-center justify-content-between flex-wrap gap-3 mb-5">
-                            <div>
-                                <p className="fs-12 fw-semibold mb-1">Find jobs</p>
-                                <h3 className="fw-semibold mb-0">Browse Jobs by Top Categories</h3>
-                                <span className="text-muted fs-15 fw-normal d-block">Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua</span>
-                            </div>
-                            <div>
-                                <Link to="#" className="btn btn-wave btn-primary">
-                                    View All Categories <i className="bi bi-arrow-right"></i>
-                                </Link>
-                            </div>
-                        </div>
-                        <Row>
-                            <Col lg={4} md={6} className="col-12">
-                                <Card className="custom-card border">
-                                    <div className="row g-0">
-                                        <Col md={3} className="col-4">
-                                            <img src={jobslanding1} className="img-fluid rounded-start h-100 browse-jobs-image" alt="..." />
-                                        </Col>
-                                        <Col md={9} className="col-8 my-auto">
-                                            <Card.Body>
-                                                <h5 className="card-title fw-semibold">Business Development</h5>
-                                                <p><span className="text-default fw-semibold">120 Jobs</span> available</p>
-                                                <Link className="text-primary fw-semibold" to="#">Explore Jobs<i className="ri-arrow-right-s-line align-middle transform-arrow"></i></Link>
-                                            </Card.Body>
-                                        </Col>
-                                    </div>
-                                </Card>
-                            </Col>
-                            <Col lg={4} md={6} className="col-12">
-                                <Card className="custom-card border">
-                                    <div className="row g-0">
-                                        <Col md={3} className="col-4">
-                                            <img src={jobslanding2} className="img-fluid rounded-start h-100 browse-jobs-image" alt="..." />
-                                        </Col>
-                                        <Col md={9} className="col-8 my-auto">
-                                            <Card.Body>
-                                                <h5 className="card-title fw-semibold">Customer Support</h5>
-                                                <p><span className="text-default fw-semibold">370 Jobs</span> available</p>
-                                                <Link className="text-primary fw-semibold" to="#">Explore Jobs<i className="ri-arrow-right-s-line align-middle transform-arrow"></i></Link>
-                                            </Card.Body>
-                                        </Col>
-                                    </div>
-                                </Card>
-                            </Col>
-                            <Col lg={4} md={6} className="col-12">
-                                <Card className="custom-card border">
-                                    <div className="row g-0">
-                                        <Col md={3} className="col-4">
-                                            <img src={jobslanding3} className="img-fluid rounded-start h-100 browse-jobs-image" alt="..." />
-                                        </Col>
-                                        <Col md={9} className="col-8 my-auto">
-                                            <Card.Body>
-                                                <h5 className="card-title fw-semibold">Marketing</h5>
-                                                <p><span className="text-default fw-semibold">743 Jobs</span> available</p>
-                                                <Link className="text-primary fw-semibold" to="#">Explore Jobs<i className="ri-arrow-right-s-line align-middle transform-arrow"></i></Link>
-                                            </Card.Body>
-                                        </Col>
-                                    </div>
-                                </Card>
-                            </Col>
-                            <Col lg={4} md={6} className="col-12">
-                                <Card className="custom-card border">
-                                    <div className="row g-0">
-                                        <Col md={3} className="col-4">
-                                            <img src={jobslanding4} className="img-fluid rounded-start h-100 browse-jobs-image" alt="..." />
-                                        </Col>
-                                        <Col md={9} className="col-8 my-auto">
-                                            <Card.Body>
-                                                <h5 className="card-title fw-semibold">Product Management</h5>
-                                                <p><span className="text-default fw-semibold">156 Jobs</span> available</p>
-                                                <Link className="text-primary fw-semibold" to="#">Explore Jobs<i className="ri-arrow-right-s-line align-middle transform-arrow"></i></Link>
-                                            </Card.Body>
-                                        </Col>
-                                    </div>
-                                </Card>
-                            </Col>
-                            <Col lg={4} md={6} className="col-12">
-                                <Card className="custom-card border">
-                                    <div className="row g-0">
-                                        <Col md={3} className="col-4">
-                                            <img src={jobslanding5} className="img-fluid rounded-start h-100 browse-jobs-image" alt="..." />
-                                        </Col>
-                                        <Col md={9} className="col-8 my-auto">
-                                            <Card.Body>
-                                                <h5 className="card-title fw-semibold">Accountant</h5>
-                                                <p><span className="text-default fw-semibold">67 Jobs</span> available</p>
-                                                <Link className="text-primary fw-semibold" to="#">Explore Jobs<i className="ri-arrow-right-s-line align-middle transform-arrow"></i></Link>
-                                            </Card.Body>
-                                        </Col>
-                                    </div>
-                                </Card>
-                            </Col>
-                            <Col lg={4} md={6} className="col-12">
-                                <Card className="custom-card border">
-                                    <div className="row g-0">
-                                        <Col md={3} className="col-4">
-                                            <img src={jobslanding6} className="img-fluid rounded-start h-100 browse-jobs-image" alt="..." />
-                                        </Col>
-                                        <Col md={9} className="col-8 my-auto">
-                                            <Card.Body>
-                                                <h5 className="card-title fw-semibold">Technical Support</h5>
-                                                <p><span className="text-default fw-semibold">140 Jobs</span> available</p>
-                                                <Link className="text-primary fw-semibold" to="#">Explore Jobs<i className="ri-arrow-right-s-line align-middle transform-arrow"></i></Link>
-                                            </Card.Body>
-                                        </Col>
-                                    </div>
-                                </Card>
-                            </Col>
-                        </Row>
-                    </div>
-                </section>
+
+
                 <section className="section bg-light" id="steps">
                     <div className="container text-center">
                         <div className="row justify-content-center text-center mb-5">
                             <Col xl={6}>
-                                <p className="fs-12 fw-semibold mb-1"><span className="landing-section-heading">Steps</span></p>
-                                <h3 className="fw-semibold mb-2">How it works ?</h3>
-                                <span className="text-muted fs-15 fw-normal d-block">Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua</span>
+                                <h3 className="fw-semibold mb-2">Преимущества VIP</h3>
                             </Col>
                         </div>
                         <div className="row text-start">
                             <div className="col-12 col-md-4">
+                                <h5 className="fw-semibold">
+                                    VIP за 100 руб.
+                                </h5>
                                 <Card className="custom-card border">
                                     <Card.Body className="rounded">
                                         <div className="mb-3 ms-1">
@@ -356,12 +146,83 @@ const Jobslanding = ({  ThemeChanger }) => {
                                             </div>
                                         </div>
                                         <h5 className="fw-semibold">
-                                            Register Your Account
+                                            Бонус от рекламодателей
                                         </h5>
                                         <p className="op-8">
-                                            Est amet sit vero sanctus labore no sed ipsum ipsum nonumy. Sit ipsum sanctus ea.
+                                            С пополнения в 25 руб вы получите 2.5 руб.
                                         </p>
-                                        <Link className="mx-1 text-primary fw-semibold" to="#">Register Now<i className="ri-arrow-right-s-line align-center transform-arrow"></i></Link>
+                                        <Link className="mx-1 text-primary fw-semibold" to="#">Register Now<i
+                                            className="ri-arrow-right-s-line align-center transform-arrow"></i></Link>
+                                    </Card.Body>
+                                </Card>
+                            </div>
+                            <Col md={4} className="col-12">
+                                <h5 className="fw-semibold">
+                                    VIP за 200 руб.
+                                </h5>
+                                <Card className="custom-card border">
+                                    <Card.Body className="rounded">
+                                        <div className="mb-3 ms-1">
+                                            <div className="icon-style">
+                                                <span className="avatar avatar-lg avatar-rounded bg-primary svg-white">
+                                                <i className="ti ti-user-plus fs-20"></i>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <h5 className="fw-semibold">
+                                            Бонус от рекламодателей
+                                        </h5>
+                                        <p className="op-8">
+                                            С пополнения в 25 руб вы получите 5 руб.
+                                        </p>
+                                        <Link className="mx-1 text-primary fw-semibold" to="#">Complete Profile<i
+                                            className="ri-arrow-right-s-line align-center transform-arrow"></i></Link>
+                                    </Card.Body>
+                                </Card>
+                            </Col>
+                            <Col md={4} className="col-12 col-md-4">
+                                <h5 className="fw-semibold">
+                                    VIP за 300 руб.
+                                </h5>
+                                <Card className="custom-card border">
+                                    <Card.Body className="rounded">
+                                        <div className="mb-3 ms-1">
+                                            <div className="icon-style">
+                                                <span className="avatar avatar-lg avatar-rounded bg-primary svg-white">
+                                                <i className="ti ti-briefcase fs-20"></i>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <h5 className="fw-semibold">
+                                            Бонус от рекламодателей
+                                        </h5>
+                                        <p className="op-8">
+                                            С пополнения в 25 руб вы получите 7.5 руб.
+                                        </p>
+                                        <Link className="mx-1 text-primary fw-semibold" to="#">Apply Now<i
+                                            className="ri-arrow-right-s-line align-center transform-arrow"></i></Link>
+                                    </Card.Body>
+                                </Card>
+                            </Col>
+                        </div>
+                        <div className="row text-start">
+                            <div className="col-12 col-md-4">
+
+                                <Card className="custom-card border">
+                                    <Card.Body className="rounded">
+                                        <div className="mb-3 ms-1">
+                                            <div className="icon-style">
+                                                <span className="avatar avatar-lg avatar-rounded bg-primary">
+                                                <i className="ti ti-file-invoice fs-20"></i>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <h5 className="fw-semibold">Покупка VIP рефералом</h5>
+                                        <p className="op-8">
+                                            С пополнения в 25 руб вы получите 2.5 руб.
+                                        </p>
+                                        <Link className="mx-1 text-primary fw-semibold" to="#">Register Now<i
+                                            className="ri-arrow-right-s-line align-center transform-arrow"></i></Link>
                                     </Card.Body>
                                 </Card>
                             </div>
@@ -375,13 +236,12 @@ const Jobslanding = ({  ThemeChanger }) => {
                                                 </span>
                                             </div>
                                         </div>
-                                        <h5 className="fw-semibold">
-                                            Complete Your Profile
-                                        </h5>
+                                        <h5 className="fw-semibold">Покупка VIP рефералом</h5>
                                         <p className="op-8">
-                                            Est amet sit vero sanctus labore no sed ipsum ipsum nonumy. Sit ipsum sanctus ea.
+                                            С пополнения в 25 руб вы получите 5 руб.
                                         </p>
-                                        <Link className="mx-1 text-primary fw-semibold" to="#">Complete Profile<i className="ri-arrow-right-s-line align-center transform-arrow"></i></Link>
+                                        <Link className="mx-1 text-primary fw-semibold" to="#">Complete Profile<i
+                                            className="ri-arrow-right-s-line align-center transform-arrow"></i></Link>
                                     </Card.Body>
                                 </Card>
                             </Col>
@@ -395,13 +255,12 @@ const Jobslanding = ({  ThemeChanger }) => {
                                                 </span>
                                             </div>
                                         </div>
-                                        <h5 className="fw-semibold">
-                                            Apply job / Hire
-                                        </h5>
+                                        <h5 className="fw-semibold">Покупка VIP рефералом</h5>
                                         <p className="op-8">
-                                            Est amet sit vero sanctus labore no sed ipsum ipsum nonumy. Sit ipsum sanctus ea.
+                                            С пополнения в 25 руб вы получите 7.5 руб.
                                         </p>
-                                        <Link className="mx-1 text-primary fw-semibold" to="#">Apply Now<i className="ri-arrow-right-s-line align-center transform-arrow"></i></Link>
+                                        <Link className="mx-1 text-primary fw-semibold" to="#">Apply Now<i
+                                            className="ri-arrow-right-s-line align-center transform-arrow"></i></Link>
                                     </Card.Body>
                                 </Card>
                             </Col>
@@ -412,13 +271,19 @@ const Jobslanding = ({  ThemeChanger }) => {
                     <div className="container">
                         <div className="row align-items-center justify-content-center">
                             <Col md={5} xl={4} className="text-center mt-4 d-lg-block d-none">
-                                <img src={jobslanding8} width="350" alt="" />
+                                <img src={jobslanding8} width="350" alt=""/>
                             </Col>
                             <Col md={7} xl={8}>
                                 <div className="my-4">
-                                    <h2 className="fw-semibold mb-3 text-fixed-white">Are You Looking For A Job? Just <Link to="#" className="text-fixed-white text-decoration-line"> <u>drop</u> </Link> resume..</h2>
-                                    <p className="mb-4 fs-15 op-8 fw-normal">Est amet sit vero sanctus labore no sed nonumy. Sit ipsum sanctus ea magna est. Aliquyam sed amet. Kasd diam rebum sit ipsum ipsum.Est amet sit vero sanctus labore no sed ipsum ipsum nonumy vero sanctus labore.. </p>
-                                    <Link to="#" className="btn btn-light btn-lg"><i className="ti ti-upload"></i> Upload Your Resume</Link>
+                                    <h2 className="fw-semibold mb-3 text-fixed-white">Are You Looking For A Job?
+                                        Just <Link to="#" className="text-fixed-white text-decoration-line"> <u>drop</u>
+                                        </Link> resume..</h2>
+                                    <p className="mb-4 fs-15 op-8 fw-normal">Est amet sit vero sanctus labore no sed
+                                        nonumy. Sit ipsum sanctus ea magna est. Aliquyam sed amet. Kasd diam rebum sit
+                                        ipsum ipsum.Est amet sit vero sanctus labore no sed ipsum ipsum nonumy vero
+                                        sanctus labore.. </p>
+                                    <Link to="#" className="btn btn-light btn-lg"><i
+                                        className="ti ti-upload"></i> Upload Your Resume</Link>
                                 </div>
                             </Col>
                         </div>
@@ -428,7 +293,8 @@ const Jobslanding = ({  ThemeChanger }) => {
                     <div className="container">
                         <div className="row justify-content-center text-center mb-5">
                             <Col xl={6}>
-                                <p className="fs-12 fw-semibold mb-1"><span className="landing-section-heading">Find jobs</span></p>
+                                <p className="fs-12 fw-semibold mb-1"><span className="landing-section-heading">Find jobs</span>
+                                </p>
                                 <h3 className="fw-semibold mb-2">Featured Jobs</h3>
                                 <span className="text-muted fs-15 fw-normal d-block">Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua</span>
                             </Col>
@@ -439,20 +305,29 @@ const Jobslanding = ({  ThemeChanger }) => {
                                     <Card.Body>
                                         <div className="btn-list float-end">
                                             <Link to="#" className="wishlist-icon" data-bs-toggle="tooltip"
-                                                data-bs-placement="top" title="Add to wishlist"><span><i className="bi bi-heart"></i></span></Link>
+                                                  data-bs-placement="top" title="Add to wishlist"><span><i
+                                                className="bi bi-heart"></i></span></Link>
                                             <Link to="#" className="wishlist-icon text-warning" data-bs-toggle="tooltip"
-                                                data-bs-placement="top" title="Featured Jobs"><span><i className="bi bi-star-fill"></i></span></Link>
+                                                  data-bs-placement="top" title="Featured Jobs"><span><i
+                                                className="bi bi-star-fill"></i></span></Link>
                                         </div>
                                         <div className="d-flex mb-3">
-                                            <span className="avatar avatar-lg avatar-rounded bg-primary bg-opacity-10 border"><svg xmlns="http://www.w3.org/2000/svg" data-name="Layer 1" viewBox="0 0 24 24"><path fill="var(--primary-color)" d="M21.46777,2.3252A1.00007,1.00007,0,0,0,20.73,2H3.27a1.00039,1.00039,0,0,0-.99609,1.08887l1.52,17a.99944.99944,0,0,0,.72851.87451l7.2002,2A.99628.99628,0,0,0,11.99023,23a1.01206,1.01206,0,0,0,.26709-.03613l7.21973-2a1.00055,1.00055,0,0,0,.729-.875l1.52-17A1,1,0,0,0,21.46777,2.3252Zm-3.19238,16.896L11.99072,20.9624,5.72461,19.22168,4.36328,4H19.63672ZM7.81982,13h6.895l-.32714,3.271-2.56788.917L8.65625,16.05811a1.00017,1.00017,0,1,0-.67285,1.88378l3.5,1.25a1.00291,1.00291,0,0,0,.67285,0l3.5-1.25a1.00044,1.00044,0,0,0,.65869-.84228l.5-5A1.00064,1.00064,0,0,0,15.81982,11H8.72461L8.4248,8h7.895a1,1,0,0,0,0-2h-9a1.00064,1.00064,0,0,0-.99511,1.09961l.5,5A1.00012,1.00012,0,0,0,7.81982,13Z" /></svg></span>
+                                            <span
+                                                className="avatar avatar-lg avatar-rounded bg-primary bg-opacity-10 border"><svg
+                                                xmlns="http://www.w3.org/2000/svg" data-name="Layer 1"
+                                                viewBox="0 0 24 24"><path fill="var(--primary-color)"
+                                                                          d="M21.46777,2.3252A1.00007,1.00007,0,0,0,20.73,2H3.27a1.00039,1.00039,0,0,0-.99609,1.08887l1.52,17a.99944.99944,0,0,0,.72851.87451l7.2002,2A.99628.99628,0,0,0,11.99023,23a1.01206,1.01206,0,0,0,.26709-.03613l7.21973-2a1.00055,1.00055,0,0,0,.729-.875l1.52-17A1,1,0,0,0,21.46777,2.3252Zm-3.19238,16.896L11.99072,20.9624,5.72461,19.22168,4.36328,4H19.63672ZM7.81982,13h6.895l-.32714,3.271-2.56788.917L8.65625,16.05811a1.00017,1.00017,0,1,0-.67285,1.88378l3.5,1.25a1.00291,1.00291,0,0,0,.67285,0l3.5-1.25a1.00044,1.00044,0,0,0,.65869-.84228l.5-5A1.00064,1.00064,0,0,0,15.81982,11H8.72461L8.4248,8h7.895a1,1,0,0,0,0-2h-9a1.00064,1.00064,0,0,0-.99511,1.09961l.5,5A1.00012,1.00012,0,0,0,7.81982,13Z"/></svg></span>
                                             <div className="ms-2">
-                                                <h5 className="fw-semibold mb-0 d-flex align-items-center"><Link to="#"> HTML Developer - Fresher</Link></h5>
+                                                <h5 className="fw-semibold mb-0 d-flex align-items-center"><Link
+                                                    to="#"> HTML Developer - Fresher</Link></h5>
                                                 <Link to="#">Spotech Technical Solutions</Link>
                                             </div>
                                         </div>
                                         <div className="popular-tags mb-3">
-                                            <Link to="#" className="badge rounded-pill bg-light text-default me-1"><i className="bi bi-geo-alt text-muted me-1"></i> Hyderabad</Link>
-                                            <Link to="#" className="badge rounded-pill bg-light text-default me-1"><i className="bi bi-briefcase text-muted me-1"></i> 13 Openings</Link>
+                                            <Link to="#" className="badge rounded-pill bg-light text-default me-1"><i
+                                                className="bi bi-geo-alt text-muted me-1"></i> Hyderabad</Link>
+                                            <Link to="#" className="badge rounded-pill bg-light text-default me-1"><i
+                                                className="bi bi-briefcase text-muted me-1"></i> 13 Openings</Link>
                                             <Link to="#" className="badge rounded-pill bg-light text-default me-1"><i className="bi bi-mortarboard text-muted me-1"></i> Graduate</Link>
                                             <Link to="#" className="badge rounded-pill bg-light text-default me-1"><i className="bi bi-clock text-muted me-1"></i> Min - 2Years</Link>
                                             <Link to="#" className="badge rounded-pill bg-light text-default me-1"><i className="bi bi-moon-stars text-muted me-1"></i> flexible-shift</Link>

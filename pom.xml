@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>ru.shutovna</groupId>
-	<artifactId>myserf</artifactId>
+	<artifactId>moyserf</artifactId>
 	<version>1.0.1-SNAPSHOT</version>
 
 	<name>MySerf</name>

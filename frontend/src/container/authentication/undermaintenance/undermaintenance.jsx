@@ -32,7 +32,7 @@ const Undermaintenance = () => {
                             <div className="row justify-content-center align-items-center h-100">
                                 <Col xxl={6} xl={8} lg={8} md={12} sm={12} className="col-12">
                                     <div className="mb-2">
-                                        <Link to={`${import.meta.env.BASE_URL}dashboards/crm/`}>
+                                        <Link to={`${import.meta.env.BASE_URL}main/`}>
                                             <img src={togglelogo} alt="" className="authentication-brand" />
                                         </Link>
                                     </div>

@@ -18,7 +18,7 @@ const Error500 = () => {
                                             <p className="mb-0 op-7">We are sorry for the inconvenience,The page you are trying to access has been removed or never been existed.</p>
                                         </Col>
                                     </div>
-                                    <Link to={`${import.meta.env.BASE_URL}dashboards/crm/`} className="btn btn-primary"><i className="ri-arrow-left-line align-middle me-1 d-inline-block"></i>BACK TO HOME</Link>
+                                    <Link to={`${import.meta.env.BASE_URL}main/`} className="btn btn-primary"><i className="ri-arrow-left-line align-middle me-1 d-inline-block"></i>BACK TO HOME</Link>
                                 </Col>
                             </div>
                         </div>

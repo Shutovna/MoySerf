@@ -30,7 +30,7 @@ const Twostepbasic = () => {
                 <div className="row justify-content-center align-items-center authentication authentication-basic h-100">
                     <Col xxl={4} xl={5} lg={5} md={6} sm={8} className="col-12">
                         <div className="my-5 d-flex justify-content-center">
-                            <Link to={`${import.meta.env.BASE_URL}dashboards/crm/`}>
+                            <Link to={`${import.meta.env.BASE_URL}main/`}>
                                 <img src={desktoplogo} alt="logo" className="desktop-logo" />
                                 <img src={desktopdarklogo} alt="logo" className="desktop-dark" />
                             </Link>
@@ -91,7 +91,7 @@ const Twostepbasic = () => {
                                         </div>
                                     </Col>
                                     <Col xl={12} className=" d-grid mt-2">
-                                        <Link to={`${import.meta.env.BASE_URL}dashboards/crm/`} className="btn btn-lg btn-primary">Verify</Link>
+                                        <Link to={`${import.meta.env.BASE_URL}main/`} className="btn btn-lg btn-primary">Verify</Link>
                                     </Col>
                                 </div>
                                 <div className="text-center">

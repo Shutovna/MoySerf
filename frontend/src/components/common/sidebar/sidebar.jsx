@@ -217,7 +217,7 @@ const Sidebar = ({ local_varaiable, ThemeChanger }) => {
             items.selected = false;
 
             if (dd === '/') {
-              dd = '/dashboards/crm/';
+              dd = '/main/';
             }
             if (dd === items.path + '/') {
               items.active = true;
@@ -470,7 +470,7 @@ const Sidebar = ({ local_varaiable, ThemeChanger }) => {
       <aside className="app-sidebar sticky" id="sidebar" onMouseEnter={() => Onhover()}
         onMouseLeave={() => Outhover()} >
         <div className="main-sidebar-header">
-          <Link to={`${import.meta.env.BASE_URL}dashboards/crm/`} className="header-logo">
+          <Link to={`${import.meta.env.BASE_URL}main/`} className="header-logo">
             <img src={logo1} alt="logo" className="desktop-logo" />
             <img src={logo2} alt="logo" className="toggle-logo" />
             <img src={logo3} alt="logo" className="desktop-dark" />

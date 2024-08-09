@@ -26,12 +26,16 @@ import Error401 from './container/error/401error/401error.jsx';
 import Error404 from './container/error/404error/404error.jsx';
 import Error500 from './container/error/500error/500error.jsx';
 import Loader from './components/common/loader/loader.jsx';
-import Developing from "./myserf/Developing.jsx";
+import DevelopingPage from "./_moyserf/pages/DevelopingPage.jsx";
 import Landinglayout from "./pages/landinglayout.jsx";
 import Landing from "./container/pages/landing/landing.jsx";
 import Jobslanding from "./container/pages/jobslanding/jobslanding.jsx";
 import Cart from "./container/pages/ecommerce/cart/cart.jsx";
-import SerfTable from "./container/pages/myserf/serf/serftable.jsx";
+import SerfTablePage from "./_moyserf/pages/SerfTablePage.jsx";
+import MainDashboardPage from "./_moyserf/pages/MainDashboardPage.jsx";
+import VIPPage from "./_moyserf/pages/VIPPage.jsx";
+import ReferalPage from "./_moyserf/pages/ReferalPage.jsx";
+import LandingPage from "./_moyserf/pages/LandingPage.jsx";
 
 
 ReactDOM.createRoot(document.getElementById('root')).render(
@@ -39,27 +43,36 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <BrowserRouter>
             <React.Suspense fallback={<Loader/>}>
                 <Routes>
-                    <Route path={`${import.meta.env.BASE_URL}`} element={<Auth/>}>
-                        <Route index element={<Login/>}/>
-                        <Route path={`${import.meta.env.BASE_URL}firebase/login`} element={<Login/>}/>
-                        <Route path={`${import.meta.env.BASE_URL}firebase/signup`} element={<Signup/>}/>
-                    </Route>
-                    <Route path={`${import.meta.env.BASE_URL}`} element={<App/>}>
-                        <Route index element={<Crm/>}/>
-                        <Route path={`${import.meta.env.BASE_URL}dashboards/crm`} element={<Crm/>}/>
-                        <Route path={`${import.meta.env.BASE_URL}learning`} element={<Developing/>}/>
-                        <Route path={`${import.meta.env.BASE_URL}serf`} element={<SerfTable/>}/>
-                        <Route path={`${import.meta.env.BASE_URL}serf-video`} element={<Developing/>}/>
-                        <Route path={`${import.meta.env.BASE_URL}adv`} element={<Developing/>}/>
-                        <Route path={`${import.meta.env.BASE_URL}wallet`} element={<Developing/>}/>
-                        <Route path={`${import.meta.env.BASE_URL}referals`} element={<Developing/>}/>
-                        <Route path={`${import.meta.env.BASE_URL}blog`} element={<Developing/>}/>
-                        <Route path={`${import.meta.env.BASE_URL}chat`} element={<Developing/>}/>
-                        <Route path={`${import.meta.env.BASE_URL}settings`} element={<Developing/>}/>
-                        <Route path={`${import.meta.env.BASE_URL}quit`} element={<Developing/>}/>
+                    <Route path="/" element={<Landinglayout/>}>
+                        <Route index element={<LandingPage/>}/>
                     </Route>
 
                     <Route path={`${import.meta.env.BASE_URL}`} element={<Authenticationlayout/>}>
+                        <Route path={`${import.meta.env.BASE_URL}signin`}
+                               element={<Signinbasic/>}/>
+                        <Route path={`${import.meta.env.BASE_URL}signup`}
+                               element={<Signupbasic/>}/>
+                    </Route>
+
+
+                    <Route path={"/cab"} element={<App/>}>
+                        <Route index element={<MainDashboardPage/>}/>
+                        <Route path={`/cab/main`} element={<MainDashboardPage/>}/>
+                        <Route path={`/cab/learning`} element={<DevelopingPage/>}/>
+                        <Route path={`/cab/serf`} element={<SerfTablePage/>}/>
+                        <Route path={`/cab/serf-video`} element={<DevelopingPage/>}/>
+                        <Route path={`/cab/vip`} element={<VIPPage/>}/>
+                        <Route path={`/cab/adv`} element={<DevelopingPage/>}/>
+                        <Route path={`/cab/wallet`} element={<DevelopingPage/>}/>
+                        <Route path={`/cab/referals`} element={<ReferalPage/>}/>
+                        <Route path={`/cab/blog`} element={<DevelopingPage/>}/>
+                        <Route path={`/cab/chat`} element={<DevelopingPage/>}/>
+                        <Route path={`/cab/settings`} element={<DevelopingPage/>}/>
+                        <Route path={`/cab/quit`} element={<DevelopingPage/>}/>
+                    </Route>
+
+                    <Route path={`${import.meta.env.BASE_URL}`} element={<Authenticationlayout/>}>
+
                         <Route path={`${import.meta.env.BASE_URL}authentication/comingsoon`} element={<Comingsoon/>}/>
                         <Route path={`${import.meta.env.BASE_URL}authentication/createpassword/basic`}
                                element={<Basic/>}/>
@@ -94,15 +107,12 @@ ReactDOM.createRoot(document.getElementById('root')).render(
                         <Route path={`${import.meta.env.BASE_URL}authentication/undermaintenance`}
                                element={<Undermaintenance/>}/>
 
-                        <Route path={`${import.meta.env.BASE_URL}`} element={<Landinglayout/>}>
-                            <Route path={`${import.meta.env.BASE_URL}pages/landing`} element={<Landing/>}/>
-                            <Route path={`${import.meta.env.BASE_URL}pages/jobslanding`} element={<Jobslanding/>}/>
-                        </Route>
 
                         <Route path={`${import.meta.env.BASE_URL}error/401error`} element={<Error401/>}/>
                         <Route path={`${import.meta.env.BASE_URL}error/404error`} element={<Error404/>}/>
                         <Route path={`${import.meta.env.BASE_URL}error/500error`} element={<Error500/>}/>
                     </Route>
+
 
                 </Routes>
             </React.Suspense>

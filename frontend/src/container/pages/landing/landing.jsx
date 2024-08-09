@@ -123,7 +123,7 @@ const Landing = ({ ThemeChanger }) => {
 
                         <div className="header-element">
                             <div className="horizontal-logo">
-                                <a href={`${import.meta.env.BASE_URL}dashboards/crm/`} className="header-logo">
+                                <a href={`${import.meta.env.BASE_URL}main/`} className="header-logo">
                                     <img src={togglelogo} alt="logo" className="toggle-logo" />
                                     <img src={toggledark} alt="logo" className="toggle-dark" />
                                 </a>
@@ -233,7 +233,7 @@ const Landing = ({ ThemeChanger }) => {
                                             </span>
                                             <h3 className="fw-semibold mb-0 text-dark">$10.8M</h3>
                                             <p className="mb-1 fs-14 op-7 text-muted ">
-                                                Выплат от рефералам
+                                                Выплат от рефералов
                                             </p>
                                         </div>
                                     </Col>
