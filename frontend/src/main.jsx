@@ -36,7 +36,7 @@ import Signin from "./_moyserf/components/Signin.jsx";
 import Signup from "./_moyserf/components/Signup.jsx";
 import Logout from "./_moyserf/components/Logout.jsx";
 import FAQPage from "./_moyserf/pages/FAQPage.jsx";
-import Blogs from "./_moyserf/pages/blog/blog/Blogs.jsx";
+import Blog from "./container/pages/blog/blog/blog.jsx";
 import Createblog from "./container/pages/blog/createblog/createblog.jsx";
 
 
@@ -69,7 +69,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
                                 <Route path={`/cab/adv`} element={<DevelopingPage/>}/>
                                 <Route path={`/cab/wallet`} element={<DevelopingPage/>}/>
                                 <Route path={`/cab/referals`} element={<ReferalPage/>}/>
-                                <Route path={`/cab/blog/read`} element={<Blogs/>}/>
+                                <Route path={`/cab/blog/read`} element={<Blog/>}/>
                                 <Route path={`/cab/blog/create`} element={<Createblog/>}/>
                                 <Route path={`/cab/chat`} element={<DevelopingPage/>}/>
                                 <Route path={`/cab/faq`} element={<FAQPage/>}/>
