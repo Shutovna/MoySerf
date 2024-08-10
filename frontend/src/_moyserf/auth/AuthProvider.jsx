@@ -1,11 +1,12 @@
 import { useContext, createContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import {ACCESS_TOKEN} from '../../constants';
 
 const AuthContext = createContext(null);
 
 const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
-    const [token, setToken] = useState(localStorage.getItem("site") || "");
+    const [token, setToken] = useState(localStorage.getItem(ACCESS_TOKEN) || "");
     const navigate = useNavigate();
     const loginAction = async (data) => {
         try {
@@ -20,7 +21,7 @@ const AuthProvider = ({ children }) => {
             if (res.accessToken) {
                 //setUser(res.data.user);
                 setToken(res.accessToken);
-                localStorage.setItem("site", res.accessToken);
+                localStorage.setItem(ACCESS_TOKEN, res.accessToken);
                 navigate("/cab/main");
                 return;
             }
@@ -33,7 +34,7 @@ const AuthProvider = ({ children }) => {
     const logOut = () => {
         setUser(null);
         setToken("");
-        localStorage.removeItem("site");
+        localStorage.removeItem(ACCESS_TOKEN);
         navigate("/auth/signin");
     };
 

@@ -4,6 +4,7 @@ import desktoplogo from "../../assets/images/brand-logos/desktop-logo.png";
 import desktopdarklogo from "..//../assets/images/brand-logos/desktop-dark.png";
 import {Link} from 'react-router-dom';
 import {useAuth} from "../auth/AuthProvider.jsx";
+import {GOOGLE_AUTH_URL} from "../constants/index.js";
 
 const Signin = () => {
     const [input, setInput] = useState({
@@ -97,7 +98,7 @@ const Signin = () => {
                                         <span>ИЛИ</span>
                                     </div>
                                     <div className="btn-list text-center">
-                                        <Link variant='light' className="btn btn-icon">
+                                        <Link to={GOOGLE_AUTH_URL} variant='light' className="btn btn-icon">
                                             <i className="ri-google-line fw-bold text-dark op-7"></i>
                                         </Link>
                                         <Link variant='light' className="btn btn-icon">

@@ -51,13 +51,15 @@ ReactDOM.createRoot(document.getElementById('root')).render(
                             <Route index element={<LandingPage/>}/>
                         </Route>
 
-                        <Route path="/oauth2/redirect" element={OAuth2RedirectHandler}></Route>
+                        <Route path={`/oauth2/redirect`}
+                               element={<OAuth2RedirectHandler/>}/>
 
                         <Route path={`${import.meta.env.BASE_URL}`} element={<Authenticationlayout/>}>
                             <Route path={`${import.meta.env.BASE_URL}auth/signin`}
                                    element={<Signin/>}/>
                             <Route path={`${import.meta.env.BASE_URL}auth/signup`}
                                    element={<Signup/>}/>
+
                         </Route>
 
                         <Route element={<PrivateRoute/>}>
