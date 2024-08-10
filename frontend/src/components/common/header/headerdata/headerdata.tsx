@@ -14,9 +14,9 @@
 
 //     { path: `${import.meta.env.BASE_URL}pages/aboutus`, title: 'Aboutus' },
 
-//     { path: `${import.meta.env.BASE_URL}pages/blog/blog`, title: 'Blog' },
-//     { path: `${import.meta.env.BASE_URL}pages/blog/blogdetails`, title: 'Blogdetails' },
-//     { path: `${import.meta.env.BASE_URL}pages/blog/createblog`, title: 'Createblog' },
+//     { path: `${import.meta.env.BASE_URL}pages/blog/blog`, title: 'BlogPage' },
+//     { path: `${import.meta.env.BASE_URL}pages/blog/blogdetails`, title: 'BlogPage' },
+//     { path: `${import.meta.env.BASE_URL}pages/blog/createblog`, title: 'CreateBlog' },
 
 //     { path: `${import.meta.env.BASE_URL}pages/chat`, title: 'Chat' },
 //     { path: `${import.meta.env.BASE_URL}pages/contacts`, title: 'Contacts' },

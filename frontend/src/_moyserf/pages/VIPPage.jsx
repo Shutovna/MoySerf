@@ -109,19 +109,34 @@ const VIPPage = () => {
                                             </tr>
 
 
+                                            <tr>
+                                                <td colSpan="5">При покупке VIP Вы получаете преимущества от
+                                                    просмотров. Вы можете смотреть рекламу не раз в 24 часа, а по такой
+                                                    схеме
+                                                </td>
+                                            </tr>
+                                            <tr key={Math.random()}>
+
+                                                <td>Время просмотра</td>
+                                                <td>раз в 12 часов</td>
+                                                <td>раз в 10 часов</td>
+                                                <td>раз в 8 часов</td>
+                                            </tr>
+
+
                                             <tr key={Math.random()}>
                                                 <td></td>
                                                 <td><Button variant='' type="button"
                                                             className="btn btn-primary btn-wave">
-                                                    <i className="ri-filter-3-fill me-2 align-middle d-inline-block"></i>Filters
+                                                    <i className="ri-filter-3-fill me-2 align-middle d-inline-block"></i>Купить VIP
                                                 </Button></td>
                                                 <td><Button variant='' type="button"
                                                             className="btn btn-primary btn-wave">
-                                                    <i className="ri-filter-3-fill me-2 align-middle d-inline-block"></i>Filters
+                                                    <i className="ri-filter-3-fill me-2 align-middle d-inline-block"></i>Купить VIP
                                                 </Button></td>
                                                 <td><Button variant='' type="button"
                                                             className="btn btn-primary btn-wave">
-                                                    <i className="ri-filter-3-fill me-2 align-middle d-inline-block"></i>Filters
+                                                    <i className="ri-filter-3-fill me-2 align-middle d-inline-block"></i>Купить VIP
                                                 </Button></td>
                                             </tr>
 

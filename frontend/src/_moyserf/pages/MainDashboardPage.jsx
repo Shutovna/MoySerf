@@ -1,5 +1,5 @@
-import {FC, Fragment, useState} from 'react';
-import {Button, Card, Col, Dropdown, Pagination, ProgressBar, Row} from 'react-bootstrap';
+import {FC, Fragment, useState, useEffect} from 'react';
+import {Button, Card, Col, Dropdown, Pagination, ProgressBar, Row, Form} from 'react-bootstrap';
 import {
     Candidatesdata,
     Conversionratio,
@@ -16,11 +16,28 @@ import face10 from "../../assets/images/faces/10.jpg";
 import face12 from "../../assets/images/faces/12.jpg";
 import face9 from "../../assets/images/faces/9.jpg";
 
+
 const MainDashboardPage = () => {
     // for User search function
     const [Data, setData] = useState(Dealsstatistics);
 
     const userdata = [];
+    const clipboardJS = null;
+
+    useEffect(() => {
+        const script = document.createElement('script');
+
+        script.src = 'https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js'; // Укажите здесь URL вашего скрипта
+        script.async = true; // Если нужно, чтобы скрипт загружался асинхронно
+
+        document.body.appendChild(script);
+
+        // Опционально: очистка после размонтирования компонента
+        return () => {
+            document.body.removeChild(script);
+        };
+    }, []); // Пустой массив зависимостей чтобы хук сработал только при монтировании
+
 
     const myfunction = (idx) => {
         let Data;
@@ -45,6 +62,7 @@ const MainDashboardPage = () => {
                     <h1 className="fw-semibold fs-30 mb-0">Приветствуем Вас, Denchik123!</h1>
                 </div>
             </div>
+
             <Row>
                 <section className="section section-bg " id="statistics">
                     <div className="container text-center position-relative">
@@ -99,6 +117,16 @@ const MainDashboardPage = () => {
                                             </p>
                                         </div>
                                     </Col>
+                                    <Col xl={2} lg={4} md={6} sm={6} className="col-12 mb-3">
+                                        <div className="p-3 text-center rounded-2 bg-white border">
+                                            <span
+                                                className="mb-3 avatar avatar-lg avatar-rounded bg-primary-transparent">
+                                                <i className="fs-24 bx bx-user-circle"></i>
+                                            </span>
+                                            <h3 className="fw-semibold mb-0 text-dark">236</h3>
+                                            <p className="mb-1 fs-14 op-7 text-muted ">Всего онлайн</p>
+                                        </div>
+                                    </Col>
                                 </div>
 
                             </Col>
@@ -108,24 +136,45 @@ const MainDashboardPage = () => {
 
 
                 <Row>
-                    <div className="fs-6 mb-2 w-50">
-                        <div className={"fw-semibold fs-5 mb-1"}> Уважаемые участники проекта!</div>
-                        <br/> Для того, чтобы проект мог существовать и
-                        развиваться, в интересах всех пользователей мы должны понимать, что есть необходимость во
-                        взаимной
-                        прибыли. По этой причине на нашем проекте есть очень скромная абонентская плата, которая
-                        вычитается
-                        из той суммы, что Вы заработали.
-                        <br/>Стоимость абонентской платы всего 2.5 рубля в сутки. В случае,
-                        если
-                        денег на вашем рабочем счете меньше абонентской платы с Вас ничего не вычитается.
-                        <br/>Абонентская плата списывается в 00:00 по Мск. В случае вывода средств с Вас будет списана
-                        абонентская плата в 2.5 рубля.
-                    </div>
+                    <Col xl={8} lg={4} md={6} sm={6} >
+                        <div className="fs-6 mb-2 w-50">
+                            <div className={"fw-semibold fs-5 mb-1"}> Уважаемые участники проекта!</div>
+                            <br/> Для того, чтобы проект мог существовать и
+                            развиваться, в интересах всех пользователей мы должны понимать, что есть необходимость во
+                            взаимной
+                            прибыли. По этой причине на нашем проекте есть очень скромная абонентская плата, которая
+                            вычитается
+                            из той суммы, что Вы заработали.
+                            <br/>Стоимость абонентской платы всего 2.5 рубля в сутки. В случае,
+                            если
+                            денег на вашем рабочем счете меньше абонентской платы с Вас ничего не вычитается.
+                            <br/>Абонентская плата списывается в 00:00 по Мск. В случае вывода средств с Вас будет
+                            списана
+                            абонентская плата в 2.5 рубля.
+                        </div>
+                    </Col>
+
+                    <Col xl={4} lg={4} md={6} sm={6} >
+
+                        <Form.Label className={"w-50"} htmlFor="input-text">Type Text</Form.Label>
+                        <Form.Control type="text" id="input-text" placeholder="Text"/>
+
+                        <div
+                            className="d-md-flex d-block align-items-center justify-content-between my-4 page-header-breadcrumb">
+                            <div>
+                                <input id="foo" value="https://github.com/zenorocha/clipboard.js.git"/>
+
+                                <button className="btn" data-clipboard-target="#foo">
+                                    <img src="assets/clippy.svg" alt="Copy to clipboard"/>
+                                </button>
+                            </div>
+                        </div>
+                    </Col>
                 </Row>
 
                 <Row>
-                    <Card className="custom-card w-50">
+                    <Col>
+                        <Card className="custom-card">
                         <Card.Body>
                             <div className="d-flex align-items-top justify-content-between mb-4">
                                 <div>
@@ -146,41 +195,42 @@ const MainDashboardPage = () => {
 
                         </Card.Body>
                     </Card>
+                    </Col>
+                    <Col className={"w-25"}>
+                        <Card className="custom-card">
+                            <Card.Header className=" justify-content-between">
+                                <Card.Title>Статистика за неделю</Card.Title>
+                                <Dropdown>
+                                    <Dropdown.Toggle variant='' className="p-2 fs-12 text-muted no-caret"
+                                                     data-bs-toggle="dropdown" aria-expanded="false">
+                                        View All<i
+                                        className="ri-arrow-down-s-line align-middle ms-1 d-inline-block"></i>
+                                    </Dropdown.Toggle>
+                                    <Dropdown.Menu role="menu">
+                                        <Dropdown.Item>Today</Dropdown.Item>
+                                        <Dropdown.Item>This Week</Dropdown.Item>
+                                        <Dropdown.Item>Last Week</Dropdown.Item>
+                                    </Dropdown.Menu>
+                                </Dropdown>
+                            </Card.Header>
+                            <Card.Body className="py-0 ps-0">
+                                <div id="crm-profits-earned">
+                                    <Profitearned/>
+                                </div>
+                            </Card.Body>
+                        </Card>
+                    </Col>
                 </Row>
+
 
                 <Col xxl={9} xl={12}>
                     <Row>
                         <Col xl={4}>
-                            <Row>
-                                <Col xl={12}>
-                                    <Card className="custom-card crm-highlight-card">
-                                        <Card.Body>
-                                            <div className="d-flex align-items-center justify-content-between">
-                                                <div>
-                                                    <div className="fw-semibold fs-18 text-fixed-white mb-2"></div>
-                                                    <span className="d-block fs-12 text-fixed-white"><span
-                                                        className="op-7">You have completed</span> <span
-                                                        className="fw-semibold text-warning">48%</span> <span
-                                                        className="op-7">of the given target, you can also check your status</span>.</span>
-                                                    <span className="d-block fw-semibold mt-1"><Link
-                                                        className="text-fixed-white"
-                                                        to="#"><u>Click here</u></Link></span>
-                                                </div>
-                                                <div>
-                                                    <div id="crm-main">
-                                                        <Profit/>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </Card.Body>
-                                    </Card>
-                                </Col>
-                            </Row>
                             <Col xl={12}>
                                 <Card className="custom-card">
                                     <Card.Header className="  justify-content-between">
                                         <Card.Title>
-                                            Top Deals
+                                            Топ 5 активных пользователей
                                         </Card.Title>
                                         <Dropdown>
                                             <Dropdown.Toggle variant='' aria-label="anchor"
@@ -278,30 +328,7 @@ const MainDashboardPage = () => {
                                     </Card.Body>
                                 </Card>
                             </Col>
-                            <Col xxl={12} xl={12} lg={12} md={12} sm={12} className="col-12">
-                                <Card className="custom-card">
-                                    <Card.Header className=" justify-content-between">
-                                        <Card.Title>Profit Earned</Card.Title>
-                                        <Dropdown>
-                                            <Dropdown.Toggle variant='' className="p-2 fs-12 text-muted no-caret"
-                                                             data-bs-toggle="dropdown" aria-expanded="false">
-                                                View All<i
-                                                className="ri-arrow-down-s-line align-middle ms-1 d-inline-block"></i>
-                                            </Dropdown.Toggle>
-                                            <Dropdown.Menu role="menu">
-                                                <Dropdown.Item>Today</Dropdown.Item>
-                                                <Dropdown.Item>This Week</Dropdown.Item>
-                                                <Dropdown.Item>Last Week</Dropdown.Item>
-                                            </Dropdown.Menu>
-                                        </Dropdown>
-                                    </Card.Header>
-                                    <Card.Body className="py-0 ps-0">
-                                        <div id="crm-profits-earned">
-                                            <Profitearned/>
-                                        </div>
-                                    </Card.Body>
-                                </Card>
-                            </Col>
+
                         </Col>
                         <Col xl={8} className="col-xl-8">
                             <Row>
@@ -318,7 +345,7 @@ const MainDashboardPage = () => {
                                                     <div
                                                         className="d-flex align-items-center justify-content-between flex-wrap">
                                                         <div>
-                                                            <p className="text-muted mb-0">Total Customers</p>
+                                                            <p className="text-muted mb-0">Просмотрено Вами</p>
                                                             <h4 className="fw-semibold mt-1">1,02,890</h4>
                                                         </div>
                                                         <div id="crm-total-customers">
@@ -354,7 +381,7 @@ const MainDashboardPage = () => {
                                                     <div
                                                         className="d-flex align-items-center justify-content-between flex-wrap">
                                                         <div>
-                                                            <p className="text-muted mb-0">Total Revenue</p>
+                                                            <p className="text-muted mb-0">Заработано Вами</p>
                                                             <h4 className="fw-semibold mt-1">$56,562</h4>
                                                         </div>
                                                         <div id="crm-total-revenue">
@@ -390,7 +417,7 @@ const MainDashboardPage = () => {
                                                     <div
                                                         className="d-flex align-items-center justify-content-between flex-wrap">
                                                         <div>
-                                                            <p className="text-muted mb-0">Conversion Ratio</p>
+                                                            <p className="text-muted mb-0">Заработано на рефералах</p>
                                                             <h4 className="fw-semibold mt-1">12.08%</h4>
                                                         </div>
                                                         <div id="crm-conversion-ratio">
@@ -426,7 +453,7 @@ const MainDashboardPage = () => {
                                                     <div
                                                         className="d-flex align-items-center justify-content-between flex-wrap">
                                                         <div>
-                                                            <p className="text-muted mb-0">Total Deals</p>
+                                                            <p className="text-muted mb-0">Заработано на VIP</p>
                                                             <h4 className="fw-semibold mt-1">2,543</h4>
                                                         </div>
                                                         <div id="crm-total-deals">
@@ -449,40 +476,14 @@ const MainDashboardPage = () => {
                                         </Card.Body>
                                     </Card>
                                 </Col>
-                                <Col xl={12}>
-                                    <Card className="custom-card">
-                                        <Card.Header className=" justify-content-between">
-                                            <Card.Title>
-                                                Revenue Analytics
-                                            </Card.Title>
-                                            <Dropdown>
-                                                <Dropdown.Toggle variant='' className="p-2 fs-12 text-muted no-caret"
-                                                                 data-bs-toggle="dropdown"
-                                                                 aria-expanded="false">
-                                                    View All<i
-                                                    className="ri-arrow-down-s-line align-middle ms-1 d-inline-block"></i>
-                                                </Dropdown.Toggle>
-                                                <Dropdown.Menu role="menu">
-                                                    <Dropdown.Item>Today</Dropdown.Item>
-                                                    <Dropdown.Item>This Week</Dropdown.Item>
-                                                    <Dropdown.Item>Last Week</Dropdown.Item>
-                                                </Dropdown.Menu>
-                                            </Dropdown>
-                                        </Card.Header>
-                                        <Card.Body>
-                                            <div id="crm-revenue-analytics">
-                                                <Revenueanalytics/>
-                                            </div>
-                                        </Card.Body>
-                                    </Card>
-                                </Col>
+
                             </Row>
                         </Col>
                         <Col xl={12}>
                             <Card className="custom-card">
                                 <Card.Header className=" justify-content-between">
                                     <Card.Title>
-                                        Deals Statistics
+                                        Статистика операций
                                     </Card.Title>
                                     <div className="d-flex flex-wrap gap-2">
                                         <div>
@@ -587,146 +588,12 @@ const MainDashboardPage = () => {
                     <Row>
                         <Col xxl={12} xl={12}>
                             <Row>
-                                <Col xxl={12} xl={6}>
-                                    <Card className="custom-card">
-                                        <Card.Header className=" justify-content-between">
-                                            <Card.Title>
-                                                Leads By Source
-                                            </Card.Title>
-                                            <Dropdown>
-                                                <Dropdown.Toggle variant='' aria-label="anchor"
-                                                                 className="btn btn-icon btn-sm btn-light no-caret"
-                                                                 data-bs-toggle="dropdown">
-                                                    <i className="fe fe-more-vertical"></i>
-                                                </Dropdown.Toggle>
-                                                <Dropdown.Menu>
-                                                    <Dropdown.Item>Week</Dropdown.Item>
-                                                    <Dropdown.Item>Month</Dropdown.Item>
-                                                    <Dropdown.Item>Year</Dropdown.Item>
-                                                </Dropdown.Menu>
-                                            </Dropdown>
-                                        </Card.Header>
-                                        <Card.Body className=" p-0 overflow-hidden">
-                                            <div
-                                                className="leads-source-chart d-flex align-items-center justify-content-center px-3 pt-4 pb-3">
 
-                                                <Candidatesdata/>
-                                                <div className="lead-source-value">
-                                                    <span className="d-block fs-14">Total</span>
-                                                    <span className="d-block fs-25 fw-bold">4,145</span>
-                                                </div>
-                                            </div>
-                                            <div className="row row-cols-12 border-top border-block-start-dashed">
-                                                <div className="col-6 col-sm p-0">
-                                                    <div
-                                                        className="ps-4 py-3 pe-3 text-center border-end border-inline-end-dashed">
-                                                        <span
-                                                            className="text-muted fs-12 mb-1 crm-lead-legend mobile d-inline-block">Mobile
-                                                        </span>
-                                                        <div><span className="fs-16 fw-semibold">1,624</span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div className="col-6 col-sm p-0">
-                                                    <div
-                                                        className="p-3 text-center border-end border-inline-end-dashed">
-                                                        <span
-                                                            className="text-muted fs-12 mb-1 crm-lead-legend desktop d-inline-block">Desktop
-                                                        </span>
-                                                        <div><span className="fs-16 fw-semibold">1,267</span></div>
-                                                    </div>
-                                                </div>
-                                                <div className="col-6 col-sm p-0">
-                                                    <div
-                                                        className="p-3 text-center border-end border-inline-end-dashed">
-                                                        <span
-                                                            className="text-muted fs-12 mb-1 crm-lead-legend laptop d-inline-block">Laptop
-                                                        </span>
-                                                        <div><span className="fs-16 fw-semibold">1,153</span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div className="col-6 col-sm p-0">
-                                                    <div className="p-3 text-center">
-                                                        <span
-                                                            className="text-muted fs-12 mb-1 crm-lead-legend tablet d-inline-block">Tablet
-                                                        </span>
-                                                        <div><span className="fs-16 fw-semibold">679</span></div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </Card.Body>
-                                    </Card>
-                                </Col>
                                 <Col xxl={12} xl={6}>
                                     <Card className="custom-card">
                                         <Card.Header className=" justify-content-between">
                                             <Card.Title>
-                                                Deals Status
-                                            </Card.Title>
-                                            <Dropdown>
-                                                <Dropdown.Toggle variant='' className="p-2 fs-12 text-muted no-caret"
-                                                                 data-bs-toggle="dropdown" aria-expanded="false">
-                                                    View All<i
-                                                    className="ri-arrow-down-s-line align-middle ms-1 d-inline-block"></i>
-                                                </Dropdown.Toggle>
-                                                <Dropdown.Menu role="menu">
-                                                    <Dropdown.Item>Today</Dropdown.Item>
-                                                    <Dropdown.Item>This Week</Dropdown.Item>
-                                                    <Dropdown.Item>Last Week</Dropdown.Item>
-                                                </Dropdown.Menu>
-
-                                            </Dropdown>
-                                        </Card.Header>
-                                        <Card.Body>
-                                            <div className="d-flex align-items-center mb-3">
-                                                <h4 className="fw-bold mb-0">4,289</h4>
-                                                <div className="ms-2">
-                                                    <span className="badge bg-success-transparent">1.02<i
-                                                        className="ri-arrow-up-s-fill align-mmiddle ms-1"></i></span>
-                                                    <span className="text-muted ms-1">compared to last week</span>
-                                                </div>
-                                            </div>
-                                            <ProgressBar className="progress-stacked progress-animate progress-xs mb-4">
-                                                <ProgressBar variant="primary" now={21} key={1}/>
-                                                <ProgressBar variant="info" now={26} key={2}/>
-                                                <ProgressBar variant="warning" now={35} key={3}/>
-                                                <ProgressBar variant="success" now={18} key={4}/>
-                                            </ProgressBar>
-                                            <ul className="list-unstyled mb-0 pt-2 crm-deals-status">
-                                                <li className="primary">
-                                                    <div className="d-flex align-items-center justify-content-between">
-                                                        <div>Successful Deals</div>
-                                                        <div className="fs-12 text-muted">987 deals</div>
-                                                    </div>
-                                                </li>
-                                                <li className="info">
-                                                    <div className="d-flex align-items-center justify-content-between">
-                                                        <div>Pending Deals</div>
-                                                        <div className="fs-12 text-muted">1,073 deals</div>
-                                                    </div>
-                                                </li>
-                                                <li className="warning">
-                                                    <div className="d-flex align-items-center justify-content-between">
-                                                        <div>Rejected Deals</div>
-                                                        <div className="fs-12 text-muted">1,674 deals</div>
-                                                    </div>
-                                                </li>
-                                                <li className="success">
-                                                    <div className="d-flex align-items-center justify-content-between">
-                                                        <div>Upcoming Deals</div>
-                                                        <div className="fs-12 text-muted">921 deals</div>
-                                                    </div>
-                                                </li>
-                                            </ul>
-                                        </Card.Body>
-                                    </Card>
-                                </Col>
-                                <Col xxl={12} xl={6}>
-                                    <Card className="custom-card">
-                                        <Card.Header className=" justify-content-between">
-                                            <Card.Title>
-                                                Recent Activity
+                                                Текущие события
                                             </Card.Title>
                                             <Dropdown>
                                                 <Dropdown.Toggle variant='' className="p-2 fs-12 text-muted no-caret"

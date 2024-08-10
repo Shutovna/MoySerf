@@ -568,10 +568,10 @@ export class Profitearned extends Component{
 
         this.state = {
             series: [{
-                name: 'Profit Earned',
+                name: 'Всего заработано',
                 data: [44, 42, 57, 86, 58, 55, 70],
             }, {
-                name: 'Total Sales',
+                name: 'Просмотрено сайтов',
                 data: [34, 22, 37, 56, 21, 35, 60],
             }],
             options: {

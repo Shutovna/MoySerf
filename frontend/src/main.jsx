@@ -35,6 +35,9 @@ import AuthProvider from "./_moyserf/auth/AuthProvider.jsx";
 import Signin from "./_moyserf/components/Signin.jsx";
 import Signup from "./_moyserf/components/Signup.jsx";
 import Logout from "./_moyserf/components/Logout.jsx";
+import FAQPage from "./_moyserf/pages/FAQPage.jsx";
+import Blogs from "./_moyserf/pages/blog/blog/Blogs.jsx";
+import Createblog from "./container/pages/blog/createblog/createblog.jsx";
 
 
 ReactDOM.createRoot(document.getElementById('root')).render(
@@ -66,8 +69,10 @@ ReactDOM.createRoot(document.getElementById('root')).render(
                                 <Route path={`/cab/adv`} element={<DevelopingPage/>}/>
                                 <Route path={`/cab/wallet`} element={<DevelopingPage/>}/>
                                 <Route path={`/cab/referals`} element={<ReferalPage/>}/>
-                                <Route path={`/cab/blog`} element={<DevelopingPage/>}/>
+                                <Route path={`/cab/blog/read`} element={<Blogs/>}/>
+                                <Route path={`/cab/blog/create`} element={<Createblog/>}/>
                                 <Route path={`/cab/chat`} element={<DevelopingPage/>}/>
+                                <Route path={`/cab/faq`} element={<FAQPage/>}/>
                                 <Route path={`/cab/settings`} element={<DevelopingPage/>}/>
                                 <Route path={`/cab/quit`} element={<Logout/>}/>
                             </Route>
@@ -81,15 +86,19 @@ ReactDOM.createRoot(document.getElementById('root')).render(
                                 <Route path={`${import.meta.env.BASE_URL}authentication/createpassword/cover`}
                                        element={<Cover/>}/>
 
-                                <Route path={`${import.meta.env.BASE_URL}authentication/lockscreen/lockscreenbasic`}
-                                       element={<Lockscreenbasic/>}/>
-                                <Route path={`${import.meta.env.BASE_URL}authentication/lockscreen/lockscreencover`}
-                                       element={<Lockscreencover/>}/>
+                                <Route
+                                    path={`${import.meta.env.BASE_URL}authentication/lockscreen/lockscreenbasic`}
+                                    element={<Lockscreenbasic/>}/>
+                                <Route
+                                    path={`${import.meta.env.BASE_URL}authentication/lockscreen/lockscreencover`}
+                                    element={<Lockscreencover/>}/>
 
-                                <Route path={`${import.meta.env.BASE_URL}authentication/resetpassword/resetbasic`}
-                                       element={<Resetbasic/>}/>
-                                <Route path={`${import.meta.env.BASE_URL}authentication/resetpassword/resetcover`}
-                                       element={<Resetcover/>}/>
+                                <Route
+                                    path={`${import.meta.env.BASE_URL}authentication/resetpassword/resetbasic`}
+                                    element={<Resetbasic/>}/>
+                                <Route
+                                    path={`${import.meta.env.BASE_URL}authentication/resetpassword/resetcover`}
+                                    element={<Resetcover/>}/>
 
                                 <Route path={`${import.meta.env.BASE_URL}authentication/signup/signupbasic`}
                                        element={<Signupbasic/>}/>

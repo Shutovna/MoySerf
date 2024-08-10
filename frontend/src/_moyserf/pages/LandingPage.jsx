@@ -220,6 +220,16 @@ const LandingPage = ({ThemeChanger}) => {
                                             </p>
                                         </div>
                                     </Col>
+                                    <Col xl={2} lg={4} md={6} sm={6} className="col-12 mb-3">
+                                        <div className="p-3 text-center rounded-2 bg-white border">
+                                            <span
+                                                className="mb-3 avatar avatar-lg avatar-rounded bg-primary-transparent">
+                                                <i className="fs-24 bx bx-user-circle"></i>
+                                            </span>
+                                            <h3 className="fw-semibold mb-0 text-dark">236</h3>
+                                            <p className="mb-1 fs-14 op-7 text-muted ">Всего онлайн</p>
+                                        </div>
+                                    </Col>
                                 </div>
 
                             </Col>
@@ -284,5 +294,7 @@ const mapStateToProps = (state) => ({
     local_varaiable: state
 });
 
-export default connect(mapStateToProps, {ThemeChanger})(LandingPage);
+export default connect(mapStateToProps, {
+    ThemeChanger
+})(LandingPage);
 

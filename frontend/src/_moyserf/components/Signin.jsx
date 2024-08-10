@@ -84,29 +84,28 @@ const Signin = () => {
                                             </div>
                                         </Col>
                                         <Col xl={12} className="d-grid mt-2">
-                                            <button className="btn-submit">Submit</button>
-                                            <Link to={`${import.meta.env.BASE_URL}cab/main`}
-                                                  className="btn btn-lg btn-primary">Войти</Link>
+
+                                            <Button className="btn btn-lg btn-primary" type={"submit"}>Войти</Button>
                                         </Col>
                                     </div>
                                     <div className="text-center">
                                         <p className="fs-12 text-muted mt-3">Еще нет аккаунта? <Link
-                                            to={`${import.meta.env.BASE_URL}signup`}
+                                            to={`${import.meta.env.BASE_URL}auth/signup`}
                                             className="text-primary">Зарегистрируйтесь</Link></p>
                                     </div>
                                     <div className="text-center my-3 authentication-barrier">
                                         <span>ИЛИ</span>
                                     </div>
                                     <div className="btn-list text-center">
-                                        <Button variant='light' className="btn btn-icon">
-                                            <i className="ri-facebook-line fw-bold text-dark op-7"></i>
-                                        </Button>
-                                        <Button variant='light' className="btn btn-icon">
+                                        <Link variant='light' className="btn btn-icon">
                                             <i className="ri-google-line fw-bold text-dark op-7"></i>
-                                        </Button>
-                                        <Button variant='light' className="btn btn-icon">
+                                        </Link>
+                                        <Link variant='light' className="btn btn-icon">
+                                            <i className="ri-facebook-line fw-bold text-dark op-7"></i>
+                                        </Link>
+                                        <Link variant='light' className="btn btn-icon">
                                             <i className="ri-twitter-line fw-bold text-dark op-7"></i>
-                                        </Button>
+                                        </Link>
                                     </div>
                                 </Card.Body>
                             </Card>

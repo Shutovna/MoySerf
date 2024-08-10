@@ -101,7 +101,7 @@ export const MENUITEMS = [
             },
             {
                 icon: (<i className="side-menu__icon bx bx-home"></i>),
-                type: 'link',
+                type: 'sub',
                 Name: '',
                 active: false,
                 selected: false,
@@ -110,6 +110,22 @@ export const MENUITEMS = [
                 badgetxt: '1',
                 class: 'badge bg-warning-transparent ms-2',
                 path: `${import.meta.env.BASE_URL}cab/blog`,
+                children: [
+                    {
+                        path: `${import.meta.env.BASE_URL}cab/blog/read`,
+                        title: "Читать",
+                        type: "link",
+                        active: false,
+                        selected: false,
+                    },
+                    {
+                        path: `${import.meta.env.BASE_URL}cab/blog/create`,
+                        title: "Создать",
+                        type: "link",
+                        selected: false,
+                        active: false,
+                    },
+                ],
             },
             {
                 icon: (<i className="side-menu__icon bx bx-home"></i>),
@@ -123,6 +139,14 @@ export const MENUITEMS = [
                 class: 'badge bg-warning-transparent ms-2',
                 path: `${import.meta.env.BASE_URL}cab/chat`,
             }, {
+                icon: (<i className="side-menu__icon bx bx-home"></i>),
+                type: 'link',
+                Name: '',
+                active: false,
+                selected: false,
+                title: 'Частые вопросы',
+                path: `${import.meta.env.BASE_URL}cab/faq`,
+            },{
                 icon: (<i className="side-menu__icon bx bx-home"></i>),
                 type: 'link',
                 Name: '',

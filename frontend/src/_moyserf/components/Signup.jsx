@@ -6,6 +6,7 @@ import {Link, useNavigate} from 'react-router-dom';
 import {LocalStorageBackup} from "../../components/common/switcher/switcherdata/switcherdata.jsx";
 import {ThemeChanger} from "../../redux/action.jsx";
 import {signup} from "..//APIUtils.js";
+import {GOOGLE_AUTH_URL} from "../constants/index.js";
 
 
 const Signup = () => {
@@ -133,7 +134,8 @@ const Signup = () => {
                                         </InputGroup>
                                     </Col>
                                     <Col xl={12} className="d-grid mt-2">
-                                        <Button onClick={Signup} variant='primary' className="btn btn-lg ">Зарегистрироваться</Button>
+                                        <Button onClick={Signup} variant='primary'
+                                                className="btn btn-lg ">Зарегистрироваться</Button>
                                     </Col>
                                 </div>
                                 <div className="text-center">
@@ -145,15 +147,16 @@ const Signup = () => {
                                     <span>ИЛИ</span>
                                 </div>
                                 <div className="btn-list text-center">
-                                    <Button variant='light' className="btn btn-icon">
-                                        <i className="ri-facebook-line fw-bold text-dark op-7"></i>
-                                    </Button>
-                                    <Button variant='light' className="btn btn-icon">
+                                    <Link href={GOOGLE_AUTH_URL}>
+                                        variant='light' className="btn btn-icon">
                                         <i className="ri-google-line fw-bold text-dark op-7"></i>
-                                    </Button>
-                                    <Button variant='light' className="btn btn-icon">
+                                    </Link>
+                                    <Link variant='light' className="btn btn-icon">
+                                        <i className="ri-facebook-line fw-bold text-dark op-7"></i>
+                                    </Link>
+                                    <Link variant='light' className="btn btn-icon">
                                         <i className="ri-twitter-line fw-bold text-dark op-7"></i>
-                                    </Button>
+                                    </Link>
                                 </div>
                             </Card.Body>
                         </Card>

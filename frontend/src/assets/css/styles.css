@@ -21734,7 +21734,7 @@ button {
   }
 }
 /* End:: Timeline */
-/* Start:: Blog */
+/* Start:: BlogPage */
 .blog-caption {
   position: absolute;
   inset-inline-start: 1.5rem;
@@ -21746,8 +21746,8 @@ button {
   max-width: 9rem;
 }
 
-/* End:: Blog */
-/* Start:: Blog Details */
+/* End:: BlogPage */
+/* Start:: BlogPage Details */
 .blog-details-img {
   height: 450px;
 }
@@ -21757,8 +21757,8 @@ button {
   font-size: 0.65rem;
 }
 
-/* End:: Blog Details */
-/* Start:: Create Blog */
+/* End:: BlogPage Details */
+/* Start:: Create BlogPage */
 .blog-images-container .filepond--root {
   width: 100%;
 }
@@ -21784,7 +21784,7 @@ button {
     margin-block-end: 0.25rem !important;
   }
 }
-/* End:: Create Blog */
+/* End:: Create BlogPage */
 /* Start:: Profile */
 .main-profile-cover {
   background-image: url("../images/media/team-covers/4.jpg");
