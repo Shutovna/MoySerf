@@ -140,14 +140,14 @@ const Signup = () => {
                                 </div>
                                 <div className="text-center">
                                     <p className="fs-12 text-muted mt-3">Уже есть аккаунт? <Link
-                                        to={`${import.meta.env.BASE_URL}/signin`}
+                                        to={`${import.meta.env.BASE_URL}signin`}
                                         className="text-primary">Войти</Link></p>
                                 </div>
                                 <div className="text-center my-3 authentication-barrier">
                                     <span>ИЛИ</span>
                                 </div>
                                 <div className="btn-list text-center">
-                                    <Link href={GOOGLE_AUTH_URL}>
+                                    <Link to={GOOGLE_AUTH_URL}
                                         variant='light' className="btn btn-icon">
                                         <i className="ri-google-line fw-bold text-dark op-7"></i>
                                     </Link>

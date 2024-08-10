@@ -38,6 +38,7 @@ import Logout from "./_moyserf/components/Logout.jsx";
 import FAQPage from "./_moyserf/pages/FAQPage.jsx";
 import Blog from "./container/pages/blog/blog/blog.jsx";
 import Createblog from "./container/pages/blog/createblog/createblog.jsx";
+import OAuth2RedirectHandler from "./_moyserf/auth/oauth2/OAuth2RedirectHandler.jsx";
 
 
 ReactDOM.createRoot(document.getElementById('root')).render(
@@ -49,6 +50,8 @@ ReactDOM.createRoot(document.getElementById('root')).render(
                         <Route path="/" element={<Landinglayout/>}>
                             <Route index element={<LandingPage/>}/>
                         </Route>
+
+                        <Route path="/oauth2/redirect" element={OAuth2RedirectHandler}></Route>
 
                         <Route path={`${import.meta.env.BASE_URL}`} element={<Authenticationlayout/>}>
                             <Route path={`${import.meta.env.BASE_URL}auth/signin`}

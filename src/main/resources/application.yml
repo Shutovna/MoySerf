@@ -13,9 +13,9 @@ spring:
   application:
     name: MoySerf
   datasource:
-    url: jdbc:postgresql://localhost:5432/moyserf
-    username: postgres
-    password: password
+    url: ${db.url}
+    username: ${db.username}
+    password: ${db.password}
 
   jpa:
     generate-ddl: true
@@ -28,9 +28,9 @@ spring:
     show-sql: true
 
   mail:
-    username: shutovna1987@gmail.com
+    username: ${mail.username}
     host: connect.smtp.bz
-    password: Ex4C0ktPAcNR
+    password: ${mail.password}
     port: '465'
     properties:
       mail:

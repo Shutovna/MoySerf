@@ -5,6 +5,8 @@ node_modules/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
+application.properties
+
 ### STS ###
 .apt_generated
 .classpath
