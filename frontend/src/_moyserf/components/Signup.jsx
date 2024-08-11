@@ -5,26 +5,29 @@ import desktopdarklogo from "../../assets/images/brand-logos/desktop-dark.png";
 import {Link, useNavigate} from 'react-router-dom';
 import {LocalStorageBackup} from "../../components/common/switcher/switcherdata/switcherdata.jsx";
 import {ThemeChanger} from "../../redux/action.jsx";
-import {signup} from "..//APIUtils.js";
 import {GOOGLE_AUTH_URL} from "../constants/index.js";
+import useAuthService from "../services/AuthService.jsx";
 
 
 const Signup = () => {
+    const {loading, error, signup, clearError} = useAuthService();
+
     const [passwordshow1, setpasswordshow1] = useState(false);
     const [passwordshow2, setpasswordshow2] = useState(false);
 
     const navigate = useNavigate();
 
-    const [err, setError] = useState("");
+    const [message, setMessage] = useState("");
+
+
     const [data, setData] = useState({
         name: "",
         email: "",
         password: "",
     });
 
-    const {nick, email, password, name} = data;
+    const { email, password, name} = data;
     const changeHandler = (e) => {
-        console.log(`changeHandler ${e.target.name}: ${e.target.value}`);
         setData({...data, [e.target.name]: e.target.value});
     };
 
@@ -34,23 +37,23 @@ const Signup = () => {
 
         const signUpRequest = Object.assign({}, data);
 
-        signup(signUpRequest)
-            .then(response => {
+        function onRegistered() {
+            return response => {
                 console.log("You're successfully registered. Please login to continue!");
-                navigate('/login');
                 routeChange();
-            }).catch(error => {
-            console.log(error);
-            setError(error.message);
-            console.log((error && error.message) || 'Oops! Something went wrong. Please try again!');
-        });
+            };
+        }
+
+        signup(signUpRequest)
+            .then(onRegistered())
+            .catch(error => console.log(error));
     };
 
 
     const routeChange = () => {
         console.log("routeChange")
-        const path = `${import.meta.env.BASE_URL}main/`;
-        navigate(path);
+        const path = `${import.meta.env.BASE_URL}auth/signin`;
+        navigate(path, {state: {message: 'Проверьте почту для подтверждения регистрации'}});
     };
 
     useEffect(() => {
@@ -74,7 +77,8 @@ const Signup = () => {
                                 <p className="h5 fw-semibold mb-2 text-center">Регистрация</p>
                                 <p className="mb-4 text-muted op-7 fw-normal text-center">Добро пожаловать!
                                     Присоединяйтесь к нам и создайте бесплатный аккаунт</p>
-                                {err && <Alert variant="danger">{err}</Alert>}
+                                {error && <Alert variant="danger">{error}</Alert>}
+                                {message && <Alert variant="success">{message}</Alert>}
                                 <div className="row gy-3">
                                     <Col xl={12}>
                                         <Form.Label htmlFor="signup-name"
@@ -148,7 +152,7 @@ const Signup = () => {
                                 </div>
                                 <div className="btn-list text-center">
                                     <Link to={GOOGLE_AUTH_URL}
-                                        variant='light' className="btn btn-icon">
+                                          variant='light' className="btn btn-icon">
                                         <i className="ri-google-line fw-bold text-dark op-7"></i>
                                     </Link>
                                     <Link variant='light' className="btn btn-icon">

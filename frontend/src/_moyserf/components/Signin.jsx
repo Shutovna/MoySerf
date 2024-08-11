@@ -1,8 +1,8 @@
-import {FC, Fragment, useState} from 'react';
-import {Button, Card, Col, Form, InputGroup} from 'react-bootstrap';
+import {FC, Fragment, useEffect, useState} from 'react';
+import {Alert, Button, Card, Col, Form, InputGroup} from 'react-bootstrap';
 import desktoplogo from "../../assets/images/brand-logos/desktop-logo.png";
-import desktopdarklogo from "..//../assets/images/brand-logos/desktop-dark.png";
-import {Link} from 'react-router-dom';
+import desktopdarklogo from "../../assets/images/brand-logos/desktop-dark.png";
+import {Link, useLocation} from 'react-router-dom';
 import {useAuth} from "../auth/AuthProvider.jsx";
 import {GOOGLE_AUTH_URL} from "../constants/index.js";
 
@@ -12,11 +12,18 @@ const Signin = () => {
         password: "",
     });
 
-    const auth = useAuth();
+    const location = useLocation();
+    const [message, setMessage] = useState(location.state?.message);
+    const [outh2Error, setOauth2Error] = useState(location.state?.error);
+
+    const {token, user, loginAction, logOut, loading, error, clearError} = useAuth();
+
     const handleSubmitEvent = (e) => {
         e.preventDefault();
+        setMessage(null);
+        setOauth2Error(null);
         if (input.email !== "" && input.password !== "") {
-            auth.loginAction(input);
+            loginAction(input);
             return;
         }
         alert("please provide a valid input");
@@ -49,6 +56,9 @@ const Signin = () => {
                                 <Card.Body className="p-5">
                                     <p className="h5 fw-semibold mb-2 text-center">Вход</p>
                                     <p className="mb-4 text-muted op-7 fw-normal text-center">Добро пожаловать!</p>
+                                    {error && <Alert variant="danger">{error}</Alert>}
+                                    {outh2Error && <Alert variant="danger">{outh2Error}</Alert>}
+                                    {message && <Alert variant="success">{message}</Alert>}
                                     <div className="row gy-3">
                                         <Col xl={12}>
                                             <Form.Label htmlFor="signin-email"

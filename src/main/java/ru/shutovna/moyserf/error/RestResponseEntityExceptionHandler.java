@@ -6,6 +6,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.MailAuthenticationException;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -56,6 +58,23 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
         return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
     }
 
+    // 401
+    @ExceptionHandler({ BadCredentialsException.class })
+    public ResponseEntity<Object> badCredentials(final RuntimeException ex, final WebRequest request) {
+        logger.error("401 Status Code", ex);
+        final GenericResponse bodyOfResponse = new GenericResponse(messages.getMessage("auth.message.invalidUser", null, request.getLocale()), "BadCredentials");
+        return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), HttpStatus.UNAUTHORIZED, request);
+    }
+
+
+    // 403
+    @ExceptionHandler({ DisabledException.class })
+    public ResponseEntity<Object> handleUserDisabled(final RuntimeException ex, final WebRequest request) {
+        logger.error("403 Status Code", ex);
+        final GenericResponse bodyOfResponse = new GenericResponse(messages.getMessage("auth.message.disabled", null, request.getLocale()), "UserDisabled");
+        return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), HttpStatus.FORBIDDEN, request);
+    }
+
     // 404
     @ExceptionHandler({ UserNotFoundException.class })
     public ResponseEntity<Object> handleUserNotFound(final RuntimeException ex, final WebRequest request) {
@@ -63,6 +82,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
         final GenericResponse bodyOfResponse = new GenericResponse(messages.getMessage("message.userNotFound", null, request.getLocale()), "UserNotFound");
         return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
     }
+
 
     // 409
     @ExceptionHandler({ UserAlreadyExistException.class })

@@ -1,31 +1,26 @@
-import { useContext, createContext, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import {ACCESS_TOKEN} from '../../constants';
+import {useContext, createContext, useState} from "react";
+import {useNavigate} from "react-router-dom";
+import {ACCESS_TOKEN, API_BASE_URL} from '../../constants';
+import {useHttp} from "../hooks/http.hooks.jsx";
 
 const AuthContext = createContext(null);
 
-const AuthProvider = ({ children }) => {
+const AuthProvider = ({children}) => {
     const [user, setUser] = useState(null);
     const [token, setToken] = useState(localStorage.getItem(ACCESS_TOKEN) || "");
     const navigate = useNavigate();
+    const {loading, request, error, clearError} = useHttp();
+
     const loginAction = async (data) => {
         try {
-            const response = await fetch("http://localhost:8080/auth/signin", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(data),
-            });
-            const res = await response.json();
+            let res = await request(`${API_BASE_URL}/auth/signin`, "POST", JSON.stringify(data));
+
             if (res.accessToken) {
                 //setUser(res.data.user);
                 setToken(res.accessToken);
                 localStorage.setItem(ACCESS_TOKEN, res.accessToken);
                 navigate("/cab/main");
-                return;
             }
-            throw new Error(res.message);
         } catch (err) {
             console.error(err);
         }
@@ -39,7 +34,7 @@ const AuthProvider = ({ children }) => {
     };
 
     return (
-        <AuthContext.Provider value={{ token, user, loginAction, logOut }}>
+        <AuthContext.Provider value={{token, user, loginAction, logOut, loading, error, clearError}}>
             {children}
         </AuthContext.Provider>
     );

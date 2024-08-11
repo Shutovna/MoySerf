@@ -3,6 +3,9 @@ server:
 
 logging:
   level:
+    ru:
+      shutovna:
+        moyserf: DEBUG
     org:
       springframework:
         security: DEBUG
@@ -55,15 +58,15 @@ spring:
               - email
               - profile
           facebook:
-            clientId:
-            clientSecret:
+            clientId: ${facebook.client.id}
+            clientSecret: ${facebook.client.secret}
             redirectUri: "{baseUrl}/oauth2/callback/{registrationId}"
             scope:
               - email
               - public_profile
           github:
-            clientId:
-            clientSecret:
+            clientId: ${github.client.id}
+            clientSecret: ${github.client.secret}
             redirectUri: "{baseUrl}/oauth2/callback/{registrationId}"
             scope:
               - user:email
@@ -93,7 +96,8 @@ app:
       - http://localhost:3000/oauth2/redirect
       - myandroidapp://oauth2/redirect
       - myiosapp://oauth2/redirect
-
+  frontend:
+    url: http://localhost:3000
 
 management:
   endpoints:

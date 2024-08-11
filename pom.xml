@@ -59,6 +59,25 @@
 			<scope>test</scope>
 		</dependency>
 
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-aspects</artifactId>
+			<version>6.1.5</version>
+		</dependency>
+
+		<!-- Spring Retry -->
+		<dependency>
+			<groupId>org.springframework.retry</groupId>
+			<artifactId>spring-retry</artifactId>
+			<version>2.0.3</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+		</dependency>
+
 		<!-- 2fa -->
 		<dependency>
 			<groupId>org.jboss.aerogear</groupId>
@@ -79,6 +98,7 @@
 			<artifactId>jstl</artifactId>
 			<version>${jstl.version}</version>
 		</dependency>
+
 
         <dependency>
             <groupId>javax.el</groupId>

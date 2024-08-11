@@ -59,142 +59,137 @@ const MainDashboardPage = () => {
 
             <div className="d-md-flex d-block align-items-center justify-content-between my-4 page-header-breadcrumb">
                 <div>
-                    <h1 className="fw-semibold fs-30 mb-0">Приветствуем Вас, Denchik123!</h1>
+                    <h1 className={"fw-semibold mb-3"}>Сайт для заработка на простых действиях в Интернете</h1>
+                    <h2 className="fw-semibold fs-30 mb-0">Приветствуем Вас, Denchik123!</h2>
                 </div>
             </div>
 
+            <hr/>
+
             <Row>
-                <section className="section section-bg " id="statistics">
-                    <div className="container text-center position-relative">
-                        <div className="row  g-2 justify-content-center">
-                            <Col xl={12}>
-                                <div className="row justify-content-evenly">
-                                    <Col xl={2} lg={4} md={6} sm={6} className="col-12 mb-3">
-                                        <div className="p-3 text-center rounded-2 bg-white border">
+                <Col className="col-5">
+                    <div className="fs-6 mb-3">
+                        <div className={"fw-semibold fs-5"}> Уважаемые участники проекта!</div>
+                        <br/> Для того, чтобы проект мог существовать и
+                        развиваться, в интересах всех пользователей мы должны понимать, что есть необходимость во
+                        взаимной
+                        прибыли. По этой причине на нашем проекте есть очень скромная абонентская плата, которая
+                        вычитается
+                        из той суммы, что Вы заработали.
+                        <br/>Стоимость абонентской платы всего 2.5 рубля в сутки. В случае,
+                        если
+                        денег на вашем рабочем счете меньше абонентской платы с Вас ничего не вычитается.
+                        <br/>Абонентская плата списывается в 00:00 по Мск. В случае вывода средств с Вас будет
+                        списана
+                        абонентская плата в 2.5 рубля.
+                    </div>
+                </Col>
+                <Col className={"align-items-center align-content-center"}>
+                    <section className="section section-bg" id="statistics">
+                        <div className="container text-center position-relative">
+                            <div className="row g-2 justify-content-center">
+                                <Col xl={12}>
+                                    <div className="row justify-content-evenly">
+                                        <Col xl={2} lg={4} md={6} sm={6} className="col-12 mb-3">
+                                            <div className="p-3 text-center rounded-2 bg-white border">
                                             <span
                                                 className="mb-3 avatar avatar-lg avatar-rounded bg-primary-transparent">
                                                 <i className="fs-24 bx bx-spreadsheet"></i>
                                             </span>
-                                            <h3 className="fw-semibold mb-0 text-dark">500+</h3>
-                                            <p className="mb-1 fs-14 op-7 text-muted ">
-                                                Рекламодателей
-                                            </p>
-                                        </div>
-                                    </Col>
-                                    <Col xl={2} lg={4} md={6} sm={6} className=" col-12 mb-3">
-                                        <div className="p-3 text-center rounded-2 bg-white border">
+                                                <h3 className="fw-semibold mb-0 text-dark">500+</h3>
+                                                <p className="mb-1 fs-14 op-7 text-muted ">
+                                                    Рекламодателей
+                                                </p>
+                                            </div>
+                                        </Col>
+                                        <Col xl={2} lg={4} md={6} sm={6} className=" col-12 mb-3">
+                                            <div className="p-3 text-center rounded-2 bg-white border">
                                             <span
                                                 className="mb-3 avatar avatar-lg avatar-rounded bg-primary-transparent">
                                                 <i className="fs-24 bx bx-user-plus"></i>
                                             </span>
-                                            <h3 className="fw-semibold mb-0 text-dark">1600+</h3>
-                                            <p className="mb-1 fs-14 op-7 text-muted ">
-                                                Работников
-                                            </p>
-                                        </div>
-                                    </Col>
-                                    <Col xl={2} lg={4} md={6} sm={6} className=" col-12 mb-3">
-                                        <div className="p-3 text-center rounded-2 bg-white border">
+                                                <h3 className="fw-semibold mb-0 text-dark">1600+</h3>
+                                                <p className="mb-1 fs-14 op-7 text-muted ">
+                                                    Работников
+                                                </p>
+                                            </div>
+                                        </Col>
+                                        <Col xl={2} lg={4} md={6} sm={6} className=" col-12 mb-3">
+                                            <div className="p-3 text-center rounded-2 bg-white border">
                                             <span
                                                 className="mb-3 avatar avatar-lg avatar-rounded bg-primary-transparent">
                                                 <i className="fs-24 bx bx-money"></i>
                                             </span>
-                                            <h3 className="fw-semibold mb-0 text-dark">$45.8M</h3>
-                                            <p className="mb-1 fs-14 op-7 text-muted ">
-                                                Всего заработано
-                                            </p>
-                                        </div>
-                                    </Col>
-                                    <Col xl={2} lg={4} md={6} sm={6} className="col-12 mb-3">
-                                        <div className="p-3 text-center rounded-2 bg-white border">
+                                                <h3 className="fw-semibold mb-0 text-dark">$45.8M</h3>
+                                                <p className="mb-1 fs-14 op-7 text-muted ">
+                                                    Всего заработано
+                                                </p>
+                                            </div>
+                                        </Col>
+                                        <Col xl={2} lg={4} md={6} sm={6} className="col-12 mb-3">
+                                            <div className="p-3 text-center rounded-2 bg-white border">
                                             <span
                                                 className="mb-3 avatar avatar-lg avatar-rounded bg-primary-transparent">
                                                 <i className="fs-24 bx bx-user-circle"></i>
                                             </span>
-                                            <h3 className="fw-semibold mb-0 text-dark">$10.8M</h3>
-                                            <p className="mb-1 fs-14 op-7 text-muted ">
-                                                Выплат от рефералов
-                                            </p>
-                                        </div>
-                                    </Col>
-                                    <Col xl={2} lg={4} md={6} sm={6} className="col-12 mb-3">
-                                        <div className="p-3 text-center rounded-2 bg-white border">
+                                                <h3 className="fw-semibold mb-0 text-dark">$10.8M</h3>
+                                                <p className="mb-1 fs-14 op-7 text-muted ">
+                                                    Выплат от рефералов
+                                                </p>
+                                            </div>
+                                        </Col>
+                                        <Col xl={2} lg={4} md={6} sm={6} className="col-12 mb-3">
+                                            <div className="p-3 text-center rounded-2 bg-white border">
                                             <span
                                                 className="mb-3 avatar avatar-lg avatar-rounded bg-primary-transparent">
                                                 <i className="fs-24 bx bx-user-circle"></i>
                                             </span>
-                                            <h3 className="fw-semibold mb-0 text-dark">236</h3>
-                                            <p className="mb-1 fs-14 op-7 text-muted ">Всего онлайн</p>
-                                        </div>
-                                    </Col>
-                                </div>
-
-                            </Col>
-                        </div>
-                    </div>
-                </section>
-
-
-                <Row>
-                    <Col xl={8} lg={4} md={6} sm={6} >
-                        <div className="fs-6 mb-2 w-50">
-                            <div className={"fw-semibold fs-5 mb-1"}> Уважаемые участники проекта!</div>
-                            <br/> Для того, чтобы проект мог существовать и
-                            развиваться, в интересах всех пользователей мы должны понимать, что есть необходимость во
-                            взаимной
-                            прибыли. По этой причине на нашем проекте есть очень скромная абонентская плата, которая
-                            вычитается
-                            из той суммы, что Вы заработали.
-                            <br/>Стоимость абонентской платы всего 2.5 рубля в сутки. В случае,
-                            если
-                            денег на вашем рабочем счете меньше абонентской платы с Вас ничего не вычитается.
-                            <br/>Абонентская плата списывается в 00:00 по Мск. В случае вывода средств с Вас будет
-                            списана
-                            абонентская плата в 2.5 рубля.
-                        </div>
-                    </Col>
-
-                    <Col xl={4} lg={4} md={6} sm={6} >
-
-                        <Form.Label className={"w-50"} htmlFor="input-text">Type Text</Form.Label>
-                        <Form.Control type="text" id="input-text" placeholder="Text"/>
-
-                        <div
-                            className="d-md-flex d-block align-items-center justify-content-between my-4 page-header-breadcrumb">
-                            <div>
-                                <input id="foo" value="https://github.com/zenorocha/clipboard.js.git"/>
-
-                                <button className="btn" data-clipboard-target="#foo">
-                                    <img src="assets/clippy.svg" alt="Copy to clipboard"/>
-                                </button>
+                                                <h3 className="fw-semibold mb-0 text-dark">236</h3>
+                                                <p className="mb-1 fs-14 op-7 text-muted ">Всего онлайн</p>
+                                            </div>
+                                        </Col>
+                                    </div>
+                                </Col>
                             </div>
                         </div>
-                    </Col>
+                    </section>
+                </Col>
+
+                <Row>
+                    <h5>Ваша реферальная ссылка</h5>
+                    <div className="input-group mb-3">
+                        <div className="input-group-prepend">
+                            <span className="input-group-text" id="basic-addon1">@</span>
+                        </div>
+                        <input type="text" className="form-control" placeholder="Имя пользователя"
+                               aria-label="Имя пользователя"
+                               aria-describedby="basic-addon1"/>
+                    </div>
                 </Row>
 
                 <Row>
                     <Col>
                         <Card className="custom-card">
-                        <Card.Body>
-                            <div className="d-flex align-items-top justify-content-between mb-4">
-                                <div>
-                                    <span className="d-block fs-15 fw-semibold">Текущие события</span>
+                            <Card.Body>
+                                <div className="d-flex align-items-top justify-content-between mb-4">
+                                    <div>
+                                        <span className="d-block fs-15 fw-semibold">Текущие события</span>
+                                    </div>
                                 </div>
-                            </div>
-                            <div className="text-center mb-4">
-                                <div className="mb-3">
+                                <div className="text-center mb-4">
+                                    <div className="mb-3">
                                             <span className="avatar avatar-xxl avatar-rounded circle-progress p-1">
                                                 <img src={face9} alt=""/>
                                             </span>
+                                    </div>
+                                    <div>
+                                        <h5 className="fw-semibold mb-0">Денчик123</h5>
+                                        <span className="fs-13 text-muted">Просмотрел рекламу на 20 копеек</span>
+                                    </div>
                                 </div>
-                                <div>
-                                    <h5 className="fw-semibold mb-0">Денчик123</h5>
-                                    <span className="fs-13 text-muted">Просмотрел рекламу на 20 копеек</span>
-                                </div>
-                            </div>
 
-                        </Card.Body>
-                    </Card>
+                            </Card.Body>
+                        </Card>
                     </Col>
                     <Col className={"w-25"}>
                         <Card className="custom-card">

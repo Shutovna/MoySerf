@@ -1,8 +1,15 @@
 package ru.shutovna.moyserf.controller;
 
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.ApplicationListener;
+import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.http.ResponseEntity;
+import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -10,8 +17,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import org.thymeleaf.spring5.SpringTemplateEngine;
+import ru.shutovna.moyserf.config.AppProperties;
 import ru.shutovna.moyserf.error.UserAlreadyExistException;
-import ru.shutovna.moyserf.exception.BadRequestException;
 import ru.shutovna.moyserf.model.AuthProvider;
 import ru.shutovna.moyserf.model.User;
 import ru.shutovna.moyserf.payload.ApiResponse;
@@ -21,18 +29,25 @@ import ru.shutovna.moyserf.payload.SignUpRequest;
 import ru.shutovna.moyserf.registration.OnRegistrationCompleteEvent;
 import ru.shutovna.moyserf.repository.UserRepository;
 import ru.shutovna.moyserf.security.TokenProvider;
+import ru.shutovna.moyserf.service.IUserService;
+import ru.shutovna.moyserf.service.MyService;
 
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.net.URI;
+import java.sql.SQLException;
 
 @RestController
 @RequestMapping("/auth")
-public class AuthController {
+@Slf4j
+public class AuthController implements ApplicationListener<ContextRefreshedEvent> {
 
     @Autowired
     private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private IUserService userService;
 
     @Autowired
     private UserRepository userRepository;
@@ -45,6 +60,15 @@ public class AuthController {
 
     @Autowired
     private ApplicationEventPublisher eventPublisher;
+
+    private AppProperties appProperties;
+
+    @Autowired
+    private MyService myService;
+
+    public AuthController(AppProperties appProperties) {
+        this.appProperties = appProperties;
+    }
 
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
@@ -64,7 +88,7 @@ public class AuthController {
 
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpRequest signUpRequest, HttpServletRequest request) {
-        if(userRepository.existsByEmail(signUpRequest.getEmail())) {
+        if (userRepository.existsByEmail(signUpRequest.getEmail())) {
             throw new UserAlreadyExistException("There is an account with that email address: " + signUpRequest.getEmail());
         }
 
@@ -83,14 +107,36 @@ public class AuthController {
                 .fromCurrentContextPath().path("/user/me")
                 .buildAndExpand(result.getId()).toUri();
 
-        eventPublisher.publishEvent(new OnRegistrationCompleteEvent(result, request.getLocale(), getAppUrl(request)));
+        eventPublisher.publishEvent(new OnRegistrationCompleteEvent(
+                result, request.getLocale(),
+                appProperties.getFrontend().getUrl()));
 
         return ResponseEntity.created(location)
                 .body(new ApiResponse(true, "User registered successfully@"));
+    }
+
+
+    @GetMapping("/registrationConfirm")
+    public ResponseEntity<?> registrationConfirm(@RequestParam String token) {
+        IUserService.VerificationTokenStatus status = userService.validateVerificationToken(token);
+        log.debug("registrationConfirm token: " + token + " result: " + status);
+        if (status == IUserService.VerificationTokenStatus.TOKEN_VALID) {
+            userService.verifyUserRegistration(token);
+        }
+        return ResponseEntity.ok()
+                .body(new ApiResponse(true, status.getName()));
     }
 
     private String getAppUrl(HttpServletRequest request) {
         return "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
     }
 
+    @Override
+    public void onApplicationEvent(ContextRefreshedEvent event) {
+        try {
+            myService.retryServiceWithCustomization("");
+        } catch (SQLException e) {
+
+        }
+    }
 }

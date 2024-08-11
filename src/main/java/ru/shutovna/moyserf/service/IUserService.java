@@ -11,6 +11,22 @@ import java.util.function.Consumer;
 
 public interface IUserService {
 
+    public enum VerificationTokenStatus {
+        TOKEN_INVALID("invalidToken"),
+        TOKEN_EXPIRED("expired"),
+        TOKEN_VALID("valid");
+
+        private String name;
+
+        VerificationTokenStatus(String name) {
+            this.name = name;
+        }
+
+        public String getName() {
+            return name;
+        }
+    }
+
     User registerNewUserAccount(SignUpRequest signUpRequest);
 
     User getUser(String verificationToken);
@@ -24,6 +40,8 @@ public interface IUserService {
     VerificationToken getVerificationToken(String VerificationToken);
 
     VerificationToken generateNewVerificationToken(String token);
+
+    void verifyUserRegistration(String verificationToken);
 
     void createPasswordResetTokenForUser(User user, String token);
 
@@ -43,7 +61,7 @@ public interface IUserService {
 
     boolean checkIfValidOldPassword(User user, String password);
 
-    String validateVerificationToken(String token);
+    VerificationTokenStatus validateVerificationToken(String token);
 
     String generateQRUrl(User user) throws UnsupportedEncodingException;
 

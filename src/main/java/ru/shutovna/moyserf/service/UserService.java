@@ -50,10 +50,6 @@ public class UserService implements IUserService {
     @Autowired
     private Environment env;
 
-    public static final String TOKEN_INVALID = "invalidToken";
-    public static final String TOKEN_EXPIRED = "expired";
-    public static final String TOKEN_VALID = "valid";
-
     public static String QR_PREFIX = "https://chart.googleapis.com/chart?chs=200x200&chld=M%%7C0&cht=qr&chl=";
     public static String APP_NAME = "SpringRegistration";
 
@@ -125,6 +121,14 @@ public class UserService implements IUserService {
     }
 
     @Override
+    public void verifyUserRegistration(String verificationToken) {
+        VerificationToken token = getVerificationToken(verificationToken);
+        User user = token.getUser();
+        user.setEmailVerified(true);
+        userRepository.save(user);
+    }
+
+    @Override
     public void createPasswordResetTokenForUser(final User user, final String token) {
         final PasswordResetToken oldPasswordToken = passwordTokenRepository.findByUser(user);
         if (oldPasswordToken != null) {
@@ -178,10 +182,10 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public String validateVerificationToken(String token) {
+    public VerificationTokenStatus validateVerificationToken(String token) {
         final VerificationToken verificationToken = tokenRepository.findByToken(token);
         if (verificationToken == null) {
-            return TOKEN_INVALID;
+            return VerificationTokenStatus.TOKEN_INVALID;
         }
 
         final User user = verificationToken.getUser();
@@ -190,12 +194,12 @@ public class UserService implements IUserService {
                 .getTime() - cal.getTime()
                 .getTime()) <= 0) {
             tokenRepository.delete(verificationToken);
-            return TOKEN_EXPIRED;
+            return VerificationTokenStatus.TOKEN_EXPIRED;
         }
 
         // tokenRepository.delete(verificationToken);
         userRepository.save(user);
-        return TOKEN_VALID;
+        return VerificationTokenStatus.TOKEN_VALID;
     }
 
     @Override

@@ -12,10 +12,6 @@ import Lockscreenbasic from './container/authentication/lockscreen/lockscreenbas
 import Lockscreencover from './container/authentication/lockscreen/lockscreencover/lockscreencover.jsx';
 import Resetbasic from './container/authentication/resetpassword/resetbasic/resetbasic.jsx';
 import Resetcover from './container/authentication/resetpassword/resetcover/resetcover.jsx';
-import Signupbasic from './container/authentication/signup/signupbasic/signupbasic.jsx';
-import Signupcover from './container/authentication/signup/signupcover/signupcover.jsx';
-import Signinbasic from './container/authentication/signin/signinbasic/signinbasic.jsx';
-import Signincover from './container/authentication/signin/signincover/signincover.jsx';
 import Twostepbasic from './container/authentication/twostepverification/twostepbasic/twostepbasic.jsx';
 import Twostepcover from './container/authentication/twostepverification/twostepcover/twostepcover.jsx';
 import Undermaintenance from './container/authentication/undermaintenance/undermaintenance.jsx';
@@ -39,7 +35,9 @@ import FAQPage from "./_moyserf/pages/FAQPage.jsx";
 import Blog from "./container/pages/blog/blog/blog.jsx";
 import Createblog from "./container/pages/blog/createblog/createblog.jsx";
 import OAuth2RedirectHandler from "./_moyserf/auth/oauth2/OAuth2RedirectHandler.jsx";
-
+import BadVerificationToken from "./_moyserf/components/BadVerificationToken.jsx";
+import RegistrationConfirm from "./_moyserf/components/RegistrationConfirm.jsx";
+import CustomForm from "./_moyserf/components/FormikTest.jsx";
 
 ReactDOM.createRoot(document.getElementById('root')).render(
     <React.Fragment>
@@ -59,6 +57,10 @@ ReactDOM.createRoot(document.getElementById('root')).render(
                                    element={<Signin/>}/>
                             <Route path={`${import.meta.env.BASE_URL}auth/signup`}
                                    element={<Signup/>}/>
+                            <Route path={`${import.meta.env.BASE_URL}auth/registrationConfirm`}
+                                   element={<RegistrationConfirm/>}/>
+                            <Route path={`${import.meta.env.BASE_URL}auth/badVerificationToken`}
+                                   element={<BadVerificationToken/>}/>
 
                         </Route>
 
@@ -66,6 +68,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
 
                             <Route path={"/cab"} element={<App/>}>
                                 <Route index element={<MainDashboardPage/>}/>
+                                <Route path={`/cab/formik`} element={<CustomForm/>}/>
                                 <Route path={`/cab/main`} element={<MainDashboardPage/>}/>
                                 <Route path={`/cab/learning`} element={<DevelopingPage/>}/>
                                 <Route path={`/cab/serf`} element={<SerfTablePage/>}/>
@@ -104,16 +107,6 @@ ReactDOM.createRoot(document.getElementById('root')).render(
                                 <Route
                                     path={`${import.meta.env.BASE_URL}authentication/resetpassword/resetcover`}
                                     element={<Resetcover/>}/>
-
-                                <Route path={`${import.meta.env.BASE_URL}authentication/signup/signupbasic`}
-                                       element={<Signupbasic/>}/>
-                                <Route path={`${import.meta.env.BASE_URL}authentication/signup/signupcover`}
-                                       element={<Signupcover/>}/>
-
-                                <Route path={`${import.meta.env.BASE_URL}authentication/signin/signinbasic`}
-                                       element={<Signinbasic/>}/>
-                                <Route path={`${import.meta.env.BASE_URL}authentication/signin/signincover`}
-                                       element={<Signincover/>}/>
 
                                 <Route
                                     path={`${import.meta.env.BASE_URL}authentication/twostepverification/twostepbasic`}
