@@ -119,7 +119,7 @@ const Signin = () => {
                                         </Col>
                                         <Col xl={12} className="d-grid mt-2">
 
-                                            {isSubmitting ?
+                                            {isSubmitting || showSpinner ?
                                                 <Spinner/> :
                                                 <Button onClick={handleSubmit} className="btn btn-lg btn-primary"
                                                         type={"button"}>Войти</Button>
