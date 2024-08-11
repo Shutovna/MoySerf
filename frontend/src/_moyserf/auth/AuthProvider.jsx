@@ -14,9 +14,10 @@ const AuthProvider = ({children}) => {
     const loginAction = async (data) => {
         try {
             let res = await request(`${API_BASE_URL}/auth/signin`, "POST", JSON.stringify(data));
+            console.log("loginAction auth response: " + JSON.stringify(res));
 
             if (res.accessToken) {
-                //setUser(res.data.user);
+                setUser({name: res.username, email: res.email});
                 setToken(res.accessToken);
                 localStorage.setItem(ACCESS_TOKEN, res.accessToken);
                 navigate("/cab/main");

@@ -31,7 +31,7 @@ public interface IUserService {
 
     User getUser(String verificationToken);
 
-    void saveRegisteredUser(User user);
+    User saveUser(User user);
 
     void deleteUser(User user);
 
@@ -45,7 +45,7 @@ public interface IUserService {
 
     void createPasswordResetTokenForUser(User user, String token);
 
-    User findUserByEmail(String email);
+    Optional<User> findUserByEmail(String email);
 
     PasswordResetToken getPasswordResetToken(String token);
 

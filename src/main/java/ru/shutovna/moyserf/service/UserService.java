@@ -84,8 +84,8 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public void saveRegisteredUser(final User user) {
-        userRepository.save(user);
+    public User saveUser(final User user) {
+        return userRepository.save(user);
     }
 
     @Override
@@ -140,8 +140,8 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public User findUserByEmail(final String email) {
-        return userRepository.findByEmail(email).orElseThrow();
+    public Optional<User> findUserByEmail(final String email) {
+        return userRepository.findByEmail(email);
     }
 
     @Override

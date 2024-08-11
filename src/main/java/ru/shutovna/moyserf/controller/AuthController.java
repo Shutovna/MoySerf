@@ -1,15 +1,11 @@
 package ru.shutovna.moyserf.controller;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.http.ResponseEntity;
-import org.springframework.retry.annotation.Backoff;
-import org.springframework.retry.annotation.Retryable;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -17,7 +13,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import org.thymeleaf.spring5.SpringTemplateEngine;
 import ru.shutovna.moyserf.config.AppProperties;
 import ru.shutovna.moyserf.error.UserAlreadyExistException;
 import ru.shutovna.moyserf.model.AuthProvider;
@@ -27,7 +22,6 @@ import ru.shutovna.moyserf.payload.AuthResponse;
 import ru.shutovna.moyserf.payload.LoginRequest;
 import ru.shutovna.moyserf.payload.SignUpRequest;
 import ru.shutovna.moyserf.registration.OnRegistrationCompleteEvent;
-import ru.shutovna.moyserf.repository.UserRepository;
 import ru.shutovna.moyserf.security.TokenProvider;
 import ru.shutovna.moyserf.service.IUserService;
 import ru.shutovna.moyserf.service.MyService;
@@ -37,6 +31,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.net.URI;
 import java.sql.SQLException;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/auth")
@@ -49,8 +44,6 @@ public class AuthController implements ApplicationListener<ContextRefreshedEvent
     @Autowired
     private IUserService userService;
 
-    @Autowired
-    private UserRepository userRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -80,15 +73,17 @@ public class AuthController implements ApplicationListener<ContextRefreshedEvent
                 )
         );
 
+        User user = userService.findUserByEmail(loginRequest.getEmail()).orElseThrow();
+
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         String token = tokenProvider.createToken(authentication);
-        return ResponseEntity.ok(new AuthResponse(token));
+        return ResponseEntity.ok(new AuthResponse(token, user.getEmail(), user.getName()));
     }
 
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpRequest signUpRequest, HttpServletRequest request) {
-        if (userRepository.existsByEmail(signUpRequest.getEmail())) {
+        if (userService.findUserByEmail(signUpRequest.getEmail()).isEmpty()) {
             throw new UserAlreadyExistException("There is an account with that email address: " + signUpRequest.getEmail());
         }
 
@@ -101,7 +96,7 @@ public class AuthController implements ApplicationListener<ContextRefreshedEvent
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
-        User result = userRepository.save(user);
+        User result = userService.saveUser(user);
 
         URI location = ServletUriComponentsBuilder
                 .fromCurrentContextPath().path("/user/me")

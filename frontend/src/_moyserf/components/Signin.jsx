@@ -19,7 +19,7 @@ const signinSchema = Yup.object().shape({
 });
 
 const Signin = () => {
-    const {token, user, loginAction, logOut, loading, error, clearError} = useAuth();
+    const {loginAction, error} = useAuth();
 
     const location = useLocation();
     const [message, setMessage] = useState(location.state?.message);
