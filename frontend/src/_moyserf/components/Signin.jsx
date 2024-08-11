@@ -1,44 +1,61 @@
 import {FC, Fragment, useEffect, useState} from 'react';
 import {Alert, Button, Card, Col, Form, InputGroup} from 'react-bootstrap';
+import {useFormik} from "formik";
+import * as Yup from "yup";
 import desktoplogo from "../../assets/images/brand-logos/desktop-logo.png";
 import desktopdarklogo from "../../assets/images/brand-logos/desktop-dark.png";
 import {Link, useLocation} from 'react-router-dom';
 import {useAuth} from "../auth/AuthProvider.jsx";
 import {GOOGLE_AUTH_URL} from "../constants/index.js";
+import Spinner from "./Spinner.jsx";
+
+const signinSchema = Yup.object().shape({
+    email: Yup.string()
+        .email("Введите правильный email")
+        .required("Введите email"),
+    password: Yup.string()
+        .min(7, "Пароль должен быть минимум 7 символов")
+        .required("Введите пароль")
+});
 
 const Signin = () => {
-    const [input, setInput] = useState({
-        email: "",
-        password: "",
-    });
+    const {token, user, loginAction, logOut, loading, error, clearError} = useAuth();
 
     const location = useLocation();
     const [message, setMessage] = useState(location.state?.message);
     const [outh2Error, setOauth2Error] = useState(location.state?.error);
+    const [showSpinner, setShowSpinner] = useState(false);
 
-    const {token, user, loginAction, logOut, loading, error, clearError} = useAuth();
+    const {handleChange, handleSubmit, values, errors, isSubmitting, setSubmitting} = useFormik({
+        validationSchema: signinSchema,
+        initialValues: {
+            email: "",
+            password: ""
+        },
+        validateOnChange: true,
+        onSubmit: (values) => {
+            setMessage(null);
+            setOauth2Error(null);
+            loginAction(values).then((result) => {
+                setSubmitting(false)
+            })
+                .catch((error) => {
+                    setSubmitting(false)
+                });
 
-    const handleSubmitEvent = (e) => {
-        e.preventDefault();
-        setMessage(null);
-        setOauth2Error(null);
-        if (input.email !== "" && input.password !== "") {
-            loginAction(input);
-            return;
         }
-        alert("please provide a valid input");
-    };
-
-    const handleInput = (e) => {
-        const {name, value} = e.target;
-        console.log(`name is: ${name} value: ${value}`);
-        setInput((prev) => ({
-            ...prev,
-            [name]: value,
-        }));
-    };
+    });
 
     const [passwordshow1, setpasswordshow1] = useState(false);
+
+
+    /* useEffect(() => {
+         console.log("useEffect error: " +error)
+         setSubmitting(false)
+
+     }, [error]);*/
+
+    console.log("isSubmitting:" + isSubmitting + " showSpinner: " + showSpinner);
     return (
         <Fragment>
             <div className="container">
@@ -51,7 +68,7 @@ const Signin = () => {
                                 <img src={desktopdarklogo} alt="logo" className="desktop-dark"/>
                             </Link>
                         </div>
-                        <form onSubmit={handleSubmitEvent}>
+                        <form>
                             <Card className="custom-card">
                                 <Card.Body className="p-5">
                                     <p className="h5 fw-semibold mb-2 text-center">Вход</p>
@@ -63,9 +80,11 @@ const Signin = () => {
                                         <Col xl={12}>
                                             <Form.Label htmlFor="signin-email"
                                                         className="form-label text-default">Email</Form.Label>
-                                            <Form.Control onChange={handleInput} name="email" type="text"
+                                            <Form.Control onChange={handleChange} value={values.email} name="email"
+                                                          type="text"
                                                           className="form-control-lg" id="signin-email"
                                                           placeholder="email"/>
+                                            <div className="text-danger mt-2">{errors.email}</div>
                                         </Col>
                                         <Col xl={12} className="mb-2">
                                             <Form.Label htmlFor="signin-password"
@@ -73,7 +92,8 @@ const Signin = () => {
                                                 to={`${import.meta.env.BASE_URL}authentication/resetpassword/resetbasic`}
                                                 className="float-end text-danger">Забыли пароль?</Link></Form.Label>
                                             <InputGroup>
-                                                <Form.Control onChange={handleInput} name="password"
+                                                <Form.Control onChange={handleChange} value={values.password}
+                                                              name="password"
                                                               type={(passwordshow1) ? 'text' : "password"}
                                                               className="form-control-lg" id="signin-password"
                                                               placeholder="пароль"/>
@@ -83,6 +103,8 @@ const Signin = () => {
                                                        aria-hidden="true"></i>
                                                 </Button>
                                             </InputGroup>
+                                            <div className="text-danger mt-2">{errors.password}</div>
+
                                             <div className="mt-2">
                                                 <div className="form-check">
                                                     <Form.Check className="" type="checkbox" value=""
@@ -93,10 +115,15 @@ const Signin = () => {
                                                     </Form.Label>
                                                 </div>
                                             </div>
+
                                         </Col>
                                         <Col xl={12} className="d-grid mt-2">
 
-                                            <Button className="btn btn-lg btn-primary" type={"submit"}>Войти</Button>
+                                            {isSubmitting ?
+                                                <Spinner/> :
+                                                <Button onClick={handleSubmit} className="btn btn-lg btn-primary"
+                                                        type={"button"}>Войти</Button>
+                                            }
                                         </Col>
                                     </div>
                                     <div className="text-center">
@@ -108,13 +135,15 @@ const Signin = () => {
                                         <span>ИЛИ</span>
                                     </div>
                                     <div className="btn-list text-center">
-                                        <Link to={GOOGLE_AUTH_URL} variant='light' className="btn btn-icon">
+                                        <Link onClick={() => setShowSpinner(true)}
+                                              to={GOOGLE_AUTH_URL} variant='light' className="btn btn-icon">
                                             <i className="ri-google-line fw-bold text-dark op-7"></i>
                                         </Link>
                                         <Link variant='light' className="btn btn-icon">
                                             <i className="ri-facebook-line fw-bold text-dark op-7"></i>
                                         </Link>
-                                        <Link variant='light' className="btn btn-icon">
+                                        <Link variant='light'
+                                              className="btn btn-icon">
                                             <i className="ri-twitter-line fw-bold text-dark op-7"></i>
                                         </Link>
                                     </div>

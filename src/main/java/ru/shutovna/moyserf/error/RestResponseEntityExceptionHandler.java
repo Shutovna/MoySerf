@@ -62,7 +62,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
     @ExceptionHandler({ BadCredentialsException.class })
     public ResponseEntity<Object> badCredentials(final RuntimeException ex, final WebRequest request) {
         logger.error("401 Status Code", ex);
-        final GenericResponse bodyOfResponse = new GenericResponse(messages.getMessage("auth.message.invalidUser", null, request.getLocale()), "BadCredentials");
+        final GenericResponse bodyOfResponse = new GenericResponse(messages.getMessage("message.badCredentials", null, request.getLocale()), "BadCredentials");
         return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), HttpStatus.UNAUTHORIZED, request);
     }
 
