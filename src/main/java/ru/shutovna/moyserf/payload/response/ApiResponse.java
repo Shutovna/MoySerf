@@ -1,4 +1,4 @@
-package ru.shutovna.moyserf.payload;
+package ru.shutovna.moyserf.payload.response;
 
 public class ApiResponse {
     private boolean success;

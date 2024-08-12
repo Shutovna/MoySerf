@@ -17,9 +17,8 @@ const AuthProvider = ({children}) => {
             console.log("loginAction auth response: " + JSON.stringify(res));
 
             if (res.accessToken) {
-                setUser({name: res.username, email: res.email});
-                setToken(res.accessToken);
-                localStorage.setItem(ACCESS_TOKEN, res.accessToken);
+                const {name, email, imageUrl} = res.userInfo;
+                setAuthInfo(res.accessToken, {name, email, imageUrl})
                 navigate("/cab/main");
             }
         } catch (err) {
@@ -28,14 +27,25 @@ const AuthProvider = ({children}) => {
     };
 
     const logOut = () => {
-        setUser(null);
-        setToken("");
-        localStorage.removeItem(ACCESS_TOKEN);
+        clearAuthInfo();
         navigate("/auth/signin");
     };
 
+    const setAuthInfo = (token, user) => {
+        setToken(token);
+        localStorage.setItem(ACCESS_TOKEN, token);
+        setUser(user);
+    }
+
+    const clearAuthInfo = () => {
+        setUser(null);
+        setToken("");
+        localStorage.removeItem(ACCESS_TOKEN);
+    }
+
     return (
-        <AuthContext.Provider value={{token, user, loginAction, logOut, loading, error, clearError}}>
+        <AuthContext.Provider
+            value={{token, user, loginAction, logOut, setAuthInfo, clearAuthInfo, loading, error, clearError}}>
             {children}
         </AuthContext.Provider>
     );

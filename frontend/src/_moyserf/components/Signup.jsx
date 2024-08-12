@@ -50,26 +50,21 @@ const Signup = () => {
             signup(values).then(() => {
                 setSubmitting(false)
                 onRegistered();
+
             })
-                .catch(() => {
+                .catch((err) => {
                     setSubmitting(false)
+                    console.log(err)
                 });
 
         }
     });
 
     function onRegistered() {
-        return response => {
-            console.log("You're successfully registered. Please login to continue!");
-            routeChange();
-        };
-    }
-
-    const routeChange = () => {
-        console.log("routeChange")
+        console.log("You're successfully registered. Please login to continue!");
         const path = `${import.meta.env.BASE_URL}auth/signin`;
         navigate(path, {state: {message: 'Проверьте почту для подтверждения регистрации'}});
-    };
+    }
 
     useEffect(() => {
         LocalStorageBackup(ThemeChanger);

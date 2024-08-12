@@ -1,9 +1,11 @@
 import {useHttp} from "../hooks/http.hooks.jsx";
+import {useApi} from "../hooks/api.hooks.jsx";
 import {BACKEND_BASE_URL} from "../constants/index.js";
 
 
 const useAuthService = () => {
     const {loading, request, error, clearError} = useHttp();
+    const {apiRequest} = useApi();
 
     const signup = async (signupRequest) => {
         return await request(`${BACKEND_BASE_URL}/auth/signup`, "POST", JSON.stringify(signupRequest));
@@ -11,7 +13,7 @@ const useAuthService = () => {
 
     const getUserInfo = async (token) => {
         console.log("getUserInfo for  " + token);
-        return await request(`${BACKEND_BASE_URL}/auth/userInfo?token=${token}`);
+        return await apiRequest(`${BACKEND_BASE_URL}/auth/userInfo`);
     }
 
     const confirmResult = async (token) => {

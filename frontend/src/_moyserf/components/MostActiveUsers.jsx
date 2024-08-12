@@ -25,8 +25,8 @@ const MostActiveUsers = () => {
         <Card.Body>
             <ul className="list-unstyled crm-top-deals mb-0">
                 {
-                    users.map((user) => {
-                        return <li>
+                    users.map((user, idx) => {
+                        return <li key={idx}>
                             <div className="d-flex align-items-top flex-wrap">
                                 <div className="me-2">
                                     <span

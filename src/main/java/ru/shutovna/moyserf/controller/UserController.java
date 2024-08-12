@@ -9,8 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.shutovna.moyserf.exception.ResourceNotFoundException;
 import ru.shutovna.moyserf.model.User;
-import ru.shutovna.moyserf.payload.UserResponse;
-import ru.shutovna.moyserf.repository.UserRepository;
+import ru.shutovna.moyserf.payload.response.MostActiveUserResponse;
 import ru.shutovna.moyserf.security.CurrentUser;
 import ru.shutovna.moyserf.security.UserPrincipal;
 import ru.shutovna.moyserf.service.IUserService;
@@ -32,8 +31,8 @@ public class UserController {
     }
 
     @GetMapping("/mostActive")
-    public ResponseEntity<List<UserResponse>> getMostActiveUsers() {
+    public ResponseEntity<List<MostActiveUserResponse>> getMostActiveUsers() {
         List<User> mostActiveUsers = userService.getMostActiveUsers();
-        return ResponseEntity.ok(mostActiveUsers.stream().map(UserResponse::fromUser).toList());
+        return ResponseEntity.ok(mostActiveUsers.stream().map(MostActiveUserResponse::fromUser).toList());
     }
 }

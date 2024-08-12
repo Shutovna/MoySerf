@@ -3,7 +3,7 @@ package ru.shutovna.moyserf.service;
 import ru.shutovna.moyserf.model.PasswordResetToken;
 import ru.shutovna.moyserf.model.User;
 import ru.shutovna.moyserf.model.VerificationToken;
-import ru.shutovna.moyserf.payload.SignUpRequest;
+import ru.shutovna.moyserf.payload.request.SignUpRequest;
 
 import java.io.UnsupportedEncodingException;
 import java.util.List;

@@ -9,7 +9,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -17,10 +19,11 @@ import ru.shutovna.moyserf.config.AppProperties;
 import ru.shutovna.moyserf.error.UserAlreadyExistException;
 import ru.shutovna.moyserf.model.AuthProvider;
 import ru.shutovna.moyserf.model.User;
-import ru.shutovna.moyserf.payload.ApiResponse;
-import ru.shutovna.moyserf.payload.AuthResponse;
-import ru.shutovna.moyserf.payload.LoginRequest;
-import ru.shutovna.moyserf.payload.SignUpRequest;
+import ru.shutovna.moyserf.payload.request.LoginRequest;
+import ru.shutovna.moyserf.payload.request.SignUpRequest;
+import ru.shutovna.moyserf.payload.response.ApiResponse;
+import ru.shutovna.moyserf.payload.response.AuthResponse;
+import ru.shutovna.moyserf.payload.response.UserInfoResponse;
 import ru.shutovna.moyserf.registration.OnRegistrationCompleteEvent;
 import ru.shutovna.moyserf.security.TokenProvider;
 import ru.shutovna.moyserf.service.IAuthSService;
@@ -31,11 +34,8 @@ import ru.shutovna.moyserf.service.MyService;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.net.URI;
-import java.security.Principal;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/auth")
@@ -84,7 +84,7 @@ public class AuthController implements ApplicationListener<ContextRefreshedEvent
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         String token = tokenProvider.createToken(authentication);
-        return ResponseEntity.ok(new AuthResponse(token, user.getEmail(), user.getName()));
+        return ResponseEntity.ok(new AuthResponse(token, user.getEmail(), user.getName(), user.getImageUrl()));
     }
 
     @PostMapping("/signup")
@@ -130,18 +130,16 @@ public class AuthController implements ApplicationListener<ContextRefreshedEvent
     }
 
     @GetMapping("/userInfo")
-    public ResponseEntity<Map<String, Object>> getUserInfo(Principal principal) {
-        log.debug("getUserInfo for principal: " + principal.getName());
-        Map<String, Object> userInfo = new HashMap<>();
-        userInfo.put("username", principal.getName());
+    public ResponseEntity<UserInfoResponse> getUserInfo(@AuthenticationPrincipal UserDetails userDetails) {
+        log.debug("getUserInfo for AuthenticationPrincipal: " + userDetails);
+        String email = userDetails.getUsername();
 
-        return ResponseEntity.ok(userInfo);
+        User user = userService.findUserByEmail(email).orElseThrow();
+
+        UserInfoResponse response = new UserInfoResponse(email, user.getName(), user.getImageUrl());
+        return ResponseEntity.ok(response);
     }
 
-
-    private String getAppUrl(HttpServletRequest request) {
-        return "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
-    }
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {

@@ -15,7 +15,8 @@ const signinSchema = Yup.object().shape({
         .required("Введите email"),
     password: Yup.string()
         .min(7, "Пароль должен быть минимум 7 символов")
-        .required("Введите пароль")
+        .required("Введите пароль"),
+    rememberMe: Yup.boolean()
 });
 
 const Signin = () => {
@@ -30,12 +31,26 @@ const Signin = () => {
         validationSchema: signinSchema,
         initialValues: {
             email: "",
-            password: ""
+            password: "",
+            rememberMe: localStorage.getItem("rememberMe"),
         },
         validateOnChange: true,
         onSubmit: (values) => {
             setMessage(null);
             setOauth2Error(null);
+
+
+            if (values.rememberMe) {
+                localStorage.setItem('rememberMe', "true");
+                localStorage.setItem('email', values.email);
+                localStorage.setItem('password', values.password);
+            } else {
+                localStorage.removeItem('rememberMe');
+                localStorage.removeItem('email');
+                localStorage.removeItem('password');
+            }
+
+
             loginAction(values).then((result) => {
                 setSubmitting(false)
             })
@@ -45,6 +60,16 @@ const Signin = () => {
 
         }
     });
+    console.log("values.rememberMe: " + values.rememberMe);
+    useEffect(() => {
+        const rememberedEmail = localStorage.getItem('email');
+        const rememberedPassword = localStorage.getItem('password');
+        if (rememberedEmail && rememberedPassword) {
+            values.email = rememberedEmail;
+            values.password = rememberedPassword;
+            values.rememberMe = true;
+        }
+    }, []);
 
     const [passwordshow1, setpasswordshow1] = useState(false);
     console.log("isSubmitting:" + isSubmitting + " showSpinner: " + showSpinner);
@@ -99,10 +124,10 @@ const Signin = () => {
 
                                             <div className="mt-2">
                                                 <div className="form-check">
-                                                    <Form.Check className="" type="checkbox" value=""
-                                                                id="defaultCheck1"/>
+                                                    <Form.Check name={"rememberMe"} onChange={handleChange} value={values.rememberMe} className="" type="checkbox"
+                                                                id="rememberMe"/>
                                                     <Form.Label className="form-check-label text-muted fw-normal"
-                                                                htmlFor="defaultCheck1">
+                                                                htmlFor="rememberMe">
                                                         Запомнить пароль ?
                                                     </Form.Label>
                                                 </div>

@@ -12,7 +12,7 @@ import ru.shutovna.moyserf.error.UserAlreadyExistException;
 import ru.shutovna.moyserf.model.PasswordResetToken;
 import ru.shutovna.moyserf.model.User;
 import ru.shutovna.moyserf.model.VerificationToken;
-import ru.shutovna.moyserf.payload.SignUpRequest;
+import ru.shutovna.moyserf.payload.request.SignUpRequest;
 import ru.shutovna.moyserf.repository.PasswordResetTokenRepository;
 import ru.shutovna.moyserf.repository.RoleRepository;
 import ru.shutovna.moyserf.repository.UserRepository;
