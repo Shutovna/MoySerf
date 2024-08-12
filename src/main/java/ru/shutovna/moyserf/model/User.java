@@ -6,6 +6,8 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
+import java.time.LocalDateTime;
+import java.util.Calendar;
 import java.util.Collection;
 
 @Entity
@@ -39,6 +41,12 @@ public class User {
     private AuthProvider provider;
 
     private String providerId;
+
+    @Column(name="created_at", nullable = false)
+    private LocalDateTime createdAt;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private User invitor;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "users_roles",

@@ -11,7 +11,10 @@ logging:
         security: DEBUG
       hibernate:
         SQL: DEBUG
-
+        type:
+          descriptor:
+            sql:
+              BasicBinder: TRACE
 spring:
   application:
     name: MoySerf
@@ -23,7 +26,7 @@ spring:
   jpa:
     generate-ddl: true
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
       dialect: org.hibernate.dialect.PostgreSQLDialect
       jdbc:
         lob:

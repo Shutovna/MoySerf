@@ -1,22 +1,22 @@
 import {useHttp} from "../hooks/http.hooks.jsx";
-import {API_BASE_URL} from "../constants/index.js";
+import {BACKEND_BASE_URL} from "../constants/index.js";
 
 
 const useAuthService = () => {
     const {loading, request, error, clearError} = useHttp();
 
     const signup = async (signupRequest) => {
-        return await request(`${API_BASE_URL}/auth/signup`, "POST", JSON.stringify(signupRequest));
+        return await request(`${BACKEND_BASE_URL}/auth/signup`, "POST", JSON.stringify(signupRequest));
     }
 
     const getUserInfo = async (token) => {
         console.log("getUserInfo for  " + token);
-        return await request(`${API_BASE_URL}/auth/userInfo?token=${token}`);
+        return await request(`${BACKEND_BASE_URL}/auth/userInfo?token=${token}`);
     }
 
     const confirmResult = async (token) => {
         console.log("confirmResult " + token);
-        return await request(`${API_BASE_URL}/auth/registrationConfirm?token=${token}`);
+        return await request(`${BACKEND_BASE_URL}/auth/registrationConfirm?token=${token}`);
     }
 
     const getAuthQueryString = () => {

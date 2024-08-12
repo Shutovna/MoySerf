@@ -16,10 +16,22 @@ import face10 from "../../assets/images/faces/10.jpg";
 import face12 from "../../assets/images/faces/12.jpg";
 import face9 from "../../assets/images/faces/9.jpg";
 import {useAuth} from "../auth/AuthProvider.jsx";
+import useUserService from "../services/UserService.jsx";
 
 
 const MainDashboardPage = () => {
     const {user} = useAuth();
+    const {findMostActiveUsers} = useUserService();
+
+    useEffect(() => {
+        findMostActiveUsers().then((mostActiveUsers) => {
+            console.log(mostActiveUsers);
+        })
+            .catch((error) => {
+                console.log(error)
+            })
+    }, []);
+
 
     // for User search function
     const [Data, setData] = useState(Dealsstatistics);
@@ -63,7 +75,7 @@ const MainDashboardPage = () => {
             <div className="d-md-flex d-block align-items-center justify-content-between my-4 page-header-breadcrumb">
                 <div>
                     <h1 className={"fw-semibold mb-3"}>Сайт для заработка на простых действиях в Интернете</h1>
-                    <h2 className="fw-semibold fs-30 mb-0">Приветствуем Вас, {user.name}!</h2>
+                    <h2 className="fw-semibold fs-30 mb-0">Приветствуем Вас, {user?.name}!</h2>
                 </div>
             </div>
 

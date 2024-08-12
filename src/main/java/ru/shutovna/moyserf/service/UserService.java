@@ -40,7 +40,7 @@ public class UserService implements IUserService {
 
     // API
     @Override
-    public Optional<User> getUserByID(final long id) {
+    public Optional<User> findUserByID(final long id) {
         return userRepository.findById(id);
     }
 
@@ -71,4 +71,8 @@ public class UserService implements IUserService {
         return userRepository.findByEmail(email);
     }
 
+    @Override
+    public List<User> getMostActiveUsers() {
+        return userRepository.findAll().stream().limit(5).toList();
+    }
 }

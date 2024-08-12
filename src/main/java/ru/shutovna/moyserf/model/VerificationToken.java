@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.Objects;
 
 @Entity
+@Table(name = "verification_tokens")
 @Getter
 @Setter
 public class VerificationToken {

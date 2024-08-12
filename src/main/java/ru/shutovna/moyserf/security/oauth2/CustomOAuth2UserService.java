@@ -18,6 +18,7 @@ import ru.shutovna.moyserf.security.UserPrincipal;
 import ru.shutovna.moyserf.security.oauth2.user.OAuth2UserInfo;
 import ru.shutovna.moyserf.security.oauth2.user.OAuth2UserInfoFactory;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
@@ -72,6 +73,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         user.setEmail(oAuth2UserInfo.getEmail());
         user.setEmailVerified(true);
         user.setImageUrl(oAuth2UserInfo.getImageUrl());
+        user.setCreatedAt(LocalDateTime.now());
         return userRepository.save(user);
     }
 

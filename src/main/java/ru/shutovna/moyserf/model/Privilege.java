@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
+@Table(name="privileges")
 @Getter
 @Setter
 public class Privilege {

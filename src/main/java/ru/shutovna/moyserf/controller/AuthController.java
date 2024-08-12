@@ -33,6 +33,7 @@ import javax.validation.Valid;
 import java.net.URI;
 import java.security.Principal;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -88,7 +89,7 @@ public class AuthController implements ApplicationListener<ContextRefreshedEvent
 
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpRequest signUpRequest, HttpServletRequest request) {
-        if (userService.findUserByEmail(signUpRequest.getEmail()).isEmpty()) {
+        if (userService.findUserByEmail(signUpRequest.getEmail()).isPresent()) {
             throw new UserAlreadyExistException("There is an account with that email address: " + signUpRequest.getEmail());
         }
 
@@ -98,6 +99,7 @@ public class AuthController implements ApplicationListener<ContextRefreshedEvent
         user.setEmail(signUpRequest.getEmail());
         user.setPassword(signUpRequest.getPassword());
         user.setProvider(AuthProvider.local);
+        user.setCreatedAt(LocalDateTime.now());
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 

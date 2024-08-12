@@ -1,30 +1,10 @@
 package ru.shutovna.moyserf.model;
+public enum TransactionType {
+    MONEY_INPUT,
+    MONEY_OUTPUT,
 
+    EARNED_SITE_VIEW,
+    EARNED_REFERAL_SITE_VIEW,
 
-import javax.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
-@Entity
-@Table(name = "TRANSACTION_TYPES")
-@Getter
-@Setter
-@NoArgsConstructor
-public class TransactionType {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
-
-    @Column(nullable = false)
-    private String name;
-
-    @Override
-    public String toString() {
-        return "TransactionType{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                '}';
-    }
+    VIP_REGISTERED
 }
-

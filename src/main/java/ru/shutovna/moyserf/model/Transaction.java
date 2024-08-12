@@ -8,7 +8,7 @@ import lombok.Setter;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "TRANSACTIONS")
+@Table(name = "transactions")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -19,8 +19,7 @@ public class Transaction {
 
     private String description;
 
-    @ManyToOne
-    @JoinColumn(name = "type_id", nullable = false)
+    @Enumerated(EnumType.STRING)
     private TransactionType type;
 
     @Column(name = "created_at", nullable = false)
