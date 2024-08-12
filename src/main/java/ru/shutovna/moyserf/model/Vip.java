@@ -27,6 +27,9 @@ public class Vip {
 
     private LocalDateTime endedAt;
 
+    @ManyToOne
+    private User user;
+
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "transaction_id", nullable = false)

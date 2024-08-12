@@ -1,18 +1,13 @@
-import {useHttp} from "../hooks/http.hooks.jsx";
+
 import {BACKEND_BASE_URL} from "../constants/index.js";
 import {ACCESS_TOKEN} from "../constants/index.js";
+import {useApi} from "../hooks/api.hooks.jsx";
 
 const useUserService = () => {
-    const {request} = useHttp();
+    const {apiRequest} = useApi();
 
     const findMostActiveUsers = async () => {
-        const token = localStorage.getItem(ACCESS_TOKEN);
-        const headers = {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}` // Добавляем токен в заголовок Authorization
-        };
-
-        return await request(`${BACKEND_BASE_URL}/api/users/mostActive`, "GET", null, headers);
+        return await apiRequest(`${BACKEND_BASE_URL}/api/users/mostActive`, "GET", null);
     }
 
     return {findMostActiveUsers};

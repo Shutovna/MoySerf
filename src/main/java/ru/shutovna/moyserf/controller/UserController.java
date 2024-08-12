@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.shutovna.moyserf.exception.ResourceNotFoundException;
 import ru.shutovna.moyserf.model.User;
@@ -16,16 +17,12 @@ import ru.shutovna.moyserf.service.IUserService;
 
 import java.util.List;
 
-@RestController("/api/users")
+@RestController
+@RequestMapping("/api/users")
 public class UserController {
 
     @Autowired
     private IUserService userService;
-
-    @GetMapping
-    public UserResponse test() {
-        return new UserResponse()   ;
-    }
 
     @GetMapping("/user/me")
     @PreAuthorize("hasRole('USER')")
@@ -35,8 +32,8 @@ public class UserController {
     }
 
     @GetMapping("/mostActive")
-    public ResponseEntity<List<User>> getMostActiveUsers() {
+    public ResponseEntity<List<UserResponse>> getMostActiveUsers() {
         List<User> mostActiveUsers = userService.getMostActiveUsers();
-        return ResponseEntity.ok(mostActiveUsers);
+        return ResponseEntity.ok(mostActiveUsers.stream().map(UserResponse::fromUser).toList());
     }
 }

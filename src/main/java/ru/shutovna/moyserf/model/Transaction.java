@@ -35,6 +35,9 @@ public class Transaction {
     @Column
     private boolean completed;
 
+    @ManyToOne
+    private User user;
+
     @Override
     public String toString() {
         return "Transaction{" +

@@ -47,14 +47,6 @@ const Signin = () => {
     });
 
     const [passwordshow1, setpasswordshow1] = useState(false);
-
-
-    /* useEffect(() => {
-         console.log("useEffect error: " +error)
-         setSubmitting(false)
-
-     }, [error]);*/
-
     console.log("isSubmitting:" + isSubmitting + " showSpinner: " + showSpinner);
     return (
         <Fragment>
