@@ -23,6 +23,7 @@ import ru.shutovna.moyserf.payload.LoginRequest;
 import ru.shutovna.moyserf.payload.SignUpRequest;
 import ru.shutovna.moyserf.registration.OnRegistrationCompleteEvent;
 import ru.shutovna.moyserf.security.TokenProvider;
+import ru.shutovna.moyserf.service.IAuthSService;
 import ru.shutovna.moyserf.service.IUserService;
 import ru.shutovna.moyserf.service.MyService;
 
@@ -30,8 +31,10 @@ import ru.shutovna.moyserf.service.MyService;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.net.URI;
+import java.security.Principal;
 import java.sql.SQLException;
-import java.util.Optional;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/auth")
@@ -44,6 +47,8 @@ public class AuthController implements ApplicationListener<ContextRefreshedEvent
     @Autowired
     private IUserService userService;
 
+    @Autowired
+    private IAuthSService authSService;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -113,14 +118,24 @@ public class AuthController implements ApplicationListener<ContextRefreshedEvent
 
     @GetMapping("/registrationConfirm")
     public ResponseEntity<?> registrationConfirm(@RequestParam String token) {
-        IUserService.VerificationTokenStatus status = userService.validateVerificationToken(token);
+        IAuthSService.VerificationTokenStatus status = authSService.validateVerificationToken(token);
         log.debug("registrationConfirm token: " + token + " result: " + status);
-        if (status == IUserService.VerificationTokenStatus.TOKEN_VALID) {
-            userService.verifyUserRegistration(token);
+        if (status == IAuthSService.VerificationTokenStatus.TOKEN_VALID) {
+            authSService.verifyUserRegistration(token);
         }
         return ResponseEntity.ok()
                 .body(new ApiResponse(true, status.getName()));
     }
+
+    @GetMapping("/userInfo")
+    public ResponseEntity<Map<String, Object>> getUserInfo(Principal principal) {
+        log.debug("getUserInfo for principal: " + principal.getName());
+        Map<String, Object> userInfo = new HashMap<>();
+        userInfo.put("username", principal.getName());
+
+        return ResponseEntity.ok(userInfo);
+    }
+
 
     private String getAppUrl(HttpServletRequest request) {
         return "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();

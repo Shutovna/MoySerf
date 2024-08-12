@@ -9,6 +9,11 @@ const useAuthService = () => {
         return await request(`${API_BASE_URL}/auth/signup`, "POST", JSON.stringify(signupRequest));
     }
 
+    const getUserInfo = async (token) => {
+        console.log("getUserInfo for  " + token);
+        return await request(`${API_BASE_URL}/auth/userInfo?token=${token}`);
+    }
+
     const confirmResult = async (token) => {
         console.log("confirmResult " + token);
         return await request(`${API_BASE_URL}/auth/registrationConfirm?token=${token}`);
@@ -32,7 +37,7 @@ const useAuthService = () => {
         return `ts=${timestamp}&apikey=${publicKey}&hash=${hash}`;
     }
 
-    return {loading, error, signup, confirmResult, clearError};
+    return {loading, error, signup, confirmResult, getUserInfo, clearError};
 
 }
 

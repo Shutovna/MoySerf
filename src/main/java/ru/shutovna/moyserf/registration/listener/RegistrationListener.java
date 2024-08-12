@@ -14,6 +14,7 @@ import ru.shutovna.moyserf.error.MailSendException;
 import ru.shutovna.moyserf.model.User;
 import ru.shutovna.moyserf.registration.OnRegistrationCompleteEvent;
 import ru.shutovna.moyserf.service.EmailService;
+import ru.shutovna.moyserf.service.IAuthSService;
 import ru.shutovna.moyserf.service.IUserService;
 
 
@@ -23,7 +24,7 @@ import java.util.UUID;
 @Slf4j
 public class RegistrationListener implements ApplicationListener<OnRegistrationCompleteEvent> {
     @Autowired
-    private IUserService service;
+    private IAuthSService authSService;
 
     @Autowired
     private EmailService emailService;
@@ -51,7 +52,7 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
     public void confirmRegistration(final OnRegistrationCompleteEvent event) throws MailSendException {
         final User user = event.getUser();
         final String token = UUID.randomUUID().toString();
-        service.createVerificationTokenForUser(user, token);
+        authSService.createVerificationTokenForUser(user, token);
 
         final String confirmationUrl = event.getAppUrl() + "/auth/registrationConfirm?token=" + token;
         try {
