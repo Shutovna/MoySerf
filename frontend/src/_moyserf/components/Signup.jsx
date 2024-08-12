@@ -7,48 +7,63 @@ import {LocalStorageBackup} from "../../components/common/switcher/switcherdata/
 import {ThemeChanger} from "../../redux/action.jsx";
 import {GOOGLE_AUTH_URL} from "../constants/index.js";
 import useAuthService from "../services/AuthService.jsx";
+import * as Yup from "yup";
+import {useFormik} from "formik";
+import Spinner from "./Spinner.jsx";
 
+const signupSchema = Yup.object().shape({
+    name: Yup.string()
+        .min(3, "Имя пользователя должно быть минимум 3 символа")
+        .required("Введите имя пользователя"),
+    email: Yup.string()
+        .email("Введите правильный email")
+        .required("Введите email"),
+    password: Yup.string()
+        .min(7, "Пароль должен быть минимум 7 символов")
+        .required("Введите пароль"),
+    confirmPassword: Yup.string()
+        .oneOf([Yup.ref('password'), null], 'Пароли должны совпадать')
+        .required('Подтверждение пароля обязательно')
+});
 
 const Signup = () => {
     const {loading, error, signup, clearError} = useAuthService();
-
-    const [passwordshow1, setpasswordshow1] = useState(false);
-    const [passwordshow2, setpasswordshow2] = useState(false);
-
     const navigate = useNavigate();
 
     const [message, setMessage] = useState("");
+    const [outh2Error, setOauth2Error] = useState(location.state?.error);
+    const [showSpinner, setShowSpinner] = useState(false);
 
+    const {handleChange, handleSubmit, values, errors, isSubmitting, setSubmitting} = useFormik({
+        validationSchema: signupSchema,
+        initialValues: {
+            name: "",
+            email: "",
+            password: "",
+            confirmPassword: ""
+        },
+        validateOnChange: true,
+        onSubmit: (values) => {
+            console.log("SigninUp")
+            setMessage(null);
+            setOauth2Error(null);
+            signup(values).then(() => {
+                setSubmitting(false)
+                onRegistered();
+            })
+                .catch(() => {
+                    setSubmitting(false)
+                });
 
-    const [data, setData] = useState({
-        name: "",
-        email: "",
-        password: "",
+        }
     });
 
-    const { email, password, name} = data;
-    const changeHandler = (e) => {
-        setData({...data, [e.target.name]: e.target.value});
-    };
-
-    const Signup = () => {
-        // e.preventDefault(
-        console.log(`Signup data: ${data}`)
-
-        const signUpRequest = Object.assign({}, data);
-
-        function onRegistered() {
-            return response => {
-                console.log("You're successfully registered. Please login to continue!");
-                routeChange();
-            };
-        }
-
-        signup(signUpRequest)
-            .then(onRegistered())
-            .catch(error => console.log(error));
-    };
-
+    function onRegistered() {
+        return response => {
+            console.log("You're successfully registered. Please login to continue!");
+            routeChange();
+        };
+    }
 
     const routeChange = () => {
         console.log("routeChange")
@@ -60,6 +75,8 @@ const Signup = () => {
         LocalStorageBackup(ThemeChanger);
     }, []);
 
+    const [passwordshow1, setpasswordshow1] = useState(false);
+    const [passwordshow2, setpasswordshow2] = useState(false);
     return (
         <Fragment>
             <div className="container-lg">
@@ -78,6 +95,7 @@ const Signup = () => {
                                 <p className="mb-4 text-muted op-7 fw-normal text-center">Добро пожаловать!
                                     Присоединяйтесь к нам и создайте бесплатный аккаунт</p>
                                 {error && <Alert variant="danger">{error}</Alert>}
+                                {outh2Error && <Alert variant="danger">{outh2Error}</Alert>}
                                 {message && <Alert variant="success">{message}</Alert>}
                                 <div className="row gy-3">
                                     <Col xl={12}>
@@ -85,24 +103,26 @@ const Signup = () => {
                                                     className="form-label text-default">Имя пользователя</Form.Label>
                                         <Form.Control
                                             name={"name"}
-                                            value={name}
-                                            onChange={changeHandler}
+                                            value={values.name}
+                                            onChange={handleChange}
                                             type="text"
                                             className="form-control form-control-lg"
                                             id="signup-name"
                                             placeholder="имя пользователя"/>
+                                        <div className="text-danger mt-2">{errors.name}</div>
                                     </Col>
                                     <Col xl={12}>
                                         <Form.Label htmlFor="signup-email"
                                                     className="form-label text-default">Email</Form.Label>
                                         <Form.Control
                                             name={"email"}
-                                            value={email}
-                                            onChange={changeHandler}
+                                            value={values.email}
+                                            onChange={handleChange}
                                             type="text"
                                             className=" form-control-lg"
                                             id="signup-email"
                                             placeholder="email"/>
+                                        <div className="text-danger mt-2">{errors.email}</div>
                                     </Col>
                                     <Col xl={12}>
                                         <Form.Label htmlFor="signup-password"
@@ -110,8 +130,8 @@ const Signup = () => {
                                         <InputGroup>
                                             <Form.Control
                                                 name={"password"}
-                                                value={password}
-                                                onChange={changeHandler}
+                                                value={values.password}
+                                                onChange={handleChange}
                                                 type={(passwordshow1) ? 'text' : "password"}
                                                 className="form-control-lg"
                                                 id="signup-password"
@@ -122,24 +142,33 @@ const Signup = () => {
                                                    aria-hidden="true"></i>
                                             </Button>
                                         </InputGroup>
+                                        <div className="text-danger mt-2">{errors.password}</div>
                                     </Col>
                                     <Col xl={12} className="mb-2">
-                                        <Form.Label htmlFor="signup-confirmpassword"
+                                        <Form.Label htmlFor="signup-confirmPassword"
                                                     className="form-label text-default">Повторите пароль</Form.Label>
                                         <InputGroup>
-                                            <Form.Control type={(passwordshow2) ? 'text' : "password"}
-                                                          className="form-control-lg" id="signup-confirmpassword"
-                                                          placeholder="повторите пароль"/>
+                                            <Form.Control
+                                                name={"confirmPassword"}
+                                                value={values.confirmPassword}
+                                                onChange={handleChange}
+                                                type={(passwordshow2) ? 'text' : "password"}
+                                                className="form-control-lg" id="signup-confirmPassword"
+                                                placeholder="повторите пароль"/>
                                             <Button variant='light' className="btn"
                                                     onClick={() => setpasswordshow2(!passwordshow2)}>
                                                 <i className={`${passwordshow2 ? 'ri-eye-line' : 'ri-eye-off-line'} align-middle`}
                                                    aria-hidden="true"></i>
                                             </Button>
                                         </InputGroup>
+                                        <div className="text-danger mt-2">{errors.confirmPassword}</div>
                                     </Col>
                                     <Col xl={12} className="d-grid mt-2">
-                                        <Button onClick={Signup} variant='primary'
-                                                className="btn btn-lg ">Зарегистрироваться</Button>
+                                        {isSubmitting || showSpinner ?
+                                            <Spinner/> :
+                                            <Button onClick={handleSubmit} variant='primary'
+                                                    className="btn btn-lg ">Зарегистрироваться</Button>
+                                        }
                                     </Col>
                                 </div>
                                 <div className="text-center">
@@ -151,7 +180,7 @@ const Signup = () => {
                                     <span>ИЛИ</span>
                                 </div>
                                 <div className="btn-list text-center">
-                                    <Link to={GOOGLE_AUTH_URL}
+                                    <Link onClick={() => setShowSpinner(true)} to={GOOGLE_AUTH_URL}
                                           variant='light' className="btn btn-icon">
                                         <i className="ri-google-line fw-bold text-dark op-7"></i>
                                     </Link>

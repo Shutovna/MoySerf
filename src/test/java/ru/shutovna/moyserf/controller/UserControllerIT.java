@@ -11,6 +11,6 @@ public class UserControllerIT {
 
     @Test
     void test() {
-        System.out.println(userController.test());
+        System.out.println(userController.getMostActiveUsers());
     }
 }

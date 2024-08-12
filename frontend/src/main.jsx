@@ -37,7 +37,6 @@ import Createblog from "./container/pages/blog/createblog/createblog.jsx";
 import OAuth2RedirectHandler from "./_moyserf/auth/oauth2/OAuth2RedirectHandler.jsx";
 import BadVerificationToken from "./_moyserf/components/BadVerificationToken.jsx";
 import RegistrationConfirm from "./_moyserf/components/RegistrationConfirm.jsx";
-import CustomForm from "./_moyserf/components/FormikTest.jsx";
 
 ReactDOM.createRoot(document.getElementById('root')).render(
     <React.Fragment>
@@ -68,7 +67,6 @@ ReactDOM.createRoot(document.getElementById('root')).render(
 
                             <Route path={"/cab"} element={<App/>}>
                                 <Route index element={<MainDashboardPage/>}/>
-                                <Route path={`/cab/formik`} element={<CustomForm/>}/>
                                 <Route path={`/cab/main`} element={<MainDashboardPage/>}/>
                                 <Route path={`/cab/learning`} element={<DevelopingPage/>}/>
                                 <Route path={`/cab/serf`} element={<SerfTablePage/>}/>
