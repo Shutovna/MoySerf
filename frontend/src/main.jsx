@@ -37,6 +37,7 @@ import Createblog from "./container/pages/blog/createblog/createblog.jsx";
 import OAuth2RedirectHandler from "./_moyserf/auth/oauth2/OAuth2RedirectHandler.jsx";
 import BadVerificationToken from "./_moyserf/components/BadVerificationToken.jsx";
 import RegistrationConfirm from "./_moyserf/components/RegistrationConfirm.jsx";
+import SavePassword from "./_moyserf/components/SavePassword.jsx";
 
 ReactDOM.createRoot(document.getElementById('root')).render(
     <React.Fragment>
@@ -58,6 +59,8 @@ ReactDOM.createRoot(document.getElementById('root')).render(
                                    element={<Signup/>}/>
                             <Route path={`${import.meta.env.BASE_URL}auth/registrationConfirm`}
                                    element={<RegistrationConfirm/>}/>
+                            <Route path={`${import.meta.env.BASE_URL}auth/savePassword`}
+                                   element={<SavePassword/>}/>
                             <Route path={`${import.meta.env.BASE_URL}auth/badVerificationToken`}
                                    element={<BadVerificationToken/>}/>
 

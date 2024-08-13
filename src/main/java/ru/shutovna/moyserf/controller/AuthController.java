@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.ApplicationListener;
+import org.springframework.context.MessageSource;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -16,31 +17,39 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.shutovna.moyserf.config.AppProperties;
+import ru.shutovna.moyserf.error.EmailSendException;
+import ru.shutovna.moyserf.error.InvalidOldPasswordException;
 import ru.shutovna.moyserf.error.UserAlreadyExistException;
 import ru.shutovna.moyserf.model.AuthProvider;
 import ru.shutovna.moyserf.model.User;
+import ru.shutovna.moyserf.model.VerificationToken;
+import ru.shutovna.moyserf.payload.request.EmailRequest;
 import ru.shutovna.moyserf.payload.request.LoginRequest;
+import ru.shutovna.moyserf.payload.request.PasswordRequest;
 import ru.shutovna.moyserf.payload.request.SignUpRequest;
 import ru.shutovna.moyserf.payload.response.ApiResponse;
 import ru.shutovna.moyserf.payload.response.AuthResponse;
 import ru.shutovna.moyserf.payload.response.UserInfoResponse;
-import ru.shutovna.moyserf.registration.OnRegistrationCompleteEvent;
 import ru.shutovna.moyserf.security.TokenProvider;
+import ru.shutovna.moyserf.security.UserPrincipal;
+import ru.shutovna.moyserf.service.EmailService;
 import ru.shutovna.moyserf.service.IAuthSService;
 import ru.shutovna.moyserf.service.IUserService;
-import ru.shutovna.moyserf.service.MyService;
-
+import ru.shutovna.moyserf.util.GenericResponse;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.net.URI;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.util.Locale;
+import java.util.Optional;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/auth")
 @Slf4j
-public class AuthController implements ApplicationListener<ContextRefreshedEvent> {
+public class AuthController {
 
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -57,13 +66,13 @@ public class AuthController implements ApplicationListener<ContextRefreshedEvent
     @Autowired
     private TokenProvider tokenProvider;
 
-    @Autowired
-    private ApplicationEventPublisher eventPublisher;
-
-    private AppProperties appProperties;
+    private final AppProperties appProperties;
 
     @Autowired
-    private MyService myService;
+    private MessageSource messages;
+
+    @Autowired
+    private EmailService emailService;
 
     public AuthController(AppProperties appProperties) {
         this.appProperties = appProperties;
@@ -109,9 +118,7 @@ public class AuthController implements ApplicationListener<ContextRefreshedEvent
                 .fromCurrentContextPath().path("/user/me")
                 .buildAndExpand(result.getId()).toUri();
 
-        eventPublisher.publishEvent(new OnRegistrationCompleteEvent(
-                result, request.getLocale(),
-                appProperties.getFrontend().getUrl()));
+        sendRegistrationConfirmationEmail(user);
 
         return ResponseEntity.created(location)
                 .body(new ApiResponse(true, "User registered successfully@"));
@@ -129,6 +136,29 @@ public class AuthController implements ApplicationListener<ContextRefreshedEvent
                 .body(new ApiResponse(true, status.getName()));
     }
 
+    @GetMapping("/resendRegistrationToken")
+    public GenericResponse resendRegistrationToken(final HttpServletRequest request, @RequestParam("token") final String existingToken) {
+        final VerificationToken newToken = authSService.generateNewVerificationToken(existingToken);
+        final User user = authSService.getUser(newToken.getToken());
+        sendRegistrationConfirmationEmail(user);
+        return new GenericResponse(messages.getMessage("message.resendToken", null, request.getLocale()));
+    }
+
+    private void sendRegistrationConfirmationEmail(User user) {
+        final String token = UUID.randomUUID().toString();
+
+        authSService.createVerificationTokenForUser(user, token);
+        final String confirmationUrl = appProperties.getFrontend().getUrl() + "/auth/registrationConfirm?token=" + token;
+        try {
+            emailService.sendConfirmationEmail(user.getEmail(), confirmationUrl);
+            log.info("Registration verification email sent to {}", user.getEmail());
+        } catch (Exception e) {
+            log.warn("Error sending registration verification email to {}", user.getEmail(), e);
+            throw new EmailSendException(e);
+        }
+    }
+
+
     @GetMapping("/userInfo")
     public ResponseEntity<UserInfoResponse> getUserInfo(@AuthenticationPrincipal UserDetails userDetails) {
         log.debug("getUserInfo for AuthenticationPrincipal: " + userDetails);
@@ -141,12 +171,51 @@ public class AuthController implements ApplicationListener<ContextRefreshedEvent
     }
 
 
-    @Override
-    public void onApplicationEvent(ContextRefreshedEvent event) {
-        try {
-            myService.retryServiceWithCustomization("");
-        } catch (SQLException e) {
+    @PostMapping("/resetPassword")
+    public GenericResponse resetPassword(final HttpServletRequest request, @Valid @RequestBody EmailRequest emailRequest) {
+        final User user = userService.findUserByEmail(emailRequest.getEmail()).orElseThrow();
+        if (user != null) {
+            final String token = UUID.randomUUID().toString();
+            authSService.createPasswordResetTokenForUser(user, token);
+            final String url = appProperties.getFrontend().getUrl() + String.format("/auth/savePassword?email=%s&token=%s", user.getEmail(), token);
+            emailService.sendResetPasswordEmail(emailRequest.getEmail(), url);
+            log.info("Reset password email sent to {}", user.getEmail());
+        }
+        return new GenericResponse(messages.getMessage("message.resetPasswordEmail", null, request.getLocale()));
+    }
+
+    @PostMapping("/savePassword")
+    public ResponseEntity<GenericResponse> savePassword(final Locale locale, @Valid @RequestBody PasswordRequest passwordDto) {
+
+        final String result = authSService.validatePasswordResetToken(passwordDto.getToken());
+
+        if (result != null) {
+            return ResponseEntity.badRequest()
+                    .body(new GenericResponse(messages.getMessage("auth.message." + result, null, locale), "Invalid token"));
+        }
+
+        Optional<User> user = authSService.getUserByPasswordResetToken(passwordDto.getToken());
+        if (user.isPresent()) {
+            authSService.changeUserPassword(user.get(), passwordDto.getNewPassword());
+            log.info("Resetted password saved for " + user.get().getEmail());
+            return ResponseEntity.ok()
+                    .body(new GenericResponse(messages.getMessage("message.resetPasswordSuc", null, locale)));
+
+        } else {
+            return ResponseEntity.badRequest()
+                    .body(new GenericResponse(messages.getMessage("auth.message.invalidUser", null, locale), "InvalidUser"));
 
         }
+    }
+
+    @PostMapping("/updatePassword")
+    public GenericResponse changeUserPassword(final Locale locale, @Valid @RequestBody PasswordRequest passwordRequest) {
+        final User user = userService.findUserByEmail(((UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getEmail()).orElseThrow();
+        if (!authSService.checkIfValidOldPassword(user, passwordRequest.getOldPassword())) {
+            throw new InvalidOldPasswordException();
+        }
+        authSService.changeUserPassword(user, passwordRequest.getNewPassword());
+        log.info("Password changed for {}", user.getEmail());
+        return new GenericResponse(messages.getMessage("message.updatePasswordSuc", null, locale));
     }
 }

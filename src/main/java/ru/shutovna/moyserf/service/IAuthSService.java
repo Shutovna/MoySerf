@@ -49,6 +49,8 @@ public interface IAuthSService {
 
     public Consumer<? super PasswordResetToken> deletePasswordResetToken(String token);
 
+    String validatePasswordResetToken(String token);
+
     void changeUserPassword(User user, String password);
 
     boolean checkIfValidOldPassword(User user, String password);

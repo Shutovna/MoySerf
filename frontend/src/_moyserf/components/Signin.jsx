@@ -8,6 +8,10 @@ import {Link, useLocation} from 'react-router-dom';
 import {useAuth} from "../auth/AuthProvider.jsx";
 import {GOOGLE_AUTH_URL} from "../constants/index.js";
 import Spinner from "./Spinner.jsx";
+import useAuthService from "../services/AuthService.jsx";
+import Oauth2Links from "./OAuth2Links.jsx";
+import fa from "suneditor/src/lang/fa.js";
+import RememberMe, {checkRememberAndSave, restoreRemembered} from "./RememberMe.jsx";
 
 const signinSchema = Yup.object().shape({
     email: Yup.string()
@@ -16,40 +20,31 @@ const signinSchema = Yup.object().shape({
     password: Yup.string()
         .min(7, "Пароль должен быть минимум 7 символов")
         .required("Введите пароль"),
-    rememberMe: Yup.boolean()
+    rememberMe: Yup.bool()
 });
 
 const Signin = () => {
-    const {loginAction, error} = useAuth();
-
+    const {loginAction, error, clearError} = useAuth();
+    const {resetPassword} = useAuthService();
     const location = useLocation();
     const [message, setMessage] = useState(location.state?.message);
     const [outh2Error, setOauth2Error] = useState(location.state?.error);
     const [showSpinner, setShowSpinner] = useState(false);
 
-    const {handleChange, handleSubmit, values, errors, isSubmitting, setSubmitting} = useFormik({
+    const {handleChange, handleSubmit, values, errors, isSubmitting, setSubmitting, validateField,setFieldValue} = useFormik({
         validationSchema: signinSchema,
         initialValues: {
             email: "",
             password: "",
-            rememberMe: localStorage.getItem("rememberMe"),
+            rememberMe: "true",
         },
         validateOnChange: true,
         onSubmit: (values) => {
             setMessage(null);
             setOauth2Error(null);
+            clearError();
 
-
-            if (values.rememberMe) {
-                localStorage.setItem('rememberMe', "true");
-                localStorage.setItem('email', values.email);
-                localStorage.setItem('password', values.password);
-            } else {
-                localStorage.removeItem('rememberMe');
-                localStorage.removeItem('email');
-                localStorage.removeItem('password');
-            }
-
+            checkRememberAndSave(values.rememberMe, values.email, values.password);
 
             loginAction(values).then((result) => {
                 setSubmitting(false)
@@ -62,14 +57,27 @@ const Signin = () => {
     });
     console.log("values.rememberMe: " + values.rememberMe);
     useEffect(() => {
-        const rememberedEmail = localStorage.getItem('email');
-        const rememberedPassword = localStorage.getItem('password');
-        if (rememberedEmail && rememberedPassword) {
-            values.email = rememberedEmail;
-            values.password = rememberedPassword;
-            values.rememberMe = true;
-        }
+        restoreRemembered(handleRemembered);
     }, []);
+
+    const handleRemembered = (rememberedEmail, rememberedPassword) => {values.email=   rememberedEmail
+        values.password = rememberedPassword
+        values.rememberMe = "true"
+        setFieldValue("rememberMe", "true");
+
+    }
+
+    const handleResetPassword = () => {
+        console.log("handleResetPassword " + values.email)
+        validateField("email")
+        if (!errors.email) {
+            resetPassword(values.email)
+                .then(() => setMessage("Письмо для сброса пароля отправлено Вам на почту"))
+                .catch((error) => {
+                    console.log(error);
+                })
+        }
+    }
 
     const [passwordshow1, setpasswordshow1] = useState(false);
     console.log("isSubmitting:" + isSubmitting + " showSpinner: " + showSpinner);
@@ -105,9 +113,10 @@ const Signin = () => {
                                         </Col>
                                         <Col xl={12} className="mb-2">
                                             <Form.Label htmlFor="signin-password"
-                                                        className="form-label text-default d-block">Пароль<Link
-                                                to={`${import.meta.env.BASE_URL}authentication/resetpassword/resetbasic`}
-                                                className="float-end text-danger">Забыли пароль?</Link></Form.Label>
+                                                        className="form-label text-default d-block">Пароль
+                                                <a href={"#"} onClick={() => handleResetPassword()}
+                                                   className="float-end text-danger">Забыли пароль?</a>
+                                            </Form.Label>
                                             <InputGroup>
                                                 <Form.Control onChange={handleChange} value={values.password}
                                                               name="password"
@@ -122,16 +131,7 @@ const Signin = () => {
                                             </InputGroup>
                                             <div className="text-danger mt-2">{errors.password}</div>
 
-                                            <div className="mt-2">
-                                                <div className="form-check">
-                                                    <Form.Check name={"rememberMe"} onChange={handleChange} value={values.rememberMe} className="" type="checkbox"
-                                                                id="rememberMe"/>
-                                                    <Form.Label className="form-check-label text-muted fw-normal"
-                                                                htmlFor="rememberMe">
-                                                        Запомнить пароль ?
-                                                    </Form.Label>
-                                                </div>
-                                            </div>
+                                            <RememberMe value={values.rememberMe} onChange={handleChange}/>
 
                                         </Col>
                                         <Col xl={12} className="d-grid mt-2">
@@ -148,22 +148,7 @@ const Signin = () => {
                                             to={`${import.meta.env.BASE_URL}auth/signup`}
                                             className="text-primary">Зарегистрируйтесь</Link></p>
                                     </div>
-                                    <div className="text-center my-3 authentication-barrier">
-                                        <span>ИЛИ</span>
-                                    </div>
-                                    <div className="btn-list text-center">
-                                        <Link onClick={() => setShowSpinner(true)}
-                                              to={GOOGLE_AUTH_URL} variant='light' className="btn btn-icon">
-                                            <i className="ri-google-line fw-bold text-dark op-7"></i>
-                                        </Link>
-                                        <Link variant='light' className="btn btn-icon">
-                                            <i className="ri-facebook-line fw-bold text-dark op-7"></i>
-                                        </Link>
-                                        <Link variant='light'
-                                              className="btn btn-icon">
-                                            <i className="ri-twitter-line fw-bold text-dark op-7"></i>
-                                        </Link>
-                                    </div>
+                                    <Oauth2Links setShowSpinner={(val)=>setShowSpinner(val)} />
                                 </Card.Body>
                             </Card>
                         </form>

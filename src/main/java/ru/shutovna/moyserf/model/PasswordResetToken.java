@@ -8,7 +8,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 @Entity
-@Table(name = "password_reset_rokens")
+@Table(name = "password_reset_tokens")
 @Getter
 @Setter
 public class PasswordResetToken {

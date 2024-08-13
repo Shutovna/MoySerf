@@ -10,6 +10,7 @@ import useAuthService from "../services/AuthService.jsx";
 import * as Yup from "yup";
 import {useFormik} from "formik";
 import Spinner from "./Spinner.jsx";
+import Oauth2Links from "./OAuth2Links.jsx";
 
 const signupSchema = Yup.object().shape({
     name: Yup.string()
@@ -25,6 +26,8 @@ const signupSchema = Yup.object().shape({
         .oneOf([Yup.ref('password'), null], 'Пароли должны совпадать')
         .required('Подтверждение пароля обязательно')
 });
+
+
 
 const Signup = () => {
     const {loading, error, signup, clearError} = useAuthService();
@@ -171,21 +174,7 @@ const Signup = () => {
                                         to={`${import.meta.env.BASE_URL}signin`}
                                         className="text-primary">Войти</Link></p>
                                 </div>
-                                <div className="text-center my-3 authentication-barrier">
-                                    <span>ИЛИ</span>
-                                </div>
-                                <div className="btn-list text-center">
-                                    <Link onClick={() => setShowSpinner(true)} to={GOOGLE_AUTH_URL}
-                                          variant='light' className="btn btn-icon">
-                                        <i className="ri-google-line fw-bold text-dark op-7"></i>
-                                    </Link>
-                                    <Link variant='light' className="btn btn-icon">
-                                        <i className="ri-facebook-line fw-bold text-dark op-7"></i>
-                                    </Link>
-                                    <Link variant='light' className="btn btn-icon">
-                                        <i className="ri-twitter-line fw-bold text-dark op-7"></i>
-                                    </Link>
-                                </div>
+                                <Oauth2Links setShowSpinner={(val)=>setShowSpinner(val)}/>
                             </Card.Body>
                         </Card>
                     </Col>

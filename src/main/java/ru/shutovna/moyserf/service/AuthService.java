@@ -134,6 +134,24 @@ public class AuthService implements IAuthSService {
         return null;
     }
 
+    @Override
+    public String validatePasswordResetToken(String token) {
+        final PasswordResetToken passToken = passwordTokenRepository.findByToken(token);
+
+        return !isTokenFound(passToken) ? "invalid"
+                : isTokenExpired(passToken) ? "expired"
+                : null;
+    }
+
+    private boolean isTokenFound(PasswordResetToken passToken) {
+        return passToken != null;
+    }
+
+    private boolean isTokenExpired(PasswordResetToken passToken) {
+        final Calendar cal = Calendar.getInstance();
+        return passToken.getExpiryDate().before(cal.getTime());
+    }
+
 
     @Override
     public void changeUserPassword(final User user, final String password) {

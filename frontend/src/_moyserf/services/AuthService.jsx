@@ -16,30 +16,28 @@ const useAuthService = () => {
         return await apiRequest(`${BACKEND_BASE_URL}/auth/userInfo`);
     }
 
+    const resetPassword = async (email) => {
+        console.log("resetPassword for  " + email);
+        let body = JSON.stringify({email: email});
+        console.log("body: " + body)
+        return await request(`${BACKEND_BASE_URL}/auth/resetPassword`, "POST", body);
+    }
+
+    const savePassword = async (token, newPassword) => {
+        console.log("savePassword for  " + token);
+        let body = JSON.stringify({token, newPassword});
+        console.log("body: " + body)
+        return await request(`${BACKEND_BASE_URL}/auth/savePassword`, "POST", body);
+    }
+
+
     const confirmResult = async (token) => {
         console.log("confirmResult " + token);
         return await request(`${BACKEND_BASE_URL}/auth/registrationConfirm?token=${token}`);
     }
 
-    const getAuthQueryString = () => {
-        // Импортируйте библиотеку crypto-js
 
-        // Ваши ключи и временная метка
-        const publicKey = '1915052ee6d413cf40c99aa4a849935d';
-        const privateKey = '356f97f8aa41b707f4e31752e94cf356496f3d88';
-        const timestamp = Date.now().toString(); // или '1' для тестов
-
-        // Создайте строку для хэширования
-        const hashString = timestamp + privateKey + publicKey;
-
-        // Сгенерируйте MD5 хэш
-        const hash = "";
-
-        // Вывод хэша и других параметров
-        return `ts=${timestamp}&apikey=${publicKey}&hash=${hash}`;
-    }
-
-    return {loading, error, signup, confirmResult, getUserInfo, clearError};
+    return {loading, error, signup, confirmResult, getUserInfo, resetPassword, savePassword, clearError};
 
 }
 
