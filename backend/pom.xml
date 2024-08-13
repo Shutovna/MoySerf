@@ -7,7 +7,7 @@
 	<artifactId>backend</artifactId>
 	<version>1.0.1-SNAPSHOT</version>
 
-	<name>MySerf</name>
+	<name>MoySerf</name>
 	<packaging>jar</packaging>
 
 
@@ -159,6 +159,11 @@
 		</dependency>
 
 		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+		</dependency>
+
+		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-configuration-processor</artifactId>
 			<optional>true</optional>
@@ -244,53 +249,27 @@
 					</execution>
 				</executions>
 			</plugin>
-
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<version>3.1.2</version>
-				<configuration>
-					<excludes>
-						<exclude>**/*IntegrationTest.java</exclude>
-						<exclude>**/*LiveTest.java</exclude>
-					</excludes>
-					<systemPropertyVariables>
-						<!-- <provPersistenceTarget>h2</provPersistenceTarget> -->
-					</systemPropertyVariables>
-				</configuration>
-			</plugin>
 		</plugins>
 	</build>
 
 	<profiles>
 		<profile>
-			<id>integration</id>
+			<id>prod</id>
+			<properties>
+				<spring.profiles.active>prod</spring.profiles.active>
+			</properties>
 			<build>
 				<plugins>
 					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-surefire-plugin</artifactId>
+						<groupId>org.springframework.boot</groupId>
+						<artifactId>spring-boot-maven-plugin</artifactId>
 						<executions>
 							<execution>
-								<phase>integration-test</phase>
 								<goals>
-									<goal>test</goal>
+									<goal>repackage</goal>
 								</goals>
-								<configuration>
-									<excludes>
-										<exclude>**/*LiveTest.java</exclude>
-									</excludes>
-									<includes>
-										<include>**/*IntegrationTest.java</include>
-									</includes>
-								</configuration>
 							</execution>
 						</executions>
-						<configuration>
-							<systemPropertyVariables>
-								<test.mime>json</test.mime>
-							</systemPropertyVariables>
-						</configuration>
 					</plugin>
 				</plugins>
 			</build>

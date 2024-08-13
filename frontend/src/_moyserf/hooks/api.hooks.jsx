@@ -1,5 +1,5 @@
 import {useHttp} from "./http.hooks.jsx";
-import {ACCESS_TOKEN, BACKEND_BASE_URL} from "../constants/index.js";
+import {ACCESS_TOKEN, API_BASE_URL} from "../constants/index.js";
 
 export const useApi = () => {
     const {request} = useHttp();

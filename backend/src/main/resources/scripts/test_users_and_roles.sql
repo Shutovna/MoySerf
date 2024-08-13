@@ -2,7 +2,7 @@ DO $$
     DECLARE
         next_val integer;
     BEGIN
-        DELETE FROM user_roles;
+        DELETE FROM users_roles;
         DELETE FROM users;
         DELETE FROM roles;
         INSERT INTO roles(id, name) VALUES(1, 'ROLE_ADMIN');
@@ -20,7 +20,7 @@ DO $$
                                'password' || i,
                                CURRENT_TIMESTAMP
                        );
-                INSERT INTO user_roles(user_id, role_id)  VALUES (next_val, 2);
+                INSERT INTO users_roles(user_id, role_id)  VALUES (next_val, 2);
 
             END LOOP;
 
@@ -33,5 +33,5 @@ DO $$
                    'password',
                    CURRENT_TIMESTAMP
                );
-        INSERT INTO user_roles(user_id, role_id)  VALUES (next_val, 1);
+        INSERT INTO users_roles(user_id, role_id)  VALUES (next_val, 1);
     END $$;

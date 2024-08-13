@@ -2,10 +2,7 @@ package ru.shutovna.moyserf.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.context.ApplicationListener;
 import org.springframework.context.MessageSource;
-import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -20,6 +17,7 @@ import ru.shutovna.moyserf.config.AppProperties;
 import ru.shutovna.moyserf.error.EmailSendException;
 import ru.shutovna.moyserf.error.InvalidOldPasswordException;
 import ru.shutovna.moyserf.error.UserAlreadyExistException;
+import ru.shutovna.moyserf.error.UserNotFoundException;
 import ru.shutovna.moyserf.model.AuthProvider;
 import ru.shutovna.moyserf.model.User;
 import ru.shutovna.moyserf.model.VerificationToken;
@@ -40,14 +38,13 @@ import ru.shutovna.moyserf.util.GenericResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.net.URI;
-import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/api/auth")
 @Slf4j
 public class AuthController {
 
@@ -118,7 +115,7 @@ public class AuthController {
                 .fromCurrentContextPath().path("/user/me")
                 .buildAndExpand(result.getId()).toUri();
 
-        sendRegistrationConfirmationEmail(user);
+        sendRegistrationConfirmationEmail(request, user);
 
         return ResponseEntity.created(location)
                 .body(new ApiResponse(true, "User registered successfully@"));
@@ -140,15 +137,15 @@ public class AuthController {
     public GenericResponse resendRegistrationToken(final HttpServletRequest request, @RequestParam("token") final String existingToken) {
         final VerificationToken newToken = authSService.generateNewVerificationToken(existingToken);
         final User user = authSService.getUser(newToken.getToken());
-        sendRegistrationConfirmationEmail(user);
+        sendRegistrationConfirmationEmail(request, user);
         return new GenericResponse(messages.getMessage("message.resendToken", null, request.getLocale()));
     }
 
-    private void sendRegistrationConfirmationEmail(User user) {
+    private void sendRegistrationConfirmationEmail(HttpServletRequest request, User user) {
         final String token = UUID.randomUUID().toString();
 
         authSService.createVerificationTokenForUser(user, token);
-        final String confirmationUrl = appProperties.getFrontend().getUrl() + "/auth/registrationConfirm?token=" + token;
+        final String confirmationUrl = getAppUrl(request, appProperties.getFrontend().getPort()) + "/auth/registrationConfirm?token=" + token;
         try {
             emailService.sendConfirmationEmail(user.getEmail(), confirmationUrl);
             log.info("Registration verification email sent to {}", user.getEmail());
@@ -173,11 +170,12 @@ public class AuthController {
 
     @PostMapping("/resetPassword")
     public GenericResponse resetPassword(final HttpServletRequest request, @Valid @RequestBody EmailRequest emailRequest) {
-        final User user = userService.findUserByEmail(emailRequest.getEmail()).orElseThrow();
+        final User user = userService.findUserByEmail(emailRequest.getEmail()).orElseThrow(() -> new UserNotFoundException());
         if (user != null) {
             final String token = UUID.randomUUID().toString();
             authSService.createPasswordResetTokenForUser(user, token);
-            final String url = appProperties.getFrontend().getUrl() + String.format("/auth/savePassword?email=%s&token=%s", user.getEmail(), token);
+            final String url = getAppUrl(request, appProperties.getFrontend().getPort())
+                    + String.format("/auth/savePassword?email=%s&token=%s", user.getEmail(), token);
             emailService.sendResetPasswordEmail(emailRequest.getEmail(), url);
             log.info("Reset password email sent to {}", user.getEmail());
         }
@@ -217,5 +215,9 @@ public class AuthController {
         authSService.changeUserPassword(user, passwordRequest.getNewPassword());
         log.info("Password changed for {}", user.getEmail());
         return new GenericResponse(messages.getMessage("message.updatePasswordSuc", null, locale));
+    }
+
+    private String getAppUrl(HttpServletRequest request, int port) {
+        return "http://" + request.getServerName() + ":" + port + request.getContextPath();
     }
 }

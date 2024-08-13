@@ -15,14 +15,14 @@ public class AppProperties {
     private final Frontend frontend = new Frontend();
 
     public static class Frontend {
-        private String url;
+        private int port;
 
-        public String getUrl() {
-            return url;
+        public int getPort() {
+            return port;
         }
 
-        public void setUrl(String url) {
-            this.url = url;
+        public void setPort(int port) {
+            this.port = port;
         }
     }
     public static class Auth {

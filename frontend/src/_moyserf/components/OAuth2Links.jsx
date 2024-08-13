@@ -11,12 +11,12 @@ export default function Oauth2Links(props) {
                   variant='light' className="btn btn-icon">
                 <i className="ri-google-line fw-bold text-dark op-7"></i>
             </Link>
-            <Link variant='light' className="btn btn-icon">
+            {/*<Link variant='light' className="btn btn-icon">
                 <i className="ri-facebook-line fw-bold text-dark op-7"></i>
             </Link>
             <Link variant='light' className="btn btn-icon">
                 <i className="ri-twitter-line fw-bold text-dark op-7"></i>
-            </Link>
+            </Link>*/}
         </div>
     </>;
 }

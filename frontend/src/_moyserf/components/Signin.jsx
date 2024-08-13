@@ -6,11 +6,9 @@ import desktoplogo from "../../assets/images/brand-logos/desktop-logo.png";
 import desktopdarklogo from "../../assets/images/brand-logos/desktop-dark.png";
 import {Link, useLocation} from 'react-router-dom';
 import {useAuth} from "../auth/AuthProvider.jsx";
-import {GOOGLE_AUTH_URL} from "../constants/index.js";
 import Spinner from "./Spinner.jsx";
 import useAuthService from "../services/AuthService.jsx";
 import Oauth2Links from "./OAuth2Links.jsx";
-import fa from "suneditor/src/lang/fa.js";
 import RememberMe, {checkRememberAndSave, restoreRemembered} from "./RememberMe.jsx";
 
 const signinSchema = Yup.object().shape({
@@ -25,7 +23,7 @@ const signinSchema = Yup.object().shape({
 
 const Signin = () => {
     const {loginAction, error, clearError} = useAuth();
-    const {resetPassword} = useAuthService();
+    const authService = useAuthService();
     const location = useLocation();
     const [message, setMessage] = useState(location.state?.message);
     const [outh2Error, setOauth2Error] = useState(location.state?.error);
@@ -40,9 +38,7 @@ const Signin = () => {
         },
         validateOnChange: true,
         onSubmit: (values) => {
-            setMessage(null);
-            setOauth2Error(null);
-            clearError();
+            clearMessages();
 
             checkRememberAndSave(values.rememberMe, values.email, values.password);
 
@@ -69,14 +65,22 @@ const Signin = () => {
 
     const handleResetPassword = () => {
         console.log("handleResetPassword " + values.email)
+        clearMessages();
         validateField("email")
         if (!errors.email) {
-            resetPassword(values.email)
+            authService.resetPassword(values.email)
                 .then(() => setMessage("Письмо для сброса пароля отправлено Вам на почту"))
                 .catch((error) => {
                     console.log(error);
                 })
         }
+    }
+
+    const clearMessages = () => {
+        setMessage(null);
+        setOauth2Error(null);
+        clearError();
+        authService.clearError();
     }
 
     const [passwordshow1, setpasswordshow1] = useState(false);
@@ -99,6 +103,7 @@ const Signin = () => {
                                     <p className="h5 fw-semibold mb-2 text-center">Вход</p>
                                     <p className="mb-4 text-muted op-7 fw-normal text-center">Добро пожаловать!</p>
                                     {error && <Alert variant="danger">{error}</Alert>}
+                                    {authService.error && <Alert variant="danger">{authService.error}</Alert>}
                                     {outh2Error && <Alert variant="danger">{outh2Error}</Alert>}
                                     {message && <Alert variant="success">{message}</Alert>}
                                     <div className="row gy-3">

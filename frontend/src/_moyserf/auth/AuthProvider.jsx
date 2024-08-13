@@ -1,6 +1,6 @@
 import {useContext, createContext, useState} from "react";
 import {useNavigate} from "react-router-dom";
-import {ACCESS_TOKEN, API_BASE_URL} from '../../constants';
+import {ACCESS_TOKEN, API_BASE_URL} from "../constants/index.js"
 import {useHttp} from "../hooks/http.hooks.jsx";
 
 const AuthContext = createContext(null);
@@ -17,8 +17,7 @@ const AuthProvider = ({children}) => {
             console.log("loginAction auth response: " + JSON.stringify(res));
 
             if (res.accessToken) {
-                const {name, email, imageUrl} = res.userInfo;
-                setAuthInfo(res.accessToken, {name, email, imageUrl})
+                setAuthInfo(res.accessToken, res.userInfo)
                 navigate("/cab/main");
             }
         } catch (err) {

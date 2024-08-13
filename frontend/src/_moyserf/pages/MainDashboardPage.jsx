@@ -1,30 +1,21 @@
-import {FC, Fragment, useState, useEffect} from 'react';
-import {Button, Card, Col, Dropdown, Pagination, ProgressBar, Row, Form} from 'react-bootstrap';
+import {Fragment, useEffect, useState} from 'react';
+import {Card, Col, Dropdown, Pagination, Row} from 'react-bootstrap';
 import {
-    Candidatesdata,
     Conversionratio,
     Dealsstatistics,
-    Profit,
     Profitearned,
-    Revenueanalytics,
     Totalcustomers,
     Totaldeals,
     Totalrevenue
 } from '../../container/dashboards/crm/crmdata.jsx';
 import {Link} from 'react-router-dom';
-import face10 from "../../assets/images/faces/10.jpg";
-import face12 from "../../assets/images/faces/12.jpg";
 import face9 from "../../assets/images/faces/9.jpg";
 import {useAuth} from "../auth/AuthProvider.jsx";
-import useUserService from "../services/UserService.jsx";
 import MostActiveUsers from "../components/MostActiveUsers.jsx";
 
 
 const MainDashboardPage = () => {
     const {user} = useAuth();
-
-
-
     // for User search function
     const [Data, setData] = useState(Dealsstatistics);
 
