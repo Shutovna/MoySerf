@@ -1,4 +1,4 @@
-package ru.shutovna.moyserf.exception;
+package ru.shutovna.moyserf.error;
 
 import org.springframework.security.core.AuthenticationException;
 

@@ -1,15 +1,10 @@
 package ru.shutovna.moyserf.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.shutovna.moyserf.error.SiteNotFoundException;
-import ru.shutovna.moyserf.error.UserNotFoundException;
+import ru.shutovna.moyserf.error.UnauthorizedException;
 import ru.shutovna.moyserf.model.Site;
 import ru.shutovna.moyserf.model.User;
 import ru.shutovna.moyserf.payload.request.SiteRequest;
@@ -30,6 +25,18 @@ public class SiteService implements ISiteService {
     @Override
     public List<Site> getSites() {
         return siteRepository.findAll();
+    }
+
+    @Override
+    public List<Site> getSitesForView() {
+        List<Site> all = siteRepository.findAll();
+        User currentUser = userService.getCurrentUser();
+        return all;
+    }
+
+    public List<Site> getSitesOpenedForView() {
+        List<Site> all = siteRepository.findAll();
+        return all;
     }
 
     @Override
@@ -54,9 +61,16 @@ public class SiteService implements ISiteService {
     @Override
     public Site saveSite(long id, SiteRequest siteRequest) {
         Site site = getSiteById(id).orElseThrow(() -> new SiteNotFoundException("Site " + id + " not found"));
+
+        User currentUser = userService.getCurrentUser();
+        if(!currentUser.equals(site.getOwner())) {
+            throw new UnauthorizedException("You are not owner of this site");
+        }
+
         site.setName(siteRequest.getName());
         site.setDescription(siteRequest.getDescription());
         site.setUrl(siteRequest.getUrl());
+        site.setAvatarUrl(siteRequest.getAvatarUrl());
 
         return siteRepository.save(site);
     }

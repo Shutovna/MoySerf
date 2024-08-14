@@ -7,7 +7,7 @@ import org.springframework.security.web.authentication.SimpleUrlAuthenticationSu
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
 import ru.shutovna.moyserf.config.AppProperties;
-import ru.shutovna.moyserf.exception.BadRequestException;
+import ru.shutovna.moyserf.error.BadRequestException;
 import ru.shutovna.moyserf.security.TokenProvider;
 import ru.shutovna.moyserf.util.CookieUtils;
 

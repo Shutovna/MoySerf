@@ -146,6 +146,7 @@ public class SiteControllerIT {
         List<Site> sites = siteRepository.findAll();
         assertThat(sites.size()).isEqualTo(1);
         Site site = sites.get(0);
+        assertThat(response.getHeaders().getLocation().getPath()).isEqualTo("/api/sites/" + site.getId());
         assertThat(site.getOwner()).isEqualTo(testUser);
         assertThat(site.getName()).isEqualTo("New Site");
     }
@@ -173,7 +174,7 @@ public class SiteControllerIT {
         assertThat(updatedSite.getName()).isEqualTo("Updated Site");
         assertThat(updatedSite.getDescription()).isEqualTo("Updated Description");
         assertThat(updatedSite.getUrl()).isEqualTo("http://updatedsite.com");
-        assertThat(updatedSite.getUrl()).isEqualTo("link");
+        assertThat(updatedSite.getAvatarUrl()).isEqualTo("link");
     }
 
     @Test

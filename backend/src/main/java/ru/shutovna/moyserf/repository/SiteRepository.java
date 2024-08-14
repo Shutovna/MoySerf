@@ -8,4 +8,6 @@ import java.util.List;
 
 public interface SiteRepository extends JpaRepository<Site, Long> {
     List<Site> findByOwner(User owner);
+
+
 }

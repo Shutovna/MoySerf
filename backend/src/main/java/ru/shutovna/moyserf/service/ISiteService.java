@@ -10,6 +10,8 @@ public interface ISiteService {
 
     List<Site> getSites();
 
+    List<Site> getSitesForView();
+
     List<Site> getMySites();
 
     Optional<Site> getSiteById(long id);

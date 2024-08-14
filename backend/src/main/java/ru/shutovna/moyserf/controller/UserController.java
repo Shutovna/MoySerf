@@ -7,7 +7,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.shutovna.moyserf.exception.ResourceNotFoundException;
+import ru.shutovna.moyserf.error.ResourceNotFoundException;
 import ru.shutovna.moyserf.model.User;
 import ru.shutovna.moyserf.payload.response.MostActiveUserResponse;
 import ru.shutovna.moyserf.security.CurrentUser;

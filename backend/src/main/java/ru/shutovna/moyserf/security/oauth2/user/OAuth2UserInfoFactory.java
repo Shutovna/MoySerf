@@ -1,6 +1,6 @@
 package ru.shutovna.moyserf.security.oauth2.user;
 
-import ru.shutovna.moyserf.exception.OAuth2AuthenticationProcessingException;
+import ru.shutovna.moyserf.error.OAuth2AuthenticationProcessingException;
 import ru.shutovna.moyserf.model.AuthProvider;
 
 import java.util.Map;

@@ -10,7 +10,7 @@ import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
-import ru.shutovna.moyserf.exception.OAuth2AuthenticationProcessingException;
+import ru.shutovna.moyserf.error.OAuth2AuthenticationProcessingException;
 import ru.shutovna.moyserf.model.AuthProvider;
 import ru.shutovna.moyserf.model.User;
 import ru.shutovna.moyserf.repository.UserRepository;

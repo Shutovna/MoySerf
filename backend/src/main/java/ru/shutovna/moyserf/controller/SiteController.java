@@ -48,7 +48,7 @@ public class SiteController {
         Site site = siteService.createSite(siteRequest);
 
         URI location = ServletUriComponentsBuilder
-                .fromCurrentContextPath().path("/api/sites/")
+                .fromCurrentContextPath().path("/api/sites/{0}")
                 .buildAndExpand(site.getId()).toUri();
 
         return ResponseEntity.created(location)

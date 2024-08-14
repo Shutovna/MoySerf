@@ -47,11 +47,14 @@ $$
 
 
         UPDATE wallets SET sum = 100*5000 WHERE user_id = site_owner_user_id;
+
         INSERT INTO public.transactions(id, completed, created_at, description, sum, type, user_id)
         VALUES (1, true, CURRENT_TIMESTAMP, '', 24*100*5, 'ORDER_SITE_VIEW', site_owner_user_id);
+
         INSERT INTO public.orders(
             id, closed, created_at, view_count, site_id, transaction_id, user_id)
         VALUES (order_id, false, CURRENT_TIMESTAMP, 500, 1, 1, site_owner_user_id);
+
         UPDATE wallets SET sum = sum - 24*100*5 WHERE user_id = site_owner_user_id;
 
 
