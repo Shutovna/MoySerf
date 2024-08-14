@@ -34,6 +34,14 @@ public class SiteController {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("/my")
+    public ResponseEntity<SiteListResponse> getMySites() {
+        List<Site> sites = siteService.getMySites();
+        SiteListResponse response = new SiteListResponse();
+        response.setSites(sites.stream().map(SiteResponse::fromSite).toList());
+        return ResponseEntity.ok(response);
+    }
+
 
     @PostMapping
     public ResponseEntity<ApiResponse> createSite(@RequestBody SiteRequest siteRequest) {

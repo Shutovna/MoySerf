@@ -34,8 +34,7 @@ public class SiteService implements ISiteService {
 
     @Override
     public List<Site> getMySites() {
-        //todo
-        return siteRepository.findAll();
+        return siteRepository.findByOwner(userService.getCurrentUser());
     }
 
     @Override

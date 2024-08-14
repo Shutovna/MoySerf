@@ -92,6 +92,41 @@ public class SiteControllerIT {
     }
 
     @Test
+    public void testGetMySites() {
+        // Создаем и сохраняем тестовые данные
+        User siteOwner = testUser;
+        User siteOwner2 = userRepository.save(TestUtil.createUser(2));
+
+        Wallet wallet = TestUtil.createWallet();
+        wallet.setUser(siteOwner);
+        Wallet wallet2 = TestUtil.createWallet();
+        wallet2.setUser(siteOwner2);
+        walletRepository.save(wallet);
+        walletRepository.save(wallet2);
+
+        Site site = TestUtil.createSite(1);
+        Site site2 = TestUtil.createSite(2);
+        Site site3 = TestUtil.createSite(3);
+        site.setOwner(siteOwner);
+        site2.setOwner(siteOwner2);
+        site3.setOwner(siteOwner);
+        siteRepository.save(site);
+        siteRepository.save(site2);
+        siteRepository.save(site3);
+
+        // Создаем объект HttpEntity с заголовками
+        HttpEntity<String> entity = new HttpEntity<>(authHeaders);
+
+        // Отправляем GET-запрос
+        ResponseEntity<SiteListResponse> response = restTemplate.exchange("/api/sites/my", HttpMethod.GET, entity, SiteListResponse.class);
+
+        // Проверяем статус ответа и наличие данных
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        SiteListResponse body = response.getBody();
+        assertThat(body.getSites().size()).isEqualTo(2);
+    }
+
+    @Test
     public void testAddSite() {
         // Создаем запрос для добавления сайта
         SiteRequest siteRequest = new SiteRequest("New Site", "Description", "http://newsite.com", null);
@@ -150,7 +185,7 @@ public class SiteControllerIT {
         // Отправляем PUT-запрос на несуществующий сайт
         ResponseEntity<Void> response = restTemplate.exchange("/api/sites/999",
                 HttpMethod.PUT,
-               entity,
+                entity,
                 Void.class);
 
         // Проверяем, что сайт не найден
