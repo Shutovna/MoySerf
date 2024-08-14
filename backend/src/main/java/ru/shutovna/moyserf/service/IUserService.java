@@ -15,4 +15,6 @@ public interface IUserService {
     Optional<User> findUserByEmail(String email);
 
     List<User> getMostActiveUsers();
+
+    User getCurrentUser();
 }

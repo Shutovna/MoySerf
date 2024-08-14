@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 public class Site {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+    private long id;
 
     private String name;
 
@@ -25,7 +25,7 @@ public class Site {
     @Column(nullable = false)
     private String url;
 
-    private byte[] avatar;
+    private String avatarUrl;
 
     @ManyToOne
     @JoinColumn(name = "owner_id", nullable = false)

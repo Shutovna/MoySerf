@@ -1,7 +1,12 @@
 package ru.shutovna.moyserf.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import ru.shutovna.moyserf.error.UserNotFoundException;
 import ru.shutovna.moyserf.model.PasswordResetToken;
 import ru.shutovna.moyserf.model.User;
 import ru.shutovna.moyserf.model.VerificationToken;
@@ -61,5 +66,17 @@ public class UserService implements IUserService {
     @Override
     public List<User> getMostActiveUsers() {
         return userRepository.findAll().stream().limit(5).toList();
+    }
+
+    @Override
+    public User getCurrentUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        Optional<User> userByEmail = findUserByEmail(userDetails.getUsername());
+        if (userByEmail.isPresent()) {
+            return userByEmail.get();
+        }
+
+        throw new UserNotFoundException("User not found");
     }
 }

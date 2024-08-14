@@ -13,7 +13,7 @@ import lombok.Setter;
 public class Wallet {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+    private long id;
 
     @Column(nullable = false)
     private long sum;

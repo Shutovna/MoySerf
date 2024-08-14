@@ -25,10 +25,6 @@ public class Transaction {
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
-    @ManyToOne
-    @JoinColumn(name = "wallet_id", nullable = false)
-    private Wallet wallet;
-
     @Column
     private long sum;
 
@@ -45,7 +41,6 @@ public class Transaction {
                 ", description='" + description + '\'' +
                 ", type=" + type +
                 ", createdAt=" + createdAt +
-                ", wallet=" + wallet.getId() +
                 ", sum=" + sum +
                 ", completed=" + completed +
                 '}';
