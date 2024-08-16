@@ -18,11 +18,11 @@ public class TestUtil {
     public static final String TEST_USER_EMAIL = "TestUser@email.com";
     public static final String TEST_USER_PASSWORD = "password";
 
-    public static String login(TestRestTemplate restTemplate) {
+    public static HttpHeaders login(TestRestTemplate restTemplate, String email, String password) {
         // Создаем тело запроса с логином и паролем
         Map<String, String> loginBody = new HashMap<>();
-        loginBody.put("email", TEST_USER_EMAIL);
-        loginBody.put("password", TEST_USER_PASSWORD);
+        loginBody.put("email", email);
+        loginBody.put("password", password);
 
         // Создаем заголовки для запроса
         HttpHeaders headers = new HttpHeaders();
@@ -35,14 +35,19 @@ public class TestUtil {
         ResponseEntity<Map> response = restTemplate.exchange("/api/auth/signin", HttpMethod.POST, entity, Map.class);
 
         // Извлекаем токен из ответа
-        return (String) response.getBody().get("accessToken");
+        String token = (String) response.getBody().get("accessToken");
+        // Создаем заголовки, добавляем токен
+        HttpHeaders authHeaders = new HttpHeaders();
+        authHeaders.set("Authorization", "Bearer " + token);
+
+        return authHeaders;
     }
 
-    public static User createTestUser(UserRepository userRepository) {
+    public static User createTestUser(UserRepository userRepository, String email, String password) {
         User user = new User();
-        user.setName(TEST_USER_EMAIL);
-        user.setPassword(new BCryptPasswordEncoder().encode(TEST_USER_PASSWORD));
-        user.setEmail(TEST_USER_EMAIL);
+        user.setName(email);
+        user.setPassword(new BCryptPasswordEncoder().encode(password));
+        user.setEmail(email);
         user.setCreatedAt(LocalDateTime.now());
         user.setEmailVerified(true);
         user.setImageUrl("http://www.google.com");
@@ -53,7 +58,7 @@ public class TestUtil {
     public static User createUser(int diff) {
         User user = new User();
         user.setName("TestUser" + diff);
-        user.setPassword("password");
+        user.setPassword(new BCryptPasswordEncoder().encode(TEST_USER_PASSWORD));
         user.setEmail("TestUser" +  + diff + "@email.com");
         user.setCreatedAt(LocalDateTime.now());
         user.setEmailVerified(true);
@@ -74,7 +79,7 @@ public class TestUtil {
         site.setDescription("TestDescription" + diff);
         site.setUrl("http://www.google.com/site" + diff);
         site.setCreatedAt(LocalDateTime.now());
-        site.setAvatarUrl("http://www.google.com");
+        site.setAvatarUrl("http://www.google.com/" + diff);
         return site;
     }
 }

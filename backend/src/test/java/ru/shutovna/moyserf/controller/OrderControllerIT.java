@@ -12,7 +12,6 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 import ru.shutovna.moyserf.model.*;
 import ru.shutovna.moyserf.payload.request.OrderRequest;
-import ru.shutovna.moyserf.payload.request.SiteRequest;
 import ru.shutovna.moyserf.payload.response.ApiResponse;
 import ru.shutovna.moyserf.repository.OrderRepository;
 import ru.shutovna.moyserf.repository.SiteRepository;
@@ -57,12 +56,9 @@ public class OrderControllerIT {
 
     @BeforeEach
     public void setUp() {
-        testUser = TestUtil.createTestUser(userRepository);
-        String token = TestUtil.login(restTemplate);
+        testUser = TestUtil.createTestUser(userRepository, TestUtil.TEST_USER_EMAIL, TestUtil.TEST_USER_PASSWORD);
+        authHeaders = TestUtil.login(restTemplate, TestUtil.TEST_USER_EMAIL, TestUtil.TEST_USER_PASSWORD);
 
-        // Создаем заголовки, добавляем токен
-        authHeaders = new HttpHeaders();
-        authHeaders.set("Authorization", "Bearer " + token);
     }
 
     @Test

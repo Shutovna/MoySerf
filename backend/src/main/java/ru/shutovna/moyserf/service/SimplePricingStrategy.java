@@ -5,4 +5,9 @@ public class SimplePricingStrategy implements IPricingStrategy{
     public long getSiteViewPrice() {
         return 24;
     }
+
+    @Override
+    public int getSiteViewPeriod() {
+        return 24;
+    }
 }

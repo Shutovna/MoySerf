@@ -1,7 +1,5 @@
 package ru.shutovna.moyserf.controller;
 
-import org.junit.Before;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,17 +8,16 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.*;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
-import ru.shutovna.moyserf.model.Site;
-import ru.shutovna.moyserf.model.User;
-import ru.shutovna.moyserf.model.Wallet;
+import ru.shutovna.moyserf.model.*;
 import ru.shutovna.moyserf.payload.request.SiteRequest;
 import ru.shutovna.moyserf.payload.response.ApiResponse;
 import ru.shutovna.moyserf.payload.response.SiteListResponse;
-import ru.shutovna.moyserf.repository.SiteRepository;
-import ru.shutovna.moyserf.repository.UserRepository;
-import ru.shutovna.moyserf.repository.WalletRepository;
+import ru.shutovna.moyserf.payload.response.SiteResponse;
+import ru.shutovna.moyserf.repository.*;
+import ru.shutovna.moyserf.service.SimplePricingStrategy;
 import ru.shutovna.moyserf.service.SiteService;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -46,17 +43,22 @@ public class SiteControllerIT {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private OrderRepository orderRepository;
+
     private HttpHeaders authHeaders;
     private User testUser;
+    @Autowired
+    private TransactionRepository transactionRepository;
+    @Autowired
+    private ViewRepository viewRepository;
 
     @BeforeEach
     public void setUp() {
-        testUser = TestUtil.createTestUser(userRepository);
-        String token = TestUtil.login(restTemplate);
-
-        // Создаем заголовки, добавляем токен
-        authHeaders = new HttpHeaders();
-        authHeaders.set("Authorization", "Bearer " + token);
+        if (testUser == null) {
+            testUser = TestUtil.createTestUser(userRepository, TestUtil.TEST_USER_EMAIL, TestUtil.TEST_USER_PASSWORD);
+            authHeaders = TestUtil.login(restTemplate, TestUtil.TEST_USER_EMAIL, TestUtil.TEST_USER_PASSWORD);
+        }
     }
 
     @Test
@@ -124,6 +126,134 @@ public class SiteControllerIT {
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         SiteListResponse body = response.getBody();
         assertThat(body.getSites().size()).isEqualTo(2);
+    }
+
+    @Test
+    public void testGetSitesOpenedForView() {
+        User siteOwner = testUser;
+
+        Site site = TestUtil.createSite(1);
+        Site site2 = TestUtil.createSite(2);
+        Site site3 = TestUtil.createSite(3);
+        site.setOwner(siteOwner);
+        site2.setOwner(siteOwner);
+        site3.setOwner(siteOwner);
+        siteRepository.save(site);
+        siteRepository.save(site2);
+        siteRepository.save(site3);
+
+        Order o = createOrder(site, 100);
+        Transaction transaction = createTransaction(siteOwner, 100 * new SimplePricingStrategy().getSiteViewPrice(), TransactionType.ORDER_SITE_VIEW);
+        o.setTransaction(transaction);
+        transactionRepository.save(transaction);
+        orderRepository.save(o);
+
+        Order o2 = createOrder(site2, 1000);
+        Transaction transaction2 = createTransaction(siteOwner, 1000 * new SimplePricingStrategy().getSiteViewPrice(), TransactionType.ORDER_SITE_VIEW);
+        o2.setTransaction(transaction2);
+        transactionRepository.save(transaction2);
+        orderRepository.save(o2);
+
+        Order o3 = createOrder(site3, 1000);
+        o3.setClosed(true);
+        Transaction transaction3 = createTransaction(siteOwner, 1000 * new SimplePricingStrategy().getSiteViewPrice(), TransactionType.ORDER_SITE_VIEW);
+        o3.setTransaction(transaction3);
+        transactionRepository.save(transaction3);
+        orderRepository.save(o3);
+
+        // Создаем объект HttpEntity с заголовками
+        HttpEntity<String> entity = new HttpEntity<>(authHeaders);
+
+        // Отправляем GET-запрос
+        ResponseEntity<SiteListResponse> response = restTemplate.exchange("/api/sites/forView", HttpMethod.GET, entity, SiteListResponse.class);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        SiteListResponse body = response.getBody();
+        List<SiteResponse> sites = body.getSites();
+        assertThat(sites.size()).isEqualTo(2);
+        assertThat(sites.get(0).getUrl()).isEqualTo(site.getUrl());
+        assertThat(sites.get(1).getUrl()).isEqualTo(site2.getUrl());
+    }
+
+    @Test
+    public void testGetSitesOpenedForView_withAlreadyViewed() {
+        User siteOwner = testUser;
+        User viewer = TestUtil.createUser(1);
+        User viewer2 = TestUtil.createUser(2);
+        userRepository.save(viewer);
+        userRepository.save(viewer2);
+        
+
+        Site site = TestUtil.createSite(1);
+        Site site2 = TestUtil.createSite(2);
+        site.setOwner(siteOwner);
+        site2.setOwner(siteOwner);
+        siteRepository.save(site);
+        siteRepository.save(site2);
+
+        Order o = createOrder(site, 100);
+        Transaction transaction = createTransaction(siteOwner, 100 * new SimplePricingStrategy().getSiteViewPrice(), TransactionType.ORDER_SITE_VIEW);
+        o.setTransaction(transaction);
+        transactionRepository.save(transaction);
+        orderRepository.save(o);
+
+        Order o2 = createOrder(site2, 1000);
+        Transaction transaction2 = createTransaction(siteOwner, 1000 * new SimplePricingStrategy().getSiteViewPrice(), TransactionType.ORDER_SITE_VIEW);
+        o2.setTransaction(transaction2);
+        transactionRepository.save(transaction2);
+        orderRepository.save(o2);
+
+        View view = new View();
+        view.setViewedAt(LocalDateTime.now().minusHours(2));
+        view.setOrder(o2);
+        view.setUser(viewer);        
+        Transaction transactionView = createTransaction(siteOwner, 100 * new SimplePricingStrategy().getSiteViewPrice(), TransactionType.USER_EARNED_SITE_VIEW);
+        view.setTransaction(transactionView);
+        transactionRepository.save(transactionView);
+        viewRepository.save(view);
+
+        // Создаем объект HttpEntity с заголовками
+        authHeaders = TestUtil.login(restTemplate, viewer.getEmail(), TestUtil.TEST_USER_PASSWORD);
+        HttpEntity<String> entity = new HttpEntity<>(authHeaders);
+
+        // Отправляем GET-запрос
+        ResponseEntity<SiteListResponse> response = restTemplate.exchange("/api/sites/forView", HttpMethod.GET, entity, SiteListResponse.class);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        SiteListResponse body = response.getBody();
+        List<SiteResponse> sites = body.getSites();
+        assertThat(sites.size()).isEqualTo(1);
+        assertThat(sites.get(0).getUrl()).isEqualTo(site.getUrl());
+
+        authHeaders = TestUtil.login(restTemplate, viewer2.getEmail(), TestUtil.TEST_USER_PASSWORD);
+        entity = new HttpEntity<>(authHeaders);
+
+        // Отправляем GET-запрос
+        response = restTemplate.exchange("/api/sites/forView", HttpMethod.GET, entity, SiteListResponse.class);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        body = response.getBody();
+        sites = body.getSites();
+        assertThat(sites.size()).isEqualTo(2);
+        assertThat(sites.get(0).getUrl()).isEqualTo(site.getUrl());
+        assertThat(sites.get(1).getUrl()).isEqualTo(site2.getUrl());
+    }
+
+    private static Transaction createTransaction(User user, long sum, TransactionType transactionType) {
+        Transaction transaction = new Transaction();
+        transaction.setType(transactionType);
+        transaction.setCompleted(false);
+        transaction.setSum(sum);
+        transaction.setUser(user);
+        transaction.setCreatedAt(LocalDateTime.now());
+        return transaction;
+    }
+
+    private static Order createOrder(Site site, int viewCount) {
+        Order o = new Order();
+        o.setSite(site);
+        o.setViewCount(viewCount);
+        o.setCreatedAt(LocalDateTime.now());
+        o.setClosed(false);
+        o.setUser(site.getOwner());
+        return o;
     }
 
     @Test

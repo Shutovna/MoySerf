@@ -15,18 +15,18 @@ import java.time.LocalDateTime;
 public class View {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+    private long id;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @ManyToOne
-    @JoinColumn(name = "site_id", nullable = false)
-    private Site site;
-
     @Column(name = "viewed_at", nullable = false)
     private LocalDateTime viewedAt;
+
+    @ManyToOne
+    @JoinColumn(name = "order_id", nullable = false)
+    private Order order;
 
     @ManyToOne
     @JoinColumn(name = "transaction_id", nullable = false)
@@ -37,7 +37,7 @@ public class View {
         return "View{" +
                 "id=" + id +
                 ", user=" + user.getEmail() +
-                ", site=" + site.getUrl() +
+                ", order=" + order.getId() +
                 ", viewedAt=" + viewedAt +
                 ", transaction=" + transaction.getId() +
                 '}';

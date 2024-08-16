@@ -42,6 +42,14 @@ public class SiteController {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("/forView")
+    public ResponseEntity<SiteListResponse> getSitesForView() {
+        List<Site> sites = siteService.getSitesForView();
+        SiteListResponse response = new SiteListResponse();
+        response.setSites(sites.stream().map(SiteResponse::fromSite).toList());
+        return ResponseEntity.ok(response);
+    }
+
 
     @PostMapping
     public ResponseEntity<ApiResponse> createSite(@RequestBody SiteRequest siteRequest) {

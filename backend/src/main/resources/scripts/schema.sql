@@ -11,9 +11,9 @@ CREATE TABLE "orders" (
                           "id" int8 NOT NULL,
                           "closed" bool NOT NULL,
                           "created_at" timestamp(6) NOT NULL,
-                          "view_count" int4 NOT NULL,
-                          "site_id" int4 NOT NULL,
-                          "transaction_id" int4 NOT NULL,
+                          "view_count" int8 NOT NULL,
+                          "site_id" int8 NOT NULL,
+                          "transaction_id" int8 NOT NULL,
                           "user_id" int8 NOT NULL,
                           CONSTRAINT "orders_pkey" PRIMARY KEY ("id"),
                           CONSTRAINT "uq_site_tran" UNIQUE ("site_id", "transaction_id")
@@ -51,12 +51,12 @@ ALTER TABLE "roles_privileges" OWNER TO "postgres";
 
 CREATE TABLE "sites" (
                          "id" int4 NOT NULL,
-                         "avatar_url" varchar(255),
                          "created_at" timestamp(6),
                          "description" varchar(10000) COLLATE "pg_catalog"."default",
                          "name" varchar(255) COLLATE "pg_catalog"."default",
                          "url" varchar(255) COLLATE "pg_catalog"."default" NOT NULL,
                          "owner_id" int8 NOT NULL,
+                         "avatar_url" varchar(255) COLLATE "pg_catalog"."default",
                          CONSTRAINT "sites_pkey" PRIMARY KEY ("id")
 );
 ALTER TABLE "sites" OWNER TO "postgres";
@@ -67,7 +67,7 @@ CREATE TABLE "transactions" (
                                 "created_at" timestamp(6) NOT NULL,
                                 "description" varchar(255) COLLATE "pg_catalog"."default",
                                 "sum" int8,
-                                "type" varchar(100) NOT NULL,
+                                "type" varchar(100) COLLATE "pg_catalog"."default" NOT NULL,
                                 "user_id" int8 NOT NULL,
                                 CONSTRAINT "transactions_pkey" PRIMARY KEY ("id"),
                                 CONSTRAINT "check_transactions_sum" CHECK (sum > 0)
@@ -89,8 +89,8 @@ CREATE TABLE "users" (
                          "password" varchar(255) COLLATE "pg_catalog"."default",
                          "provider" varchar(255) COLLATE "pg_catalog"."default",
                          "provider_id" varchar(255) COLLATE "pg_catalog"."default",
-                         "created_at" timestamp NOT NULL,
                          "invitor_id" int8,
+                         "created_at" timestamp(6) NOT NULL,
                          CONSTRAINT "users_pkey" PRIMARY KEY ("id"),
                          CONSTRAINT "uk6dotkott2kjsp8vw4d0m25fb7" UNIQUE ("email"),
                          CONSTRAINT "uq_users_name" UNIQUE ("name")
@@ -115,8 +115,7 @@ ALTER TABLE "verification_tokens" OWNER TO "postgres";
 CREATE TABLE "views" (
                          "id" int8 NOT NULL,
                          "viewed_at" timestamp(6) NOT NULL,
-                         "site_id" int4 NOT NULL,
-                         "transaction_id" int4 NOT NULL,
+                         "transaction_id" int8 NOT NULL,
                          "user_id" int8 NOT NULL,
                          "order_id" int8 NOT NULL,
                          CONSTRAINT "views_pkey" PRIMARY KEY ("id")
@@ -125,51 +124,40 @@ ALTER TABLE "views" OWNER TO "postgres";
 
 CREATE TABLE "vips" (
                         "id" int8 NOT NULL,
-                        "type" varchar(100) NOT NULL,
-                        "started_at" timestamp NOT NULL,
-                        "ended_at" timestamp,
+                        "type" varchar(100) COLLATE "pg_catalog"."default" NOT NULL,
+                        "started_at" timestamp(6) NOT NULL,
+                        "ended_at" timestamp(6),
                         "transaction_id" int8 NOT NULL,
                         "user_id" int8 NOT NULL,
-                        PRIMARY KEY ("id")
+                        CONSTRAINT "vips_pkey" PRIMARY KEY ("id")
 );
-
-CREATE TABLE "vips_actions" (
-                                "id" int8 NOT NULL,
-                                "vip_id" int4,
-                                "type" varchar(100) NOT NULL,
-                                "created_at" timestamp NOT NULL,
-                                "transaction_id" int8 NOT NULL,
-                                PRIMARY KEY ("id")
-);
+ALTER TABLE "vips" OWNER TO "postgres";
 
 CREATE TABLE "wallets" (
                            "id" int8 NOT NULL,
                            "sum" int8 NOT NULL,
                            "user_id" int8 NOT NULL,
                            CONSTRAINT "wallets_pkey" PRIMARY KEY ("id"),
-                           CONSTRAINT "check_wallets_sum" CHECK (sum>=0)
+                           CONSTRAINT "check_wallets_sum" CHECK (sum >= 0)
 );
 ALTER TABLE "wallets" OWNER TO "postgres";
 
-ALTER TABLE "orders" ADD CONSTRAINT "fk_orders_users" FOREIGN KEY ("user_id") REFERENCES "users" ("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
 ALTER TABLE "orders" ADD CONSTRAINT "fk_orders_sites" FOREIGN KEY ("site_id") REFERENCES "sites" ("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
 ALTER TABLE "orders" ADD CONSTRAINT "fk_orders_transactions" FOREIGN KEY ("transaction_id") REFERENCES "transactions" ("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE "orders" ADD CONSTRAINT "fk_orders_users" FOREIGN KEY ("user_id") REFERENCES "users" ("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
 ALTER TABLE "password_reset_tokens" ADD CONSTRAINT "fk_password_reset_tokens_users" FOREIGN KEY ("user_id") REFERENCES "users" ("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
-ALTER TABLE "roles_privileges" ADD CONSTRAINT "fk_roles_previliges_roles" FOREIGN KEY ("role_id") REFERENCES "roles" ("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
 ALTER TABLE "roles_privileges" ADD CONSTRAINT "fk_roles_previliges_previliges" FOREIGN KEY ("privilege_id") REFERENCES "privileges" ("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE "roles_privileges" ADD CONSTRAINT "fk_roles_previliges_roles" FOREIGN KEY ("role_id") REFERENCES "roles" ("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
 ALTER TABLE "sites" ADD CONSTRAINT "fk_sites_users" FOREIGN KEY ("owner_id") REFERENCES "users" ("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
-ALTER TABLE "transactions" ADD CONSTRAINT "fk_transactions_users" FOREIGN KEY ("user_id") REFERENCES "users" ("id");
-ALTER TABLE "users" ADD CONSTRAINT "fk_users_users" FOREIGN KEY ("invitor_id") REFERENCES "users" ("id");
-ALTER TABLE "users_roles" ADD CONSTRAINT "fk_users_roles_users" FOREIGN KEY ("user_id") REFERENCES "users" ("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE "transactions" ADD CONSTRAINT "fk_transactions_users" FOREIGN KEY ("user_id") REFERENCES "users" ("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE "users" ADD CONSTRAINT "fk_users_users" FOREIGN KEY ("invitor_id") REFERENCES "users" ("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
 ALTER TABLE "users_roles" ADD CONSTRAINT "fk_users_roles_roles" FOREIGN KEY ("role_id") REFERENCES "roles" ("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE "users_roles" ADD CONSTRAINT "fk_users_roles_users" FOREIGN KEY ("user_id") REFERENCES "users" ("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
 ALTER TABLE "verification_tokens" ADD CONSTRAINT "fk_verification_token_users" FOREIGN KEY ("user_id") REFERENCES "users" ("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
-ALTER TABLE "views" ADD CONSTRAINT "fk_views_sites" FOREIGN KEY ("site_id") REFERENCES "sites" ("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
-ALTER TABLE "views" ADD CONSTRAINT "fk_views_users" FOREIGN KEY ("user_id") REFERENCES "users" ("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE "views" ADD CONSTRAINT "fk_views_orders_1" FOREIGN KEY ("order_id") REFERENCES "orders" ("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
 ALTER TABLE "views" ADD CONSTRAINT "fk_views_transsactions" FOREIGN KEY ("transaction_id") REFERENCES "transactions" ("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
-ALTER TABLE "views" ADD CONSTRAINT "fk_views_orders_1" FOREIGN KEY ("order_id") REFERENCES "orders" ("id");
-ALTER TABLE "vips" ADD CONSTRAINT "fk_vips_transactions" FOREIGN KEY ("transaction_id") REFERENCES "transactions" ("id");
-ALTER TABLE "vips" ADD CONSTRAINT "fk_vips_users_1" FOREIGN KEY ("user_id") REFERENCES "users" ("id");
-ALTER TABLE "vips_actions" ADD CONSTRAINT "fk_vip_actions_vips" FOREIGN KEY ("vip_id") REFERENCES "vips" ("id");
-ALTER TABLE "vips_actions" ADD CONSTRAINT "fk_vip_action_transactions" FOREIGN KEY ("transaction_id") REFERENCES "transactions" ("id");
+ALTER TABLE "views" ADD CONSTRAINT "fk_views_users" FOREIGN KEY ("user_id") REFERENCES "users" ("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE "vips" ADD CONSTRAINT "fk_vips_transactions" FOREIGN KEY ("transaction_id") REFERENCES "transactions" ("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE "vips" ADD CONSTRAINT "fk_vips_users_1" FOREIGN KEY ("user_id") REFERENCES "users" ("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
 ALTER TABLE "wallets" ADD CONSTRAINT "fk_wallets_users" FOREIGN KEY ("user_id") REFERENCES "users" ("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
 
