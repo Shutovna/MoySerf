@@ -9,13 +9,13 @@ import org.springframework.http.*;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 import ru.shutovna.moyserf.model.*;
+import ru.shutovna.moyserf.payload.request.CreateSiteRequest;
 import ru.shutovna.moyserf.payload.request.SiteRequest;
 import ru.shutovna.moyserf.payload.response.ApiResponse;
 import ru.shutovna.moyserf.payload.response.SiteListResponse;
 import ru.shutovna.moyserf.payload.response.SiteResponse;
 import ru.shutovna.moyserf.repository.*;
 import ru.shutovna.moyserf.service.SimplePricingStrategy;
-import ru.shutovna.moyserf.service.SiteService;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -27,27 +27,13 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
 @Sql("classpath:scripts/delete_all_data.sql")
-public class SiteControllerIT {
-
-    @Autowired
-    private TestRestTemplate restTemplate;
-    @Autowired
-    private SiteService siteService;
-
+public class SiteControllerIT extends BaseTestWithUser {
     @Autowired
     private SiteRepository siteRepository;
 
     @Autowired
-    private WalletRepository walletRepository;
-
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
     private OrderRepository orderRepository;
 
-    private HttpHeaders authHeaders;
-    private User testUser;
     @Autowired
     private TransactionRepository transactionRepository;
     @Autowired
@@ -56,8 +42,7 @@ public class SiteControllerIT {
     @BeforeEach
     public void setUp() {
         if (testUser == null) {
-            testUser = TestUtil.createTestUser(userRepository, TestUtil.TEST_USER_EMAIL, TestUtil.TEST_USER_PASSWORD);
-            authHeaders = TestUtil.login(restTemplate, TestUtil.TEST_USER_EMAIL, TestUtil.TEST_USER_PASSWORD);
+            initAndLogin();
         }
     }
 
@@ -65,7 +50,7 @@ public class SiteControllerIT {
     public void testGetAllSites() {
         // Создаем и сохраняем тестовые данные
         User siteOwner = TestUtil.createUser(1);
-        Wallet wallet = TestUtil.createWallet();
+        Wallet wallet = TestUtil.createWallet(testUser);
         wallet.setUser(siteOwner);
 
         userRepository.save(siteOwner);
@@ -99,9 +84,9 @@ public class SiteControllerIT {
         User siteOwner = testUser;
         User siteOwner2 = userRepository.save(TestUtil.createUser(2));
 
-        Wallet wallet = TestUtil.createWallet();
+        Wallet wallet = TestUtil.createWallet(testUser);
         wallet.setUser(siteOwner);
-        Wallet wallet2 = TestUtil.createWallet();
+        Wallet wallet2 = TestUtil.createWallet(testUser);
         wallet2.setUser(siteOwner2);
         walletRepository.save(wallet);
         walletRepository.save(wallet2);
@@ -259,10 +244,11 @@ public class SiteControllerIT {
     @Test
     public void testAddSite() {
         // Создаем запрос для добавления сайта
-        SiteRequest siteRequest = new SiteRequest("New Site", "Description", "http://newsite.com", null);
+        CreateSiteRequest siteRequest = new CreateSiteRequest("New Site", "Description",
+                "http://newsite.com", null, 100);
 
         // Отправляем POST-запрос
-        HttpEntity<SiteRequest> entity = new HttpEntity<SiteRequest>(siteRequest, authHeaders);
+        HttpEntity<CreateSiteRequest> entity = new HttpEntity<>(siteRequest, authHeaders);
         ResponseEntity<ApiResponse> response = restTemplate.exchange("/api/sites", HttpMethod.POST, entity, ApiResponse.class);
 
         // Проверяем статус ответа и сообщение
@@ -279,6 +265,13 @@ public class SiteControllerIT {
         assertThat(response.getHeaders().getLocation().getPath()).isEqualTo("/api/sites/" + site.getId());
         assertThat(site.getOwner()).isEqualTo(testUser);
         assertThat(site.getName()).isEqualTo("New Site");
+
+        List<Order> all = orderRepository.findAll();
+        assertThat(all.size()).isEqualTo(1);
+        Order order = all.get(0);
+        assertThat(order.getSite()).isEqualTo(site);
+        assertThat(order.getViewCount()).isEqualTo(100);
+
     }
 
     @Test

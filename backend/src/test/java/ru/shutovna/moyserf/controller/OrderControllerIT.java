@@ -27,17 +27,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
 @Sql("classpath:scripts/delete_all_data.sql")
-public class OrderControllerIT {
-
-    @Autowired
-    private TestRestTemplate restTemplate;
-
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private WalletRepository walletRepository;
-
+public class OrderControllerIT extends BaseTestWithUser{
     @Autowired
     private SiteRepository siteRepository;
 
@@ -50,26 +40,16 @@ public class OrderControllerIT {
     @Autowired
     private MessageSource messages;
 
-    private HttpHeaders authHeaders;
-
-    private User testUser;
-
     @BeforeEach
     public void setUp() {
-        testUser = TestUtil.createTestUser(userRepository, TestUtil.TEST_USER_EMAIL, TestUtil.TEST_USER_PASSWORD);
-        authHeaders = TestUtil.login(restTemplate, TestUtil.TEST_USER_EMAIL, TestUtil.TEST_USER_PASSWORD);
-
+        if (testUser == null) {
+            initAndLogin();
+        }
     }
 
     @Test
     public void testAddOrder() {
         User siteOwner = testUser;
-
-        Wallet wallet = TestUtil.createWallet();
-        wallet.setSum(1000*100);
-        wallet.setUser(siteOwner);
-        testUser.setWallet(wallet);
-        walletRepository.save(wallet);
 
         Site site = TestUtil.createSite(1);
         site.setOwner(siteOwner);
@@ -118,7 +98,7 @@ public class OrderControllerIT {
         assertThat(transaction.getSum()).isEqualTo(
                 pricingStrategyFactory.getPricingStrategy().getSiteViewPrice() * 2000);
 
-        wallet = walletRepository.findById(wallet.getId()).orElseThrow();
-        assertThat(wallet.getSum()).isEqualTo(520*100);
+        testWallet = walletRepository.findById(testWallet.getId()).orElseThrow();
+        assertThat(testWallet.getSum()).isEqualTo(520*100);
     }
 }

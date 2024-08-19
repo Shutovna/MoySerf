@@ -43,7 +43,7 @@ public class TestUtil {
         return authHeaders;
     }
 
-    public static User createTestUser(UserRepository userRepository, String email, String password) {
+    public static User createTestUser(String email, String password) {
         User user = new User();
         user.setName(email);
         user.setPassword(new BCryptPasswordEncoder().encode(password));
@@ -52,7 +52,7 @@ public class TestUtil {
         user.setEmailVerified(true);
         user.setImageUrl("http://www.google.com");
         user.setProvider(AuthProvider.local);
-        return userRepository.save(user);
+        return user;
     }
 
     public static User createUser(int diff) {
@@ -67,9 +67,10 @@ public class TestUtil {
         return user;
     }
 
-    public static Wallet createWallet() {
+    public static Wallet createWallet(User user) {
         Wallet wallet = new Wallet();
         wallet.setSum(1000 * 100);
+        wallet.setUser(user);
         return wallet;
     }
 

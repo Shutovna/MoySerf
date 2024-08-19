@@ -8,6 +8,7 @@ import ru.shutovna.moyserf.error.UnauthorizedException;
 import ru.shutovna.moyserf.model.Site;
 import ru.shutovna.moyserf.model.User;
 import ru.shutovna.moyserf.model.View;
+import ru.shutovna.moyserf.payload.request.CreateSiteRequest;
 import ru.shutovna.moyserf.payload.request.SiteRequest;
 import ru.shutovna.moyserf.repository.SiteRepository;
 
@@ -69,7 +70,7 @@ public class SiteService implements ISiteService {
     }
 
     @Override
-    public Site createSite(SiteRequest siteRequest) {
+    public Site createSite(CreateSiteRequest siteRequest) {
         User user = userService.getCurrentUser();
 
         Site site = new Site();

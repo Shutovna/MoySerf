@@ -6,10 +6,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.shutovna.moyserf.model.Site;
+import ru.shutovna.moyserf.payload.request.CreateSiteRequest;
+import ru.shutovna.moyserf.payload.request.OrderRequest;
 import ru.shutovna.moyserf.payload.request.SiteRequest;
 import ru.shutovna.moyserf.payload.response.ApiResponse;
 import ru.shutovna.moyserf.payload.response.SiteListResponse;
 import ru.shutovna.moyserf.payload.response.SiteResponse;
+import ru.shutovna.moyserf.service.IOrderService;
 import ru.shutovna.moyserf.service.ISiteService;
 
 import java.net.URI;
@@ -21,9 +24,12 @@ import java.util.Optional;
 public class SiteController {
     private final ISiteService siteService;
 
+    private final IOrderService orderService;
+
     @Autowired
-    public SiteController(ISiteService siteService) {
+    public SiteController(ISiteService siteService, IOrderService orderService) {
         this.siteService = siteService;
+        this.orderService = orderService;
     }
 
     @GetMapping
@@ -52,8 +58,13 @@ public class SiteController {
 
 
     @PostMapping
-    public ResponseEntity<ApiResponse> createSite(@RequestBody SiteRequest siteRequest) {
+    public ResponseEntity<ApiResponse> createSite(@RequestBody CreateSiteRequest siteRequest) {
         Site site = siteService.createSite(siteRequest);
+
+        OrderRequest orderRequest = new OrderRequest();
+        orderRequest.setSiteId(site.getId());
+        orderRequest.setViewCount(siteRequest.getViewCount());
+        orderService.createOrder(orderRequest);
 
         URI location = ServletUriComponentsBuilder
                 .fromCurrentContextPath().path("/api/sites/{0}")

@@ -1,6 +1,7 @@
 package ru.shutovna.moyserf.service;
 
 import ru.shutovna.moyserf.model.Site;
+import ru.shutovna.moyserf.payload.request.CreateSiteRequest;
 import ru.shutovna.moyserf.payload.request.SiteRequest;
 
 import java.util.List;
@@ -16,7 +17,7 @@ public interface ISiteService {
 
     Optional<Site> getSiteById(long id);
 
-    Site createSite(SiteRequest siteRequest);
+    Site createSite(CreateSiteRequest siteRequest);
 
     Site saveSite(long id, SiteRequest siteRequest);
 }

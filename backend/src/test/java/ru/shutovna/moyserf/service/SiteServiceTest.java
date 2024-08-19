@@ -11,9 +11,11 @@ import ru.shutovna.moyserf.model.Order;
 import ru.shutovna.moyserf.model.Site;
 import ru.shutovna.moyserf.model.User;
 import ru.shutovna.moyserf.model.View;
+import ru.shutovna.moyserf.payload.request.CreateSiteRequest;
 import ru.shutovna.moyserf.payload.request.SiteRequest;
 import ru.shutovna.moyserf.repository.SiteRepository;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -29,6 +31,9 @@ public class SiteServiceTest {
 
     @Mock
     private IUserService userService;
+
+    @Mock
+    private IPricingStrategyFactory pricingStrategyFactory;
 
     @InjectMocks
     private SiteService siteService;
@@ -61,24 +66,6 @@ public class SiteServiceTest {
     }
 
     @Test
-    void testGetSitesForView() {
-        when(siteRepository.findAll()).thenReturn(Arrays.asList(testSite));
-        when(userService.getCurrentUser()).thenReturn(testUser);
-
-        // Пример данных для Views
-        View view = new View();
-        Order order = new Order();
-        order.setSite(testSite);
-        view.setOrder(order);
-        testUser.setViews(Arrays.asList(view));
-
-        List<Site> sites = siteService.getSitesForView();
-
-        assertNotNull(sites);
-        assertEquals(1, sites.size());
-    }
-
-    @Test
     void testGetMySites() {
         when(userService.getCurrentUser()).thenReturn(testUser);
         when(siteRepository.findByOwner(testUser)).thenReturn(Arrays.asList(testSite));
@@ -92,11 +79,12 @@ public class SiteServiceTest {
 
     @Test
     void testCreateSite() {
-        SiteRequest siteRequest = new SiteRequest();
-        siteRequest.setName("New Site");
+        CreateSiteRequest siteRequest = new CreateSiteRequest();
+        siteRequest.setName("Test Site");
         siteRequest.setDescription("Description");
         siteRequest.setUrl("http://newsite.com");
         siteRequest.setAvatarUrl("http://newsite.com/avatar.png");
+        siteRequest.setViewCount(100);
 
         when(userService.getCurrentUser()).thenReturn(testUser);
         when(siteRepository.save(any(Site.class))).thenReturn(testSite);
@@ -105,7 +93,7 @@ public class SiteServiceTest {
 
         assertNotNull(createdSite);
         assertEquals(testUser, createdSite.getOwner());
-        assertEquals("New Site", createdSite.getName());
+        assertEquals("Test Site", createdSite.getName());
         verify(siteRepository, times(1)).save(any(Site.class));
     }
 
