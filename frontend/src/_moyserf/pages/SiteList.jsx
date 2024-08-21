@@ -28,19 +28,72 @@ const SiteList = () => {
 
     const handleAddViewsSubmit = (event) => {
         event.preventDefault()
-        let data = {
-            siteId: event.target.siteId.value,
-            viewCount: event.target.viewCount.value
-        };
-        addViews(data).then((res) => {
-            toast.success('Просмотры добавлены');
-            refreshData();
-            console.log(res);
+        let siteId = event.target.siteId.value;
+        let viewCount = event.target.viewCount.value;
+        let errorDiv = document.getElementById(`errors-view-${siteId}`);
+        if (!viewCount) {
+            errorDiv.innerHTML = 'Введите количество просмотров';
 
-        })
-            .catch((error) => {
-                console.log(error)
-            });
+        } else if (viewCount < 100) {
+            errorDiv.innerHTML = 'Минимум 100 просмотров';
+
+        } else {
+            errorDiv.innerHTML = '';
+            let data = {
+                siteId: siteId,
+                viewCount: viewCount
+            };
+            addViews(data).then((res) => {
+                toast.success('Просмотры добавлены');
+                refreshData();
+                console.log(res);
+
+            })
+                .catch((error) => {
+                    console.log(error)
+                });
+        }
+    }
+
+    function validateEditForm(siteId, data) {
+        let validForm = true;
+        if (!data.name) {
+            validForm = false;
+            document.getElementById(`errors-edit-name-${siteId}`).innerHTML = 'Введите название';
+        } else if (data.name.length < 5) {
+            validForm = false;
+            document.getElementById(`errors-edit-name-${siteId}`).innerHTML = 'Минимум 5 символов';
+        } else {
+            document.getElementById(`errors-edit-name-${siteId}`).innerHTML = '';
+        }
+
+        if (!data.url) {
+            validForm = false;
+            document.getElementById(`errors-edit-url-${siteId}`).innerHTML = 'Введите URL';
+        } else if (!isValidURL(data.url)) {
+            validForm = false;
+            document.getElementById(`errors-edit-url-${siteId}`).innerHTML = 'Введите правильный URL';
+        } else {
+            document.getElementById(`errors-edit-url-${siteId}`).innerHTML = '';
+        }
+
+        if (data.description && data.description.length > 10000) {
+            validForm = false;
+            document.getElementById(`errors-edit-description-${siteId}`).innerHTML = 'Максимум 10000 символов';
+        } else {
+            document.getElementById(`errors-edit-description-${siteId}`).innerHTML = '';
+        }
+
+        return validForm;
+    }
+
+    function isValidURL(url) {
+        try {
+            new URL(url);
+            return true;
+        } catch (e) {
+            return false;
+        }
     }
 
     const handleEditSubmit = (event) => {
@@ -51,15 +104,17 @@ const SiteList = () => {
             url: event.target.url.value,
             description: event.target.description.value,
         };
-        console.log(JSON.stringify(data))
-        saveSite(siteId, data).then((res) => {
-            toast.success('Сайт изменен');
-            refreshData();
-            console.log(res);
+        if (validateEditForm(siteId, data)) {
+            console.log(JSON.stringify(data))
+            saveSite(siteId, data).then((res) => {
+                toast.success('Сайт изменен');
+                refreshData();
+                console.log(res);
 
-        }).catch((error) => {
-            console.log(error)
-        });
+            }).catch((error) => {
+                console.log(error)
+            });
+        }
     }
     return (
         <Fragment>
@@ -86,7 +141,8 @@ const SiteList = () => {
                                 </p>
 
                                 {/*Редактирование сайта*/}
-                                <Accordion className="accordion accordionicon-left accordions-items-seperate"  defaultActiveKey="1">
+                                <Accordion className="mb-1 accordion accordionicon-left accordions-items-seperate"
+                                           defaultActiveKey="1">
                                     <Accordion.Item>
                                         <Accordion.Header>Редактировать</Accordion.Header>
                                         <Accordion.Body className={"test"}>
@@ -101,7 +157,8 @@ const SiteList = () => {
                                                                       defaultValue={site.name}
                                                                       type="text" className="form-control"
                                                                       id="site-name-add" placeholder="Название"/>
-                                                        {/*<div className="text-danger mt-2">{errors.name}</div>*/}
+                                                        <div id={`errors-edit-name-${site.id}`}
+                                                             className="text-danger mt-2"></div>
                                                     </Col>
                                                     <Col xl={12}>
                                                         <Form.Label htmlFor="site-url-add"
@@ -110,7 +167,8 @@ const SiteList = () => {
                                                                       defaultValue={site.url}
                                                                       type="text" className="form-control"
                                                                       id="site-url-add" placeholder="URL"/>
-                                                        {/*<div className="text-danger mt-2">{errors.url}</div>*/}
+                                                        <div id={`errors-edit-url-${site.id}`}
+                                                             className="text-danger mt-2"></div>
                                                     </Col>
                                                     <Col xl={12}>
                                                         <Form.Label htmlFor="site-description-add"
@@ -121,7 +179,10 @@ const SiteList = () => {
                                                             defaultValue={site.description}
                                                             as="textarea" className="form-control"
                                                             id="site-description-add"
+                                                            placeholder="Описание"
                                                             rows={2}></Form.Control>
+                                                        <div id={`errors-edit-description-${site.id}`}
+                                                             className="text-danger mt-2"></div>
                                                     </Col>
                                                     <div
                                                         className="px-4 py-3 border-top border-block-start-dashed d-sm-flex justify-content-end">
@@ -139,14 +200,15 @@ const SiteList = () => {
                                 </Accordion>
 
                                 <p className="mb-1 fw-semibold fs-14 d-flex align-items-center ">
-                                    Просмотров: <span>{site.viewCount}</span>
+                                    Просмотров:&nbsp;<span>{site.viewCount}</span>
                                 </p>
                                 <p className="mb-1 fw-semibold fs-14 d-flex align-items-center">
-                                    Осталось просмотров: <span>{site.restViewCount}</span>
+                                    Осталось просмотров:&nbsp;<span>{site.restViewCount}</span>
                                 </p>
 
                                 {/*Добавление просмотров*/}
-                                <Accordion className="accordion accordionicon-left accordions-items-seperate" defaultActiveKey="1">
+                                <Accordion className="accordion accordionicon-left accordions-items-seperate"
+                                           defaultActiveKey="1">
                                     <Accordion.Item>
                                         <Accordion.Header>Добавить просмотров</Accordion.Header>
                                         <Accordion.Body>
@@ -163,6 +225,8 @@ const SiteList = () => {
                                                         defaultValue={100}
                                                         id="site-view-count-add"
                                                         placeholder="Количество просмотров"/>
+                                                    <div id={`errors-view-${site.id}`}
+                                                         className="text-danger mt-2"></div>
                                                     <div
                                                         className="px-4 py-3 border-top border-block-start-dashed d-sm-flex justify-content-end">
 
@@ -179,16 +243,6 @@ const SiteList = () => {
                                 </Accordion>
 
                             </Card.Body>
-                            <Card.Footer className="text-center">
-                                <Link to={`${import.meta.env.BASE_URL}pages/ecommerce/cart`}
-                                      className="btn btn-primary-light m-1" onClick={() => {
-                                    AddToCart(site.id);
-                                }}><i className="ri-shopping-cart-2-line me-2 align-middle d-inline-block"></i>Move To
-                                    Cart</Link>
-                                <Link to={`${import.meta.env.BASE_URL}pages/ecommerce/productdetails/`}
-                                      className="btn btn-success-light m-1"
-                                ><i className="ri-eye-line me-2 align-middle d-inline-block"></i>View Product</Link>
-                            </Card.Footer>
                         </Card>
                     </Col>
                 )) : ""}
