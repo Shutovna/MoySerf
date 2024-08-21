@@ -5,19 +5,20 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import ru.shutovna.moyserf.model.Order;
 import ru.shutovna.moyserf.model.Site;
 import ru.shutovna.moyserf.payload.request.CreateSiteRequest;
 import ru.shutovna.moyserf.payload.request.OrderRequest;
 import ru.shutovna.moyserf.payload.request.SiteRequest;
-import ru.shutovna.moyserf.payload.response.ApiResponse;
-import ru.shutovna.moyserf.payload.response.SiteListResponse;
-import ru.shutovna.moyserf.payload.response.SiteResponse;
+import ru.shutovna.moyserf.payload.response.*;
 import ru.shutovna.moyserf.service.IOrderService;
 import ru.shutovna.moyserf.service.ISiteService;
 
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;
+
+import static java.util.stream.Collectors.summingInt;
 
 @RestController
 @RequestMapping("/api/sites")
@@ -41,10 +42,20 @@ public class SiteController {
     }
 
     @GetMapping("/my")
-    public ResponseEntity<SiteListResponse> getMySites() {
+    public ResponseEntity<MySiteListResponse> getMySites() {
         List<Site> sites = siteService.getMySites();
-        SiteListResponse response = new SiteListResponse();
-        response.setSites(sites.stream().map(SiteResponse::fromSite).toList());
+        MySiteListResponse response = new MySiteListResponse();
+        response.setSites(sites.stream().map(site -> {
+            List<Order> orders = site.getOrders();
+            int orderedViewCount = orders.stream().mapToInt(Order::getViewCount).sum();
+            int viewCount = orders.stream().mapToInt(order -> order.getViews().size()).sum();
+            int restViewCount = orderedViewCount - viewCount;
+            if (viewCount > orderedViewCount || restViewCount < 0) {
+                throw new IllegalStateException("orderedViewCount: " + orderedViewCount + " restViewCount: " + restViewCount);
+            }
+
+            return MySiteResponse.fromSite(site, viewCount, restViewCount);
+        }).toList());
         return ResponseEntity.ok(response);
     }
 

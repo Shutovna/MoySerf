@@ -6,7 +6,7 @@ import java.util.Optional;
 
 public interface IUserService {
 
-    User saveUser(User user);
+    User registerUser(User user);
 
     void deleteUser(User user);
 
@@ -17,4 +17,8 @@ public interface IUserService {
     List<User> getMostActiveUsers();
 
     User getCurrentUser();
+
+    Optional<User> findByEmail(String email);
+
+    User save(User user);
 }

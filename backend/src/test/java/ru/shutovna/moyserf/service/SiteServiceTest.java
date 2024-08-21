@@ -68,7 +68,7 @@ public class SiteServiceTest {
     @Test
     void testGetMySites() {
         when(userService.getCurrentUser()).thenReturn(testUser);
-        when(siteRepository.findByOwner(testUser)).thenReturn(Arrays.asList(testSite));
+        when(siteRepository.findByOwnerOrderByCreatedAtDesc(testUser)).thenReturn(Arrays.asList(testSite));
 
         List<Site> mySites = siteService.getMySites();
 

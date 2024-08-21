@@ -31,14 +31,14 @@ ALTER TABLE "password_reset_tokens" OWNER TO "postgres";
 
 CREATE TABLE "privileges" (
                               "id" int8 NOT NULL,
-                              "name" varchar(255) COLLATE "pg_catalog"."default",
+                              "name" varchar(255) COLLATE "pg_catalog"."default" NOT NULL,
                               CONSTRAINT "privilege_pkey" PRIMARY KEY ("id")
 );
 ALTER TABLE "privileges" OWNER TO "postgres";
 
 CREATE TABLE "roles" (
                          "id" int8 NOT NULL,
-                         "name" varchar(255) COLLATE "pg_catalog"."default",
+                         "name" varchar(255) COLLATE "pg_catalog"."default" NOT NULL,
                          CONSTRAINT "role_pkey" PRIMARY KEY ("id")
 );
 ALTER TABLE "roles" OWNER TO "postgres";
@@ -51,7 +51,7 @@ ALTER TABLE "roles_privileges" OWNER TO "postgres";
 
 CREATE TABLE "sites" (
                          "id" int4 NOT NULL,
-                         "created_at" timestamp(6),
+                         "created_at" timestamp(6) NOT NULL,
                          "description" varchar(10000) COLLATE "pg_catalog"."default",
                          "name" varchar(255) COLLATE "pg_catalog"."default",
                          "url" varchar(255) COLLATE "pg_catalog"."default" NOT NULL,

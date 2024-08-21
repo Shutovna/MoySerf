@@ -12,11 +12,9 @@ import ru.shutovna.moyserf.error.UserAlreadyExistException;
 import ru.shutovna.moyserf.model.PasswordResetToken;
 import ru.shutovna.moyserf.model.User;
 import ru.shutovna.moyserf.model.VerificationToken;
+import ru.shutovna.moyserf.model.Wallet;
 import ru.shutovna.moyserf.payload.request.SignUpRequest;
-import ru.shutovna.moyserf.repository.PasswordResetTokenRepository;
-import ru.shutovna.moyserf.repository.RoleRepository;
-import ru.shutovna.moyserf.repository.UserRepository;
-import ru.shutovna.moyserf.repository.VerificationTokenRepository;
+import ru.shutovna.moyserf.repository.*;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -27,7 +25,7 @@ import java.util.stream.Collectors;
 @Service
 public class AuthService implements IAuthSService {
     @Autowired
-    private UserRepository userRepository;
+    private IUserService userService;
 
     @Autowired
     private VerificationTokenRepository tokenRepository;
@@ -70,7 +68,8 @@ public class AuthService implements IAuthSService {
         user.setPassword(passwordEncoder.encode(signUpRequest.getPassword()));
         user.setEmail(signUpRequest.getEmail());
         user.setRoles(Collections.singletonList(roleRepository.findByName("ROLE_USER")));
-        return userRepository.save(user);
+
+        return userService.save(user);
     }
 
     @Override
@@ -98,7 +97,7 @@ public class AuthService implements IAuthSService {
         VerificationToken token = getVerificationToken(verificationToken);
         User user = token.getUser();
         user.setEmailVerified(true);
-        userRepository.save(user);
+        userService.save(user);
     }
 
     @Override
@@ -156,7 +155,7 @@ public class AuthService implements IAuthSService {
     @Override
     public void changeUserPassword(final User user, final String password) {
         user.setPassword(passwordEncoder.encode(password));
-        userRepository.save(user);
+        userService.save(user);
     }
 
     @Override
@@ -181,7 +180,7 @@ public class AuthService implements IAuthSService {
         }
 
         // tokenRepository.delete(verificationToken);
-        userRepository.save(user);
+        userService.save(user);
         return IAuthSService.VerificationTokenStatus.TOKEN_VALID;
     }
 
@@ -196,7 +195,7 @@ public class AuthService implements IAuthSService {
         final Authentication curAuth = SecurityContextHolder.getContext()
                 .getAuthentication();
         User currentUser = (User) curAuth.getPrincipal();
-        currentUser = userRepository.save(currentUser);
+        currentUser = userService.save(currentUser);
         final Authentication auth = new UsernamePasswordAuthenticationToken(currentUser, currentUser.getPassword(), curAuth.getAuthorities());
         SecurityContextHolder.getContext()
                 .setAuthentication(auth);
@@ -204,7 +203,7 @@ public class AuthService implements IAuthSService {
     }
 
     private boolean emailExists(final String email) {
-        return userRepository.findByEmail(email) != null;
+        return userService.findByEmail(email) != null;
     }
 
     @Override

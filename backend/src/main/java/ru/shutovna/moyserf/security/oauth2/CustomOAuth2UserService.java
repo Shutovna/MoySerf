@@ -13,10 +13,13 @@ import org.springframework.util.StringUtils;
 import ru.shutovna.moyserf.error.OAuth2AuthenticationProcessingException;
 import ru.shutovna.moyserf.model.AuthProvider;
 import ru.shutovna.moyserf.model.User;
+import ru.shutovna.moyserf.model.Wallet;
 import ru.shutovna.moyserf.repository.UserRepository;
+import ru.shutovna.moyserf.repository.WalletRepository;
 import ru.shutovna.moyserf.security.UserPrincipal;
 import ru.shutovna.moyserf.security.oauth2.user.OAuth2UserInfo;
 import ru.shutovna.moyserf.security.oauth2.user.OAuth2UserInfoFactory;
+import ru.shutovna.moyserf.service.IUserService;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -25,7 +28,10 @@ import java.util.Optional;
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
     @Autowired
-    private UserRepository userRepository;
+    private IUserService userService;
+
+    @Autowired
+    private WalletRepository walletRepository;
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest oAuth2UserRequest) throws OAuth2AuthenticationException {
@@ -47,7 +53,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             throw new OAuth2AuthenticationProcessingException("Email not found from OAuth2 provider");
         }
 
-        Optional<User> userOptional = userRepository.findByEmail(oAuth2UserInfo.getEmail());
+        Optional<User> userOptional = userService.findByEmail(oAuth2UserInfo.getEmail());
         User user;
         if(userOptional.isPresent()) {
             user = userOptional.get();
@@ -74,13 +80,14 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         user.setEmailVerified(true);
         user.setImageUrl(oAuth2UserInfo.getImageUrl());
         user.setCreatedAt(LocalDateTime.now());
-        return userRepository.save(user);
+
+        return userService.registerUser(user);
     }
 
     private User updateExistingUser(User existingUser, OAuth2UserInfo oAuth2UserInfo) {
         existingUser.setName(oAuth2UserInfo.getName());
         existingUser.setImageUrl(oAuth2UserInfo.getImageUrl());
-        return userRepository.save(existingUser);
+        return userService.save(existingUser);
     }
 
 }

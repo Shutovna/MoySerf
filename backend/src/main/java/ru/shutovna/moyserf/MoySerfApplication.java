@@ -14,6 +14,4 @@ public class MoySerfApplication {
     public static void main(String[] args) {
         SpringApplication.run(MoySerfApplication.class, args);
     }
-
-
 }

@@ -51,7 +51,7 @@ public class SiteService implements ISiteService {
 
         List<Site> result = allSites.stream().filter(site -> {
             List<View> userSiteViews = siteViews.get(site.getId());
-            //сли нет просмотров
+            //если нет просмотров
             return userSiteViews == null
                     //или нет просмотров за последние 24 часа
                     || userSiteViews.stream().filter(
@@ -66,7 +66,7 @@ public class SiteService implements ISiteService {
 
     @Override
     public List<Site> getMySites() {
-        return siteRepository.findByOwner(userService.getCurrentUser());
+        return siteRepository.findByOwnerOrderByCreatedAtDesc(userService.getCurrentUser());
     }
 
     @Override
@@ -78,6 +78,7 @@ public class SiteService implements ISiteService {
         site.setDescription(siteRequest.getDescription());
         site.setUrl(siteRequest.getUrl());
         site.setAvatarUrl(siteRequest.getAvatarUrl());
+        site.setCreatedAt(LocalDateTime.now());
         site.setOwner(user);
 
         return siteRepository.save(site);

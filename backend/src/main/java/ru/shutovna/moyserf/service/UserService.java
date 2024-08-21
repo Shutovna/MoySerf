@@ -10,9 +10,11 @@ import ru.shutovna.moyserf.error.UserNotFoundException;
 import ru.shutovna.moyserf.model.PasswordResetToken;
 import ru.shutovna.moyserf.model.User;
 import ru.shutovna.moyserf.model.VerificationToken;
+import ru.shutovna.moyserf.model.Wallet;
 import ru.shutovna.moyserf.repository.PasswordResetTokenRepository;
 import ru.shutovna.moyserf.repository.UserRepository;
 import ru.shutovna.moyserf.repository.VerificationTokenRepository;
+import ru.shutovna.moyserf.repository.WalletRepository;
 
 import javax.transaction.Transactional;
 import java.util.*;
@@ -28,6 +30,9 @@ public class UserService implements IUserService {
     private VerificationTokenRepository tokenRepository;
 
     @Autowired
+    private WalletRepository walletRepository;
+
+    @Autowired
     private PasswordResetTokenRepository passwordTokenRepository;
 
     // API
@@ -37,8 +42,16 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public User saveUser(final User user) {
-        return userRepository.save(user);
+    public User registerUser(final User user) {
+        User saved = userRepository.save(user);
+
+        Wallet wallet = new Wallet();
+        wallet.setUser(saved);
+        //todo
+        wallet.setSum(1000 * 100);
+        walletRepository.save(wallet);
+
+        return saved;
     }
 
     @Override
@@ -78,5 +91,15 @@ public class UserService implements IUserService {
         }
 
         throw new UserNotFoundException("User not found");
+    }
+
+    @Override
+    public Optional<User> findByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
+
+    @Override
+    public User save(User user) {
+        return userRepository.save(user);
     }
 }
