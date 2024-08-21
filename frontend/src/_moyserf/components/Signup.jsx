@@ -1,16 +1,16 @@
-import {FC, Fragment, useEffect, useState} from 'react';
-import {Alert, Button, Card, Col, Form, InputGroup} from 'react-bootstrap';
+import {Fragment, useEffect, useState} from 'react';
+import {Button, Card, Col, Form, InputGroup} from 'react-bootstrap';
 import desktoplogo from "../../assets/images/brand-logos/desktop-logo.png";
 import desktopdarklogo from "../../assets/images/brand-logos/desktop-dark.png";
 import {Link, useNavigate} from 'react-router-dom';
 import {LocalStorageBackup} from "../../components/common/switcher/switcherdata/switcherdata.jsx";
 import {ThemeChanger} from "../../redux/action.jsx";
-import {GOOGLE_AUTH_URL} from "../constants/index.js";
 import useAuthService from "../services/AuthService.jsx";
 import * as Yup from "yup";
 import {useFormik} from "formik";
 import Spinner from "./Spinner.jsx";
 import Oauth2Links from "./OAuth2Links.jsx";
+import {toast} from "react-toastify";
 
 const signupSchema = Yup.object().shape({
     name: Yup.string()
@@ -30,11 +30,8 @@ const signupSchema = Yup.object().shape({
 
 
 const Signup = () => {
-    const {loading, error, signup, clearError} = useAuthService();
+    const {signup} = useAuthService();
     const navigate = useNavigate();
-
-    const [message, setMessage] = useState("");
-    const [outh2Error, setOauth2Error] = useState(location.state?.error);
     const [showSpinner, setShowSpinner] = useState(false);
 
     const {handleChange, handleSubmit, values, errors, isSubmitting, setSubmitting} = useFormik({
@@ -47,9 +44,6 @@ const Signup = () => {
         },
         validateOnChange: true,
         onSubmit: (values) => {
-            console.log("SigninUp")
-            setMessage(null);
-            setOauth2Error(null);
             signup(values).then(() => {
                 setSubmitting(false)
                 onRegistered();
@@ -66,7 +60,8 @@ const Signup = () => {
     function onRegistered() {
         console.log("You're successfully registered. Please login to continue!");
         const path = `${import.meta.env.BASE_URL}auth/signin`;
-        navigate(path, {state: {message: 'Проверьте почту для подтверждения регистрации'}});
+        toast.info('Проверьте почту для подтверждения регистрации');
+        navigate(path);
     }
 
     useEffect(() => {
@@ -92,9 +87,6 @@ const Signup = () => {
                                 <p className="h5 fw-semibold mb-2 text-center">Регистрация</p>
                                 <p className="mb-4 text-muted op-7 fw-normal text-center">Добро пожаловать!
                                     Присоединяйтесь к нам и создайте бесплатный аккаунт</p>
-                                {error && <Alert variant="danger">{error}</Alert>}
-                                {outh2Error && <Alert variant="danger">{outh2Error}</Alert>}
-                                {message && <Alert variant="success">{message}</Alert>}
                                 <div className="row gy-3">
                                     <Col xl={12}>
                                         <Form.Label htmlFor="signup-name"

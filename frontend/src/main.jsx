@@ -21,7 +21,7 @@ import Error500 from './container/error/500error/500error.jsx';
 import Loader from './components/common/loader/loader.jsx';
 import DevelopingPage from "./_moyserf/pages/DevelopingPage.jsx";
 import Landinglayout from "./pages/landinglayout.jsx";
-import SerfTablePage from "./_moyserf/pages/SerfTablePage.jsx";
+import SerfListPage from "./_moyserf/pages/SerfListPage.jsx";
 import MainDashboardPage from "./_moyserf/pages/MainDashboardPage.jsx";
 import VIPPage from "./_moyserf/pages/VIPPage.jsx";
 import ReferalPage from "./_moyserf/pages/ReferalPage.jsx";
@@ -38,9 +38,26 @@ import OAuth2RedirectHandler from "./_moyserf/auth/oauth2/OAuth2RedirectHandler.
 import BadVerificationToken from "./_moyserf/components/BadVerificationToken.jsx";
 import RegistrationConfirm from "./_moyserf/components/RegistrationConfirm.jsx";
 import SavePassword from "./_moyserf/components/SavePassword.jsx";
+import SiteList from "./_moyserf/pages/SiteList.jsx";
+import SiteAdd from "./_moyserf/pages/SiteAdd.jsx";
+import {ToastContainer} from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
     <React.Fragment>
+        <ToastContainer
+            position="top-center"
+            autoClose={4000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme="light"
+            transition: Bounce
+        />
         <BrowserRouter>
             <AuthProvider>
                 <React.Suspense fallback={<Loader/>}>
@@ -72,10 +89,11 @@ ReactDOM.createRoot(document.getElementById('root')).render(
                                 <Route index element={<MainDashboardPage/>}/>
                                 <Route path={`/cab/main`} element={<MainDashboardPage/>}/>
                                 <Route path={`/cab/learning`} element={<DevelopingPage/>}/>
-                                <Route path={`/cab/serf`} element={<SerfTablePage/>}/>
+                                <Route path={`/cab/serf`} element={<SerfListPage/>}/>
                                 <Route path={`/cab/serf-video`} element={<DevelopingPage/>}/>
                                 <Route path={`/cab/vip`} element={<VIPPage/>}/>
-                                <Route path={`/cab/adv`} element={<DevelopingPage/>}/>
+                                <Route path={`/cab/adv`} element={<SiteList/>}/>
+                                <Route path={`/cab/adv/add`} element={<SiteAdd/>}/>
                                 <Route path={`/cab/wallet`} element={<DevelopingPage/>}/>
                                 <Route path={`/cab/referals`} element={<ReferalPage/>}/>
                                 <Route path={`/cab/blog/read`} element={<Blog/>}/>

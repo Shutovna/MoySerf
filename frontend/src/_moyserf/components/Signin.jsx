@@ -1,15 +1,16 @@
-import {FC, Fragment, useEffect, useState} from 'react';
-import {Alert, Button, Card, Col, Form, InputGroup} from 'react-bootstrap';
+import {Fragment, useEffect, useState} from 'react';
+import {Button, Card, Col, Form, InputGroup} from 'react-bootstrap';
 import {useFormik} from "formik";
 import * as Yup from "yup";
 import desktoplogo from "../../assets/images/brand-logos/desktop-logo.png";
 import desktopdarklogo from "../../assets/images/brand-logos/desktop-dark.png";
-import {Link, useLocation} from 'react-router-dom';
+import {Link} from 'react-router-dom';
 import {useAuth} from "../auth/AuthProvider.jsx";
 import Spinner from "./Spinner.jsx";
 import useAuthService from "../services/AuthService.jsx";
 import Oauth2Links from "./OAuth2Links.jsx";
 import RememberMe, {checkRememberAndSave, restoreRemembered} from "./RememberMe.jsx";
+import {toast} from "react-toastify";
 
 const signinSchema = Yup.object().shape({
     email: Yup.string()
@@ -22,11 +23,8 @@ const signinSchema = Yup.object().shape({
 });
 
 const Signin = () => {
-    const {loginAction, error, clearError} = useAuth();
+    const {loginAction} = useAuth();
     const authService = useAuthService();
-    const location = useLocation();
-    const [message, setMessage] = useState(location.state?.message);
-    const [outh2Error, setOauth2Error] = useState(location.state?.error);
     const [showSpinner, setShowSpinner] = useState(false);
 
     const {handleChange, handleSubmit, values, errors, isSubmitting, setSubmitting, validateField,setFieldValue} = useFormik({
@@ -38,14 +36,12 @@ const Signin = () => {
         },
         validateOnChange: true,
         onSubmit: (values) => {
-            clearMessages();
-
             checkRememberAndSave(values.rememberMe, values.email, values.password);
 
-            loginAction(values).then((result) => {
+            loginAction(values).then(() => {
                 setSubmitting(false)
             })
-                .catch((error) => {
+                .catch(() => {
                     setSubmitting(false)
                 });
 
@@ -65,22 +61,14 @@ const Signin = () => {
 
     const handleResetPassword = () => {
         console.log("handleResetPassword " + values.email)
-        clearMessages();
         validateField("email")
         if (!errors.email) {
             authService.resetPassword(values.email)
-                .then(() => setMessage("Письмо для сброса пароля отправлено Вам на почту"))
+                .then(() => toast.success("Письмо для сброса пароля отправлено Вам на почту"))
                 .catch((error) => {
                     console.log(error);
                 })
         }
-    }
-
-    const clearMessages = () => {
-        setMessage(null);
-        setOauth2Error(null);
-        clearError();
-        authService.clearError();
     }
 
     const [passwordshow1, setpasswordshow1] = useState(false);
@@ -102,10 +90,6 @@ const Signin = () => {
                                 <Card.Body className="p-5">
                                     <p className="h5 fw-semibold mb-2 text-center">Вход</p>
                                     <p className="mb-4 text-muted op-7 fw-normal text-center">Добро пожаловать!</p>
-                                    {error && <Alert variant="danger">{error}</Alert>}
-                                    {authService.error && <Alert variant="danger">{authService.error}</Alert>}
-                                    {outh2Error && <Alert variant="danger">{outh2Error}</Alert>}
-                                    {message && <Alert variant="success">{message}</Alert>}
                                     <div className="row gy-3">
                                         <Col xl={12}>
                                             <Form.Label htmlFor="signin-email"

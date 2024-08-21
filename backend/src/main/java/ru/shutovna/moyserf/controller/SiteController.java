@@ -14,6 +14,7 @@ import ru.shutovna.moyserf.payload.response.*;
 import ru.shutovna.moyserf.service.IOrderService;
 import ru.shutovna.moyserf.service.ISiteService;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;
@@ -69,7 +70,7 @@ public class SiteController {
 
 
     @PostMapping
-    public ResponseEntity<ApiResponse> createSite(@RequestBody CreateSiteRequest siteRequest) {
+    public ResponseEntity<ApiResponse> createSite(@RequestBody @Valid CreateSiteRequest siteRequest) {
         Site site = siteService.createSite(siteRequest);
 
         OrderRequest orderRequest = new OrderRequest();
@@ -86,7 +87,7 @@ public class SiteController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponse> updateSite(@PathVariable Long id, @RequestBody SiteRequest siteRequest) {
+    public ResponseEntity<ApiResponse> updateSite(@PathVariable Long id, @RequestBody @Valid SiteRequest siteRequest) {
         Site updatedSite = siteService.saveSite(id, siteRequest);
         return ResponseEntity.ok()
                 .body(new ApiResponse(true, "Site updated successfully"));
