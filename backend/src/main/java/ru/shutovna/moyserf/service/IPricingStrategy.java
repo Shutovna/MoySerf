@@ -1,6 +1,9 @@
 package ru.shutovna.moyserf.service;
 
 public interface IPricingStrategy {
-    long getSiteViewPrice();
+    int getUserSiteViewPrice();
+    int getSystemSiteViewPrice();
+    int getSiteViewPrice();
     int getSiteViewPeriod();
+    int getSiteViewTime();
 }

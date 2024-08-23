@@ -1,7 +1,6 @@
-import Cart from "../../container/pages/ecommerce/cart/cart.jsx";
 import React, {Fragment, useEffect, useState} from "react";
 import Pageheader from "../../components/pageheader/pageheader.jsx";
-import {Button, Card, Col, Form, OverlayTrigger, Row, Tooltip} from "react-bootstrap";
+import {Button, Card, Col, Row} from "react-bootstrap";
 import {Link} from "react-router-dom";
 import useSiteService from "../services/SiteService.jsx";
 
@@ -69,6 +68,15 @@ const SerfListPage = () => {
                                                         <span
                                                             className="badge bg-success-transparent ms-3">
                                                             <a href={site.url}>{site.url}</a>
+                                                        </span>
+                                                    </div>
+                                                    <div className="mb-1">
+
+                                                        <span
+                                                            className="badge bg-success-transparent ms-3">
+                                                            <Link target={"_blank"}
+                                                                  to={`/view-site?siteId=${site.id}&url=${site.url}`}>
+                                                                Просмотреть</Link>
                                                         </span>
                                                     </div>
                                                 </div>

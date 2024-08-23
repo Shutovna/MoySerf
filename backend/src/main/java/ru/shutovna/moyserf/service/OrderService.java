@@ -11,7 +11,6 @@ import ru.shutovna.moyserf.error.UnauthorizedException;
 import ru.shutovna.moyserf.model.*;
 import ru.shutovna.moyserf.payload.request.OrderRequest;
 import ru.shutovna.moyserf.repository.OrderRepository;
-import ru.shutovna.moyserf.repository.SiteRepository;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -58,13 +57,13 @@ public class OrderService implements IOrderService {
         Site site = siteService.getSiteById(orderRequest.getSiteId()).orElseThrow(
                 () -> new SiteNotFoundException("Site not found"));
 
-        if(!site.getOwner().equals(currentUser)) {
+        if (!site.getOwner().equals(currentUser)) {
             throw new UnauthorizedException("You do not own this site");
         }
 
         int viewCount = orderRequest.getViewCount();
         Locale currentLocale = LocaleContextHolder.getLocale();
-        String description = messages.getMessage("message.transaction.description",
+        String description = messages.getMessage("message.transaction.order.description",
                 new Object[]{viewCount, site.getName()},
                 currentLocale);
         long sum = viewCount * pricingStrategyFactory.getPricingStrategy().getSiteViewPrice();
@@ -72,7 +71,7 @@ public class OrderService implements IOrderService {
         Transaction transaction = transactionService.createTransaction(TransactionType.ORDER_SITE_VIEW, description, sum);
 
         Wallet wallet = currentUser.getWallet();
-        if(sum <= wallet.getSum()) {
+        if (sum <= wallet.getSum()) {
             wallet.setSum(wallet.getSum() - sum);
         } else {
             throw new NotEnoughMoneyException("Not enough money");
@@ -87,5 +86,10 @@ public class OrderService implements IOrderService {
         order.setTransaction(transaction);
 
         return orderRepository.save(order);
+    }
+
+    @Override
+    public Order getFirstOpenedOrderForSite(Site site) {
+        return orderRepository.findAllBySiteAndClosedIsFalseOrderByCreatedAtAsc(site).stream().findFirst().orElseThrow();
     }
 }

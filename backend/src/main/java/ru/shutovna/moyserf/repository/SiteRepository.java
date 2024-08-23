@@ -10,7 +10,8 @@ import java.util.List;
 public interface SiteRepository extends JpaRepository<Site, Long> {
     List<Site> findByOwnerOrderByCreatedAtDesc(User owner);
 
-    @Query("SELECT s FROM Site s WHERE (SELECT COUNT(o) FROM Order o WHERE o.site.id = s.id and o.closed = false ) > 0")
+    @Query("SELECT s FROM Site s WHERE (SELECT COUNT(o) FROM Order o WHERE o.site.id = s.id and o.closed = false ) > 0" +
+            " ORDER BY s.createdAt desc")
     List<Site> findOpenedForView();
 
 

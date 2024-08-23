@@ -1,0 +1,32 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+}
+
+iframe {
+    display: block;
+    width: 100%;
+    height: 1000px;
+    border: none;
+}
+.view-box {
+
+
+}
+.view-box__status-panel {
+    background-color: deepskyblue;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.view-box__status-text {
+    font-size: 25px;
+    font-weight: bold;
+}
+
+.view-box__view-frame {
+
+}

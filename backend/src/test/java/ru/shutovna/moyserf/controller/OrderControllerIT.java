@@ -4,7 +4,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.*;
@@ -15,8 +14,6 @@ import ru.shutovna.moyserf.payload.request.OrderRequest;
 import ru.shutovna.moyserf.payload.response.ApiResponse;
 import ru.shutovna.moyserf.repository.OrderRepository;
 import ru.shutovna.moyserf.repository.SiteRepository;
-import ru.shutovna.moyserf.repository.UserRepository;
-import ru.shutovna.moyserf.repository.WalletRepository;
 import ru.shutovna.moyserf.service.IPricingStrategyFactory;
 
 import java.util.List;
@@ -86,7 +83,7 @@ public class OrderControllerIT extends BaseTestWithUser{
 
         Transaction transaction = order.getTransaction();
         Locale currentLocale = LocaleContextHolder.getLocale();
-        String description = messages.getMessage("message.transaction.description",
+        String description = messages.getMessage("message.transaction.order.description",
                 new Object[]{2000, site.getName()},
                 currentLocale);
 

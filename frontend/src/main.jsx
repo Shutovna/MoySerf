@@ -42,6 +42,7 @@ import SiteList from "./_moyserf/pages/SiteList.jsx";
 import SiteAdd from "./_moyserf/pages/SiteAdd.jsx";
 import {ToastContainer} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
+import SiteViewPage from "./_moyserf/pages/SiteViewPage.jsx";
 
 ReactDOM.createRoot(document.getElementById('root')).render(
     <React.Fragment>
@@ -62,6 +63,8 @@ ReactDOM.createRoot(document.getElementById('root')).render(
             <AuthProvider>
                 <React.Suspense fallback={<Loader/>}>
                     <Routes>
+                        <Route path={`/view-site`} element={<SiteViewPage/>}/>
+
                         <Route path="/" element={<Landinglayout/>}>
                             <Route index element={<LandingPage/>}/>
                         </Route>

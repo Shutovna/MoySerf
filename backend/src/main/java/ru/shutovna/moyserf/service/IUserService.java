@@ -18,6 +18,8 @@ public interface IUserService {
 
     User getCurrentUser();
 
+    User getSystemUser();
+
     Optional<User> findByEmail(String email);
 
     User save(User user);

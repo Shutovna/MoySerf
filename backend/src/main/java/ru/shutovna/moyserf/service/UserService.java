@@ -4,8 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import ru.shutovna.moyserf.error.SystemUserNotFoundError;
 import ru.shutovna.moyserf.error.UserNotFoundException;
 import ru.shutovna.moyserf.model.PasswordResetToken;
 import ru.shutovna.moyserf.model.User;
@@ -15,6 +15,7 @@ import ru.shutovna.moyserf.repository.PasswordResetTokenRepository;
 import ru.shutovna.moyserf.repository.UserRepository;
 import ru.shutovna.moyserf.repository.VerificationTokenRepository;
 import ru.shutovna.moyserf.repository.WalletRepository;
+import ru.shutovna.moyserf.util.Constants;
 
 import javax.transaction.Transactional;
 import java.util.*;
@@ -91,6 +92,12 @@ public class UserService implements IUserService {
         }
 
         throw new UserNotFoundException("User not found");
+    }
+
+    @Override
+    public User getSystemUser() {
+        return userRepository.findById(Constants.SYSTEM_USER_ID).orElseThrow(() ->
+                new SystemUserNotFoundError("System user not found"));
     }
 
     @Override
