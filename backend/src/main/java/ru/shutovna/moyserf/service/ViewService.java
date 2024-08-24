@@ -58,31 +58,53 @@ public class ViewService implements IViewService {
     @Override
     public View create(long siteId) {
         User currentUser = userService.getCurrentUser();
+        User systemUser = userService.getSystemUser();
         Site site = siteService.getSiteById(siteId).orElseThrow(() -> new SiteNotFoundException("Site not found"));
 
         Locale currentLocale = LocaleContextHolder.getLocale();
-        String description = messages.getMessage("message.transaction.view.description",
-                new Object[]{site.getUrl()},
-                currentLocale);
+
 
         int userSiteViewPrice = pricingStrategyFactory.getPricingStrategy().getUserSiteViewPrice();
         int systemSiteViewPrice = pricingStrategyFactory.getPricingStrategy().getSystemSiteViewPrice();
+        int userEarnedReferalSiteViewPrice = pricingStrategyFactory.getPricingStrategy().getUserEarnedReferalSiteViewPrice();
 
+        int systemEarned = systemSiteViewPrice;
+        int userEarned = userSiteViewPrice;
+        User invitor = currentUser.getInvitor();
+        if(invitor != null) {
+            String referalDescription= messages.getMessage("message.transaction.referal.description",
+                    new Object[]{userEarnedReferalSiteViewPrice, site.getUrl()},
+                    currentLocale);
+            transactionService.createTransaction(
+                    TransactionType.USER_EARNED_REFERAL_SITE_VIEW, referalDescription,
+                    userEarnedReferalSiteViewPrice, invitor);
+            systemEarned = systemSiteViewPrice - userEarnedReferalSiteViewPrice;
+
+            Wallet wallet = invitor.getWallet();
+            wallet.setSum(wallet.getSum() + userEarnedReferalSiteViewPrice);
+            walletService.saveWallet(wallet);
+        }
+
+        String description = messages.getMessage("message.transaction.view.description",
+                new Object[]{userEarned, site.getUrl()},
+                currentLocale);
         Transaction userTransaction = transactionService.createTransaction(
                 TransactionType.USER_EARNED_SITE_VIEW, description,
-                userSiteViewPrice);
+                userEarned, currentUser);
 
+        description = messages.getMessage("message.transaction.view.system.description",
+                new Object[]{systemEarned, site.getUrl()},
+                currentLocale);
         transactionService.createTransaction(
                 TransactionType.SYSTEM_EARENED_SITE_VIEW, description,
-                systemSiteViewPrice);
+                systemEarned, systemUser);
 
         Wallet wallet = currentUser.getWallet();
-        wallet.setSum(wallet.getSum() + userSiteViewPrice);
+        wallet.setSum(wallet.getSum() + userEarned);
         walletService.saveWallet(wallet);
 
-        User systemUser = userService.getSystemUser();
         Wallet systemUserWallet = systemUser.getWallet();
-        systemUserWallet.setSum(systemUserWallet.getSum() + systemSiteViewPrice);
+        systemUserWallet.setSum(systemUserWallet.getSum() + systemEarned);
         walletService.saveWallet(systemUserWallet);
 
         View view = new View();
@@ -133,6 +155,7 @@ public class ViewService implements IViewService {
                     message = "View token expired for " + key;
                     log.warn(message);
                 } else {
+                    //Создаем просмотр
                     create(key.getSiteId());
                     map.remove(key);
                     success = true;

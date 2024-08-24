@@ -68,7 +68,8 @@ public class OrderService implements IOrderService {
                 currentLocale);
         long sum = viewCount * pricingStrategyFactory.getPricingStrategy().getSiteViewPrice();
 
-        Transaction transaction = transactionService.createTransaction(TransactionType.ORDER_SITE_VIEW, description, sum);
+        Transaction transaction = transactionService.createTransaction(TransactionType.ORDER_SITE_VIEW,
+                description, sum, currentUser);
 
         Wallet wallet = currentUser.getWallet();
         if (sum <= wallet.getSum()) {

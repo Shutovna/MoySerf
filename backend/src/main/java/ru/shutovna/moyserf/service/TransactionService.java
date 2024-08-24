@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.shutovna.moyserf.model.Transaction;
 import ru.shutovna.moyserf.model.TransactionType;
+import ru.shutovna.moyserf.model.User;
 import ru.shutovna.moyserf.repository.TransactionRepository;
 
 import java.time.LocalDateTime;
@@ -31,14 +32,14 @@ public class TransactionService implements ITransactionService {
     }
 
     @Override
-    public Transaction createTransaction(TransactionType type, String description, long sum) {
+    public Transaction createTransaction(TransactionType type, String description, long sum, User user) {
         Transaction transaction = new Transaction();
         transaction.setType(type);
         transaction.setDescription(description);
         transaction.setSum(sum);
         transaction.setCompleted(false);
         transaction.setCreatedAt(LocalDateTime.now());
-        transaction.setUser(userService.getCurrentUser());
+        transaction.setUser(user);
         return transactionRepository.save(transaction);
     }
 }

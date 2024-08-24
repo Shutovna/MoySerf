@@ -12,6 +12,11 @@ public class SimplePricingStrategy implements IPricingStrategy{
     }
 
     @Override
+    public int getUserEarnedReferalSiteViewPrice() {
+        return 1;
+    }
+
+    @Override
     public int getSiteViewPrice() {
         return 24;
     }

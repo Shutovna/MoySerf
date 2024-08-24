@@ -93,13 +93,13 @@ const MainDashboardPage = () => {
                         абонентская плата в 2.5 рубля.
                     </div>
                 </Col>
-                <Col className={"align-items-center align-content-center"}>
+                <Col className={"align-items-start"}>
                     <section className="section section-bg" id="statistics">
                         <div className="container text-center position-relative">
                             <div className="row g-2 justify-content-center">
                                 <Col xl={12}>
                                     <div className="row justify-content-evenly">
-                                        <Col xl={3} lg={3} md={3} sm={6} className="col-12 mb-3">
+                                        <Col xl={3} lg={6} md={6} sm={6} className="mb-3">
                                             <div className="p-3 text-center rounded-2 bg-white border">
                                             <span
                                                 className="mb-3 avatar avatar-lg avatar-rounded bg-primary-transparent">
@@ -111,7 +111,7 @@ const MainDashboardPage = () => {
                                                 </p>
                                             </div>
                                         </Col>
-                                        <Col xl={2} lg={6} md={6} sm={6} className=" col-12 mb-3">
+                                        <Col xl={3} lg={6} md={6} sm={6} className=" mb-3">
                                             <div className="p-3 text-center rounded-2 bg-white border">
                                             <span
                                                 className="mb-3 avatar avatar-lg avatar-rounded bg-primary-transparent">
@@ -123,7 +123,7 @@ const MainDashboardPage = () => {
                                                 </p>
                                             </div>
                                         </Col>
-                                        <Col xl={2} lg={6} md={6} sm={6} className=" col-12 mb-3">
+                                        <Col xl={3} lg={6} md={6} sm={6} className="mb-3">
                                             <div className="p-3 text-center rounded-2 bg-white border">
                                             <span
                                                 className="mb-3 avatar avatar-lg avatar-rounded bg-primary-transparent">
@@ -135,7 +135,7 @@ const MainDashboardPage = () => {
                                                 </p>
                                             </div>
                                         </Col>
-                                        <Col xl={2} lg={6} md={6} sm={6} className="col-12 mb-3">
+                                        <Col xl={3} lg={6} md={6} sm={6} className="mb-3">
                                             <div className="p-3 text-center rounded-2 bg-white border">
                                             <span
                                                 className="mb-3 avatar avatar-lg avatar-rounded bg-primary-transparent">
@@ -147,7 +147,7 @@ const MainDashboardPage = () => {
                                                 </p>
                                             </div>
                                         </Col>
-                                        <Col xl={2} lg={6} md={6} sm={6} className="col-12 mb-3">
+                                        <Col xl={3} lg={6} md={6} sm={6} className="mb-3">
                                             <div className="p-3 text-center rounded-2 bg-white border">
                                             <span
                                                 className="mb-3 avatar avatar-lg avatar-rounded bg-primary-transparent">
