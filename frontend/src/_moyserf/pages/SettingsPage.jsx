@@ -30,6 +30,7 @@ const SettingsPage = () => {
                 .then((res) => {
                     console.log(res);
                     setFile(newFile);
+                    setChanged(!changed);
                 })
                 .catch(err => {
                     console.log(err);

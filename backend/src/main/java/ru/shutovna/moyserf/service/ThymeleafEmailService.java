@@ -72,6 +72,7 @@ public class ThymeleafEmailService implements EmailService {
             helper.setText(emailContent, true);
 
             javaMailSender.send(message);
+            log.info("Reset password email sent to {}", recipientEmail);
         } catch (Exception e) {
             log.warn("Failed to send reset password email to " + recipientEmail);
             throw new EmailSendException(e);

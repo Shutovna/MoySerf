@@ -184,7 +184,7 @@ const MainDashboardPage = () => {
                             </a>
                         </div>
                         <input id={"referalLink"}
-                               value={referalLink} type="text" className="form-control" placeholder="Реферальная ссылка"
+                               value={referalLink} readOnly={true} type="text" className="form-control" placeholder="Реферальная ссылка"
                                aria-label="Реферальная ссылка"
                                aria-describedby="basic-addon1"/>
                     </div>

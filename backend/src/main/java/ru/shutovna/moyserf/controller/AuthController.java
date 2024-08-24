@@ -193,7 +193,6 @@ public class AuthController {
             final String url = getAppUrl(request, appProperties.getFrontend().getPort())
                     + String.format("/auth/savePassword?email=%s&token=%s", user.getEmail(), token);
             emailService.sendResetPasswordEmail(emailRequest.getEmail(), url);
-            log.info("Reset password email sent to {}", user.getEmail());
         }
         return new GenericResponse(messages.getMessage("message.resetPasswordEmail", null, request.getLocale()));
     }

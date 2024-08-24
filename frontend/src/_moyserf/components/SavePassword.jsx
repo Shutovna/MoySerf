@@ -11,6 +11,7 @@ import {ThemeChanger} from "../../redux/action.jsx";
 import Oauth2Links from "./OAuth2Links.jsx";
 import Spinner from "./Spinner.jsx";
 import RememberMe, {checkRememberAndSave, restoreRemembered} from "./RememberMe.jsx";
+import {toast} from "react-toastify";
 
 const savePasswordSchema = Yup.object().shape({
     password: Yup.string()
@@ -65,7 +66,8 @@ const SavePassword = () => {
     const onSaved = () => {
         console.log("You're successfully saved new password. Please login to continue!");
         const path = `${import.meta.env.BASE_URL}auth/signin`;
-        navigate(path, {state: {message: 'Пароль успешно изменен'}});
+        toast.success("Пароль успешно изменен")
+        navigate(path);
 
     }
 
