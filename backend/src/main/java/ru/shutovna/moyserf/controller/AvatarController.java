@@ -1,6 +1,8 @@
 package ru.shutovna.moyserf.controller;
 
 import lombok.extern.slf4j.Slf4j;
+import net.coobird.thumbnailator.Thumbnails;
+import net.coobird.thumbnailator.name.Rename;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.UrlResource;
@@ -19,13 +21,14 @@ import ru.shutovna.moyserf.service.IUserService;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -41,42 +44,27 @@ public class AvatarController {
     @PostMapping("/upload")
     public ResponseEntity<ApiResponse> uploadAvatar(@RequestParam("file") MultipartFile file) {
         try {
-            // Чтение изображения с диска
-            BufferedImage originalImage = ImageIO.read(file.getInputStream());
-            BufferedImage scaledImage = resizeImageUsingGetScaledInstance(originalImage, 100, 100);
+            avatarService.uploadAvatar(file.getOriginalFilename(), file.getInputStream());
 
-            // Сохранение сжатого изображения на диск
-            File tempFile = File.createTempFile(UUID.randomUUID().toString(), ".jpg");
-            ImageIO.write(scaledImage, "jpg", tempFile);
+            User currentUser = userService.getCurrentUser();
+            final URI location = ServletUriComponentsBuilder
+                    .fromCurrentContextPath().path("/api/avatars/{0}")
+                    .buildAndExpand(currentUser.getId()).toUri();
 
-            try (FileInputStream fileInputStream = new FileInputStream(tempFile)) {
-                String fileName = avatarService.uploadAvatar(file.getOriginalFilename(), fileInputStream);
-                User currentUser = userService.getCurrentUser();
-                URI location = ServletUriComponentsBuilder
-                        .fromCurrentContextPath().path("/api/avatars/{0}")
-                        .buildAndExpand(currentUser.getId()).toUri();
-
-                log.debug("File {} uploaded to {}", fileName, location);
-                return ResponseEntity.created(location)
-                        .body(new ApiResponse(true, "Avatar uploaded successfully"));
-            } finally {
-                tempFile.delete();
-            }
+            return ResponseEntity.created(location)
+                    .body(new ApiResponse(true, "Avatar uploaded successfully"));
 
         } catch (IOException e) {
+            log.error(e.getMessage(), e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
-    public static BufferedImage resizeImageUsingGetScaledInstance(BufferedImage originalImage, int targetWidth, int targetHeight) {
-        Image scaledImage = originalImage.getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH);
-        BufferedImage resizedImage = new BufferedImage(targetWidth, targetHeight, originalImage.getType());
-
-        Graphics2D g2d = resizedImage.createGraphics();
-        g2d.drawImage(scaledImage, 0, 0, null);
-        g2d.dispose();
-
-        return resizedImage;
+    @PutMapping("/rotate")
+    public ResponseEntity<ApiResponse> rotateAvatar(@RequestParam("angle") double angle) {
+        avatarService.rotateAvatar(angle);
+        return ResponseEntity.ok()
+                .body(new ApiResponse(true, "Avatar rotated successfully"));
     }
 
     @GetMapping(value = "/{userId}", produces = MediaType.IMAGE_JPEG_VALUE)
@@ -84,6 +72,9 @@ public class AvatarController {
         try {
             UrlResource resource = avatarService.getAvatar(userId);
 
+            if (resource == null) {
+                return ResponseEntity.noContent().build();
+            }
             if (resource.exists() && resource.isReadable()) {
                 byte[] imageBytes = IOUtils.toByteArray(resource.getInputStream());
                 return ResponseEntity
@@ -95,8 +86,10 @@ public class AvatarController {
                 return ResponseEntity.notFound().build();
             }
         } catch (MalformedURLException e) {
+            log.error(e.getMessage(), e);
             return ResponseEntity.badRequest().build();
         } catch (IOException e) {
+            log.error(e.getMessage(), e);
             throw new RuntimeException(e);
         }
     }

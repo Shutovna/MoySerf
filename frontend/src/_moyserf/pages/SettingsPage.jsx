@@ -3,26 +3,33 @@ import useAvatarService from "../services/AvatarService.jsx"
 import {useAuth} from "../auth/AuthProvider.jsx";
 import ImageViewer from "../components/ImageViewer.jsx";
 
+
 const SettingsPage = () => {
-    const [file, setFile] = useState(null);
-    const [avatarUrl, setAvatarUrl] = useState("");
+    const [file, setFile] = useState();
+    const [changed, setChanged] = useState(true);
     const {user} = useAuth();
-    const {uploadAvatar} = useAvatarService();
+    const {uploadAvatar, rotateAvatar} = useAvatarService();
 
     const fileInputRef = useRef(null);
     const handleButtonClick = () => {
         fileInputRef.current.click();
     };
 
+    function rotate(e, angle) {
+        e.preventDefault();
+        rotateAvatar(angle)
+            .then(() => setChanged(!changed))
+
+    }
+
     const handleFileChange = (event) => {
-        const file = event.target.files[0];
-        if (file) {
-            console.log('Selected file:', file.name);
-            setFile(file);
-            uploadAvatar(file)
+        const newFile = event.target.files[0];
+        if (newFile) {
+            console.log('Selected file:', newFile.name);
+            uploadAvatar(newFile)
                 .then((res) => {
                     console.log(res);
-                    setAvatarUrl(res);
+                    setFile(newFile);
                 })
                 .catch(err => {
                     console.log(err);
@@ -32,9 +39,17 @@ const SettingsPage = () => {
 
     return (
         <div>
-            <ImageViewer userId={user.id}/>
-            <input ref={fileInputRef} type="file" onChange={handleFileChange} className={"visually-hidden"}/>
-            <button onClick={handleButtonClick}>Загрузить аватар</button>
+            <div className={"d-inline-block justify-content-center align-items-center text-center"}>
+                <ImageViewer changed={changed} userId={user.id} file={file} className={""}/>
+                <div className={"d-flex justify-content-between"}>
+                    <a onClick={(e) => rotate(e, 90)} href={"#"}><i className='fs-4 bx bx-left-arrow-circle'></i></a>
+                    <a onClick={(e) => rotate(e,-90)} href={"#"}><i className='fs-4 bx bx-right-arrow-circle'></i></a>
+                </div>
+                <div>
+                    <input ref={fileInputRef} type="file" onChange={handleFileChange} className={"visually-hidden"}/>
+                    <button onClick={handleButtonClick}>Загрузить аватар</button>
+                </div>
+            </div>
         </div>
     );
 }

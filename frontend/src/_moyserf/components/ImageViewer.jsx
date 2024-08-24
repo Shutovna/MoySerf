@@ -2,45 +2,50 @@ import React, {useState, useEffect} from 'react';
 import {useApi} from '../hooks/api.hooks.jsx';
 import * as logger from "react-dom/test-utils";
 import {BACKEND_BASE_URL} from "../constants/index.js";
+import emptyAvatar from "../../assets/images/_moyserf/empty_avatar.avif";
 
-function ImageViewer({userId}) {
+function ImageViewer({userId, changed}) {
     const [imageSrc, setImageSrc] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const {blobRequest} = useApi();
 
-    useEffect(() => {
-        const fetchImage = async () => {
-            try {
-                const response = await blobRequest(`${BACKEND_BASE_URL}/api/avatars/${userId}`);
-                if (!response.ok) {
-                    throw new Error(`Image not found: ${response.statusText}`);
-                }
+    const fetchImage = async () => {
+        try {
+            const response = await blobRequest(`${BACKEND_BASE_URL}/api/avatars/${userId}`);
+            if (response.ok) {
                 const blob = await response.blob();
-                // Принудительно устанавливаем Content-Type
-                const newBlob = new Blob([blob], { type: 'image/jpeg' });
-
-                const imageUrl = URL.createObjectURL(newBlob);
+                const imageUrl = blob.size === 0 ? "" : URL.createObjectURL(blob);
                 setImageSrc(imageUrl);
-            } catch (err) {
-                setError(err.message);
-            } finally {
-                setLoading(false);
+            } else {
+                throw new Error(`Image not found: ${response.statusText}`);
             }
-        };
 
+        } catch (err) {
+            setError(err.message);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
         fetchImage()
             .then(res => console.log(res))
             .catch(res => console.log(res))
-
     }, []);
 
-    if (loading) return <p>Loading image...</p>;
-    if (error) return <p>Error loading image: {error}</p>;
+    useEffect(() => {
+        fetchImage();
+    }, [changed]);
+
+    if (loading) return <p>Загрузка изображения...</p>;
+    if (error) return <p>Ошибка загрузки изображения: {error}</p>;
 
     return (
         <div>
-            {imageSrc && <img className={"avatar"} src={imageSrc} alt={userId}/>}
+            {imageSrc ? <img className={"avatar"} src={imageSrc} alt={userId}/>
+                : <img className={"avatar"} src={emptyAvatar} alt={userId}/>
+            }
         </div>
     );
 }
