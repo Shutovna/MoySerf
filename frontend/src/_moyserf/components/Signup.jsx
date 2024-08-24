@@ -11,6 +11,7 @@ import {useFormik} from "formik";
 import Spinner from "./Spinner.jsx";
 import Oauth2Links from "./OAuth2Links.jsx";
 import {toast} from "react-toastify";
+import log from "eslint-plugin-react/lib/util/log.js";
 
 const signupSchema = Yup.object().shape({
     name: Yup.string()
@@ -30,9 +31,11 @@ const signupSchema = Yup.object().shape({
 
 
 const Signup = () => {
-    const {signup} = useAuthService();
+    const {signup, getUserInfoById} = useAuthService();
     const navigate = useNavigate();
     const [showSpinner, setShowSpinner] = useState(false);
+    const [invitorId, setInvitorId] = useState(new URLSearchParams(location.search).get("invitorId"));
+    const [invitorName, setInvitorName] = useState("");
 
     const {handleChange, handleSubmit, values, errors, isSubmitting, setSubmitting} = useFormik({
         validationSchema: signupSchema,
@@ -44,6 +47,7 @@ const Signup = () => {
         },
         validateOnChange: true,
         onSubmit: (values) => {
+            values = {...values, invitorId: invitorId};
             signup(values).then(() => {
                 setSubmitting(false)
                 onRegistered();
@@ -70,6 +74,23 @@ const Signup = () => {
 
     const [passwordshow1, setpasswordshow1] = useState(false);
     const [passwordshow2, setpasswordshow2] = useState(false);
+
+    function getInvitor() {
+
+    }
+
+    useEffect(() => {
+        const fetch = async () => {
+            await getUserInfoById(invitorId).then((info) => {
+                setInvitorName(info.name);
+
+            }).catch(err => console.log(err));
+        }
+
+        fetch();
+
+    }, []);
+
     return (
         <Fragment>
             <div className="container-lg">
@@ -87,6 +108,8 @@ const Signup = () => {
                                 <p className="h5 fw-semibold mb-2 text-center">Регистрация</p>
                                 <p className="mb-4 text-muted op-7 fw-normal text-center">Добро пожаловать!
                                     Присоединяйтесь к нам и создайте бесплатный аккаунт</p>
+                                <p className="mb-4 op-7 fw-normal text-center">Вас пригласил: {invitorName}</p>
+
                                 <div className="row gy-3">
                                     <Col xl={12}>
                                         <Form.Label htmlFor="signup-name"
@@ -166,7 +189,7 @@ const Signup = () => {
                                         to={`${import.meta.env.BASE_URL}signin`}
                                         className="text-primary">Войти</Link></p>
                                 </div>
-                                <Oauth2Links setShowSpinner={(val)=>setShowSpinner(val)}/>
+                                <Oauth2Links setShowSpinner={(val) => setShowSpinner(val)}/>
                             </Card.Body>
                         </Card>
                     </Col>

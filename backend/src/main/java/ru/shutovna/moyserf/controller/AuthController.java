@@ -90,7 +90,7 @@ public class AuthController {
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         String token = tokenProvider.createToken(authentication);
-        return ResponseEntity.ok(new AuthResponse(token, user.getId(), user.getEmail(), user.getName(), user.getImageUrl()));
+        return ResponseEntity.ok(new AuthResponse(token, user));
     }
 
     @PostMapping("/signup")
@@ -106,6 +106,14 @@ public class AuthController {
         user.setPassword(signUpRequest.getPassword());
         user.setProvider(AuthProvider.local);
         user.setCreatedAt(LocalDateTime.now());
+
+        Long invitorId = signUpRequest.getInvitorId();
+        if (invitorId != null) {
+            User invitor = userService.findUserByID(invitorId).orElseThrow(() ->
+                    new UserNotFoundException("Invitor user " + invitorId + " not found"));
+            user.setInvitor(invitor);
+            log.info("Referal for " + invitorId + " registered");
+        }
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
@@ -163,14 +171,22 @@ public class AuthController {
 
         User user = userService.findUserByEmail(email).orElseThrow();
 
-        UserInfoResponse response = new UserInfoResponse(user.getId(), email, user.getName(), user.getImageUrl());
+        UserInfoResponse response = UserInfoResponse.from(user);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/userInfo/{userId:\\d+}")
+    public ResponseEntity<UserInfoResponse> getUserInfoById(@PathVariable Long userId) {
+        log.debug("getUserInfoById for {}}", userId);
+        User user = userService.findUserByID(userId).orElseThrow(() -> new UserNotFoundException("Not found"));
+        UserInfoResponse response = UserInfoResponse.from(user);
         return ResponseEntity.ok(response);
     }
 
 
     @PostMapping("/resetPassword")
     public GenericResponse resetPassword(final HttpServletRequest request, @Valid @RequestBody EmailRequest emailRequest) {
-        final User user = userService.findUserByEmail(emailRequest.getEmail()).orElseThrow(() -> new UserNotFoundException());
+        final User user = userService.findUserByEmail(emailRequest.getEmail()).orElseThrow(UserNotFoundException::new);
         if (user != null) {
             final String token = UUID.randomUUID().toString();
             authSService.createPasswordResetTokenForUser(user, token);

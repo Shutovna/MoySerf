@@ -16,6 +16,8 @@ public interface IUserService {
 
     List<User> getMostActiveUsers();
 
+    List<User> getMyReferals();
+
     User getCurrentUser();
 
     User getSystemUser();

@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.shutovna.moyserf.error.ResourceNotFoundException;
 import ru.shutovna.moyserf.model.User;
 import ru.shutovna.moyserf.payload.response.MostActiveUserResponse;
+import ru.shutovna.moyserf.payload.response.MyReferalResponse;
 import ru.shutovna.moyserf.security.CurrentUser;
 import ru.shutovna.moyserf.security.UserPrincipal;
 import ru.shutovna.moyserf.service.IUserService;
@@ -34,5 +35,17 @@ public class UserController {
     public ResponseEntity<List<MostActiveUserResponse>> getMostActiveUsers() {
         List<User> mostActiveUsers = userService.getMostActiveUsers();
         return ResponseEntity.ok(mostActiveUsers.stream().map(MostActiveUserResponse::fromUser).toList());
+    }
+
+    @GetMapping("/getMyReferals")
+    public ResponseEntity<List<MyReferalResponse>> getMyReferals() {
+        List<User> referals = userService.getMyReferals();
+        List<MyReferalResponse> response = referals.stream().map(user -> {
+            long earnedSum = user.getViews().stream().mapToLong(
+                            view -> view.getTransaction().getSum())
+                    .sum();
+            return new MyReferalResponse(user.getId(), user.getName(), earnedSum);
+        }).toList();
+        return ResponseEntity.ok(response);
     }
 }

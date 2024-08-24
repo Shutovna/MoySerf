@@ -6,6 +6,7 @@ import {Alert, Button, Card, Col, Form, Row} from 'react-bootstrap';
 import Spinner from "../components/Spinner.jsx";
 import useSiteService from "../services/SiteService.jsx";
 import {useNavigate} from "react-router-dom";
+import {toast} from "react-toastify";
 
 
 const createSiteSchema = Yup.object().shape({
@@ -48,6 +49,7 @@ const SiteAdd = () => {
             console.log("onSubmit: " + values);
             createSite(values).then((result) => {
                 setSubmitting(false);
+                toast.success('Сайт добавлен');
                 navigate("/cab/adv");
             })
                 .catch((res) => {

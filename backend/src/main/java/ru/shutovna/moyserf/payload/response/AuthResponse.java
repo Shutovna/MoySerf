@@ -3,6 +3,7 @@ package ru.shutovna.moyserf.payload.response;
 import com.nimbusds.openid.connect.sdk.claims.UserInfo;
 import lombok.Getter;
 import lombok.Setter;
+import ru.shutovna.moyserf.model.User;
 
 @Getter
 @Setter
@@ -12,8 +13,8 @@ public class AuthResponse {
 
     private UserInfoResponse userInfo;
 
-    public AuthResponse(String accessToken, long userId, String email, String name, String imageUrl) {
+    public AuthResponse(String accessToken, User user) {
         this.accessToken = accessToken;
-        this.userInfo = new UserInfoResponse(userId, email, name, imageUrl);
+        this.userInfo = UserInfoResponse.from(user);
     }
 }

@@ -83,6 +83,12 @@ public class UserService implements IUserService {
     }
 
     @Override
+    public List<User> getMyReferals() {
+        User currentUser = getCurrentUser();
+        return userRepository.findAllByInvitorEquals(currentUser);
+    }
+
+    @Override
     public User getCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();

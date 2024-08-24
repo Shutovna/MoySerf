@@ -16,6 +16,11 @@ const useAuthService = () => {
         return await apiRequest(`${API_BASE_URL}/auth/userInfo`);
     }
 
+    const getUserInfoById = async (userId) => {
+        console.log("getUserInfoById for  " + userId);
+        return await apiRequest(`${API_BASE_URL}/auth/userInfo/${userId}`);
+    }
+
     const resetPassword = async (email) => {
         console.log("resetPassword for  " + email);
         let body = JSON.stringify({email: email});
@@ -37,7 +42,7 @@ const useAuthService = () => {
     }
 
 
-    return {loading, error, signup, confirmResult, getUserInfo, resetPassword, savePassword, clearError};
+    return {loading, error, signup, confirmResult, getUserInfo, resetPassword, savePassword, getUserInfoById, clearError};
 
 }
 

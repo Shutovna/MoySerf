@@ -12,15 +12,28 @@ import {Link} from 'react-router-dom';
 import face9 from "../../assets/images/faces/9.jpg";
 import {useAuth} from "../auth/AuthProvider.jsx";
 import MostActiveUsers from "../components/MostActiveUsers.jsx";
-
+import useReferalService from "../services/ReferalService.jsx";
 
 const MainDashboardPage = () => {
     const {user} = useAuth();
+    const {getReferalLink} = useReferalService();
+    const [referalLink, setReferalLink] = useState(getReferalLink());
+
     // for User search function
     const [Data, setData] = useState(Dealsstatistics);
 
     const userdata = [];
     const clipboardJS = null;
+
+    const copyToClipboard = (text) => {
+        navigator.clipboard.writeText(text)
+            .then(() => {
+                console.log('Текст скопирован в буфер обмена!' + text);
+            })
+            .catch(err => {
+                console.error('Не удалось скопировать текст: ', err);
+            });
+    };
 
     useEffect(() => {
         const script = document.createElement('script');
@@ -155,10 +168,24 @@ const MainDashboardPage = () => {
                     <h5>Ваша реферальная ссылка</h5>
                     <div className="input-group mb-3">
                         <div className="input-group-prepend">
-                            <span className="input-group-text" id="basic-addon1">@</span>
+                            <a href="#" onClick={(e) => {
+                                e.preventDefault();
+                                copyToClipboard(document.getElementById("referalLink").value);
+                            }}>
+                            <span className="input-group-text" id="basic-addon1"><svg xmlns="http://www.w3.org/2000/svg"
+                                                                                      width="20" height="20"
+                                                                                      fill="currentColor"
+                                                                                      className="bi bi-copy"
+                                                                                      viewBox="0 0 16 16">
+                            <path fill-rule="evenodd"
+                                  d="M4 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-1h1v1a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h1v1z"/>
+                            </svg>
+                            </span>
+                            </a>
                         </div>
-                        <input type="text" className="form-control" placeholder="Имя пользователя"
-                               aria-label="Имя пользователя"
+                        <input id={"referalLink"}
+                               value={referalLink} type="text" className="form-control" placeholder="Реферальная ссылка"
+                               aria-label="Реферальная ссылка"
                                aria-describedby="basic-addon1"/>
                     </div>
                 </Row>
@@ -661,7 +688,8 @@ const MainDashboardPage = () => {
                 </Col>
             </Row>
         </Fragment>
-    );
+    )
+        ;
 };
 
 export default MainDashboardPage;
