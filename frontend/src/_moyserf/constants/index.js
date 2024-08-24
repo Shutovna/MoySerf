@@ -1,6 +1,7 @@
 export const BACKEND_BASE_URL = 'http://localhost:8080';
 export const API_BASE_URL = `${BACKEND_BASE_URL}/api`;
 export const ACCESS_TOKEN = 'accessToken';
+export const USER_INFO  = 'userInfo';
 
 export const OAUTH2_REDIRECT_URI = 'http://localhost:3000/oauth2/redirect'
 

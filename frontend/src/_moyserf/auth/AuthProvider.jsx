@@ -1,12 +1,12 @@
-import {useContext, createContext, useState} from "react";
+import {useContext, createContext, useState, useEffect} from "react";
 import {useNavigate} from "react-router-dom";
-import {ACCESS_TOKEN, API_BASE_URL} from "../constants/index.js"
+import {ACCESS_TOKEN, API_BASE_URL, USER_INFO} from "../constants/index.js"
 import {useHttp} from "../hooks/http.hooks.jsx";
 
 const AuthContext = createContext(null);
 
 const AuthProvider = ({children}) => {
-    const [user, setUser] = useState(null);
+    const [user, setUser] = useState(JSON.parse(localStorage.getItem(USER_INFO)) || "");
     const [token, setToken] = useState(localStorage.getItem(ACCESS_TOKEN) || "");
     const navigate = useNavigate();
     const {loading, request, error, clearError} = useHttp();
@@ -25,6 +25,14 @@ const AuthProvider = ({children}) => {
         }
     };
 
+    useEffect(() => {
+        localStorage.setItem(USER_INFO, JSON.stringify(user));
+    }, [user]);
+
+    useEffect(() => {
+        localStorage.setItem(ACCESS_TOKEN, token);
+    }, [token]);
+
     const logOut = () => {
         clearAuthInfo();
         navigate("/auth/signin");
@@ -32,7 +40,6 @@ const AuthProvider = ({children}) => {
 
     const setAuthInfo = (token, user) => {
         setToken(token);
-        localStorage.setItem(ACCESS_TOKEN, token);
         setUser(user);
     }
 
@@ -40,6 +47,7 @@ const AuthProvider = ({children}) => {
         setUser(null);
         setToken("");
         localStorage.removeItem(ACCESS_TOKEN);
+        localStorage.removeItem(USER_INFO);
     }
 
     return (
