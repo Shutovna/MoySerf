@@ -78,6 +78,13 @@
 			<artifactId>commons-lang3</artifactId>
 		</dependency>
 
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>2.16.1</version>
+		</dependency>
+
+
 		<!-- 2fa -->
 		<dependency>
 			<groupId>org.jboss.aerogear</groupId>
@@ -199,6 +206,11 @@
 			<version>0.11.2</version>
 			<scope>runtime</scope>
 		</dependency>
+		<dependency>
+			<groupId>com.twelvemonkeys.imageio</groupId>
+			<artifactId>imageio-jpeg</artifactId>
+			<version>3.11.0</version>
+		</dependency>
 
 
 	</dependencies>
@@ -226,6 +238,8 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
+
+
 
 			<!--<plugin>
 				<groupId>org.apache.maven.plugins</groupId>

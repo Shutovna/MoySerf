@@ -11,8 +11,6 @@ const SiteViewPage = () => {
     const [statusText, setStatusText] = useState('');
     let intervalRef = useRef();
 
-    const navigate = useNavigate();
-
     const [searchParams] = useSearchParams();
     const siteId = searchParams.get('siteId');
     const url = searchParams.get('url');

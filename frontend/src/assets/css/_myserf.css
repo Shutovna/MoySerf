@@ -30,3 +30,14 @@ iframe {
 .view-box__view-frame {
 
 }
+
+.avatar {
+    vertical-align: middle;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+}
+.avatar {
+    width: 100px;
+    height: 100px;
+}

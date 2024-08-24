@@ -58,7 +58,7 @@ const MainDashboardPage = () => {
             <div className="d-md-flex d-block align-items-center justify-content-between my-4 page-header-breadcrumb">
                 <div>
                     <h1 className={"fw-semibold mb-3"}>Сайт для заработка на простых действиях в Интернете</h1>
-                    <h2 className="fw-semibold fs-30 mb-0">Приветствуем Вас, {user?.name}!</h2>
+                    <h2 className="fw-semibold fs-30 mb-0">Приветствуем Вас, {user.name}!</h2>
                 </div>
             </div>
 

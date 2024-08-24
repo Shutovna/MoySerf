@@ -43,6 +43,7 @@ import SiteAdd from "./_moyserf/pages/SiteAdd.jsx";
 import {ToastContainer} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import SiteViewPage from "./_moyserf/pages/SiteViewPage.jsx";
+import SettingsPage from "./_moyserf/pages/SettingsPage.jsx";
 
 ReactDOM.createRoot(document.getElementById('root')).render(
     <React.Fragment>
@@ -103,7 +104,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
                                 <Route path={`/cab/blog/create`} element={<Createblog/>}/>
                                 <Route path={`/cab/chat`} element={<DevelopingPage/>}/>
                                 <Route path={`/cab/faq`} element={<FAQPage/>}/>
-                                <Route path={`/cab/settings`} element={<DevelopingPage/>}/>
+                                <Route path={`/cab/settings`} element={<SettingsPage/>}/>
                                 <Route path={`/cab/quit`} element={<Logout/>}/>
                             </Route>
 

@@ -12,8 +12,8 @@ public class AuthResponse {
 
     private UserInfoResponse userInfo;
 
-    public AuthResponse(String accessToken, String email, String name, String imageUrl) {
+    public AuthResponse(String accessToken, long userId, String email, String name, String imageUrl) {
         this.accessToken = accessToken;
-        this.userInfo = new UserInfoResponse(email, name, imageUrl);
+        this.userInfo = new UserInfoResponse(userId, email, name, imageUrl);
     }
 }

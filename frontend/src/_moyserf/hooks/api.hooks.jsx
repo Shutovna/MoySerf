@@ -14,5 +14,24 @@ export const useApi = () => {
         return await request(url, method, body, headers);
     }
 
-    return {apiRequest};
+    const blobRequest = async (url, method = 'GET', body = null) => {
+        const token = localStorage.getItem(ACCESS_TOKEN);
+        const headers = {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type' : 'image/jpeg'// Добавляем токен в заголовок Authorization
+        };
+
+        return await request(url, method, body, headers, false);
+    }
+
+    const multipartRequest = async (url, method = 'POST', body = null) => {
+        const token = localStorage.getItem(ACCESS_TOKEN);
+        const headers = {
+            'Authorization': `Bearer ${token}` // Добавляем токен в заголовок Authorization
+        };
+
+        return await request(url, method, body, headers, false);
+    }
+
+    return {apiRequest, blobRequest, multipartRequest};
 }
