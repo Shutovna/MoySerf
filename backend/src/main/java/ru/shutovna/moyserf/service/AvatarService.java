@@ -50,7 +50,6 @@ public class AvatarService implements IAvatarService {
             File outputFile = target.toFile();
             ImageIO.write(resized, "jpg", outputFile);
 
-
             User user = userService.findUserByID(currentUser.getId()).orElseThrow(
                     () -> new UserNotFoundException("User " + currentUser.getId() + " not found"));
             user.setImageUrl(target.toString());

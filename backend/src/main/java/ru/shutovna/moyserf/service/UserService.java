@@ -91,7 +91,8 @@ public class UserService implements IUserService {
     @Override
     public User getCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        Object principal = authentication.getPrincipal();
+        UserDetails userDetails = (UserDetails) principal;
         Optional<User> userByEmail = findUserByEmail(userDetails.getUsername());
         if (userByEmail.isPresent()) {
             return userByEmail.get();

@@ -133,7 +133,7 @@ public class AuthController {
     @GetMapping("/registrationConfirm")
     public ResponseEntity<?> registrationConfirm(@RequestParam String token) {
         IAuthSService.VerificationTokenStatus status = authSService.validateVerificationToken(token);
-        log.debug("registrationConfirm token: " + token + " result: " + status);
+        log.debug("registrationConfirm token: {} result: {}", token, status);
         if (status == IAuthSService.VerificationTokenStatus.TOKEN_VALID) {
             authSService.verifyUserRegistration(token);
         }
@@ -223,7 +223,7 @@ public class AuthController {
 
     @PostMapping("/updatePassword")
     public GenericResponse changeUserPassword(final Locale locale, @Valid @RequestBody PasswordRequest passwordRequest) {
-        final User user = userService.findUserByEmail(((UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getEmail()).orElseThrow();
+        final User user = userService.getCurrentUser();
         if (!authSService.checkIfValidOldPassword(user, passwordRequest.getOldPassword())) {
             throw new InvalidOldPasswordException();
         }

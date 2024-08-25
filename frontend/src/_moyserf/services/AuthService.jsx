@@ -35,6 +35,13 @@ const useAuthService = () => {
         return await request(`${API_BASE_URL}/auth/savePassword`, "POST", body);
     }
 
+    const updatePassword = async (oldPassword, newPassword) => {
+        console.log("updatePassword");
+        let body = JSON.stringify({oldPassword, newPassword});
+        console.log("body: " + body)
+        return await request(`${API_BASE_URL}/auth/updatePassword`, "POST", body);
+    }
+
 
     const confirmResult = async (token) => {
         console.log("confirmResult " + token);
@@ -42,7 +49,7 @@ const useAuthService = () => {
     }
 
 
-    return {loading, error, signup, confirmResult, getUserInfo, resetPassword, savePassword, getUserInfoById, clearError};
+    return {loading, error, signup, confirmResult, getUserInfo, resetPassword, savePassword, updatePassword, getUserInfoById, clearError};
 
 }
 

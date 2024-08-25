@@ -24,14 +24,12 @@ const savePasswordSchema = Yup.object().shape({
 });
 
 const SavePassword = () => {
-    const {loading, error, savePassword, clearError} = useAuthService();
+    const {savePassword} = useAuthService();
     const location = useLocation();
     const navigate = useNavigate();
 
     const [token, setToken] = useState(new URLSearchParams(location.search).get("token"));
     const [email, setEmail] = useState(new URLSearchParams(location.search).get("email"));
-    const [message, setMessage] = useState("");
-    const [outh2Error, setOauth2Error] = useState(location.state?.error);
     const [showSpinner, setShowSpinner] = useState(false);
 
 
@@ -45,8 +43,6 @@ const SavePassword = () => {
         validateOnChange: true,
         onSubmit: (values) => {
             console.log("Saving password");
-            setMessage(null);
-            setOauth2Error(null);
 
             checkRememberAndSave(values.rememberMe, email, values.password);
 
@@ -92,9 +88,7 @@ const SavePassword = () => {
                         <Card className="custom-card">
                             <Card.Body className="p-5">
                                 <p className="h5 fw-semibold mb-2 text-center">Сброс пароля</p>
-                                {error && <Alert variant="danger">{error}</Alert>}
-                                {outh2Error && <Alert variant="danger">{outh2Error}</Alert>}
-                                {message && <Alert variant="success">{message}</Alert>}
+
                                 <Row className="row gy-3">
                                     <Col xl={12}>
                                         <Form.Label htmlFor="reset-password" className="form-label text-default">Новый

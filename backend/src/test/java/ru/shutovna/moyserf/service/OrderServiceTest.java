@@ -75,7 +75,7 @@ class OrderServiceTest {
         when(pricingStrategyFactory.getPricingStrategy()).thenReturn(new SimplePricingStrategy());
 
         Transaction mockTransaction = new Transaction();
-        when(transactionService.createTransaction(any(), anyString(), anyLong())).thenReturn(mockTransaction);
+        when(transactionService.createTransaction(any(), anyString(), anyLong(), mockUser)).thenReturn(mockTransaction);
         when(orderRepository.save(any(Order.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
         // Act
@@ -129,7 +129,7 @@ class OrderServiceTest {
         when(pricingStrategyFactory.getPricingStrategy()).thenReturn(new SimplePricingStrategy());
 
         Transaction mockTransaction = new Transaction();
-        when(transactionService.createTransaction(any(), anyString(), anyLong())).thenReturn(mockTransaction);
+        when(transactionService.createTransaction(any(), anyString(), anyLong(), mockUser)).thenReturn(mockTransaction);
         when(orderRepository.save(any(Order.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
         // Act

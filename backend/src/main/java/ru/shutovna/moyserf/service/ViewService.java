@@ -23,7 +23,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @Transactional
 @Slf4j
 public class ViewService implements IViewService {
-    private static final ConcurrentHashMap<UserSiteKey, List<ViewToken>> map = new ConcurrentHashMap<>();
+    protected static final ConcurrentHashMap<UserSiteKey, List<ViewToken>> map = new ConcurrentHashMap<>();
 
     private final IUserService userService;
 
@@ -71,8 +71,8 @@ public class ViewService implements IViewService {
         int systemEarned = systemSiteViewPrice;
         int userEarned = userSiteViewPrice;
         User invitor = currentUser.getInvitor();
-        if(invitor != null) {
-            String referalDescription= messages.getMessage("message.transaction.referal.description",
+        if (invitor != null) {
+            String referalDescription = messages.getMessage("message.transaction.referal.description",
                     new Object[]{userEarnedReferalSiteViewPrice, site.getUrl()},
                     currentLocale);
             transactionService.createTransaction(
@@ -168,10 +168,11 @@ public class ViewService implements IViewService {
             }
         }
 
+        map.remove(key);
         if (!success) {
-            map.remove(key);
             throw new InvalidViewException(message);
         }
+
     }
 
     private int getSiteViewTime() {
