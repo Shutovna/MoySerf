@@ -44,10 +44,11 @@ public class AvatarService implements IAvatarService {
             Path target = Paths.get(directory + "/" + fileName);
             BufferedImage originalImage = ImageIO.read(inputStream);
 
-            //BufferedImage outputImage = resize(originalImage, 100, 100);
+            BufferedImage cropped = crop(originalImage);
+            BufferedImage resized = resize(cropped, 500, 500);
 
             File outputFile = target.toFile();
-            ImageIO.write(originalImage, "jpg", outputFile);
+            ImageIO.write(resized, "jpg", outputFile);
 
 
             User user = userService.findUserByID(currentUser.getId()).orElseThrow(
@@ -60,6 +61,23 @@ public class AvatarService implements IAvatarService {
             log.error(e.getMessage(), e);
             throw new ImageException(e);
         }
+    }
+
+    public BufferedImage crop(BufferedImage originalImage) {
+        // Загрузите изображение
+
+        // Определите размеры исходного изображения
+        int width = originalImage.getWidth();
+        int height = originalImage.getHeight();
+
+        // Вычислите длину стороны квадрата и смещение для обрезки
+        int newSide = Math.min(width, height);
+        int xOffset = (width - newSide) / 2;
+        int yOffset = (height - newSide) / 2;
+
+        // Обрежьте изображение до квадратной формы
+
+       return originalImage.getSubimage(xOffset, yOffset, newSide, newSide);
     }
 
     @Override
