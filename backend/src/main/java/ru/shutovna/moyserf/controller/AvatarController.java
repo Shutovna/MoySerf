@@ -68,7 +68,7 @@ public class AvatarController {
     }
 
     @GetMapping(value = "/{userId}", produces = MediaType.IMAGE_JPEG_VALUE)
-    public ResponseEntity<byte[]> getAvatar(@PathVariable long userId) {
+    public ResponseEntity<byte[]> getAvatar(@PathVariable int userId) {
         try {
             UrlResource resource = avatarService.getAvatar(userId);
 

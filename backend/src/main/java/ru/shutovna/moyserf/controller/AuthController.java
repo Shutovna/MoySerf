@@ -107,7 +107,7 @@ public class AuthController {
         user.setProvider(AuthProvider.local);
         user.setCreatedAt(LocalDateTime.now());
 
-        Long invitorId = signUpRequest.getInvitorId();
+        Integer invitorId = signUpRequest.getInvitorId();
         if (invitorId != null) {
             User invitor = userService.findUserByID(invitorId).orElseThrow(() ->
                     new UserNotFoundException("Invitor user " + invitorId + " not found"));
@@ -176,7 +176,7 @@ public class AuthController {
     }
 
     @GetMapping("/userInfo/{userId:\\d+}")
-    public ResponseEntity<UserInfoResponse> getUserInfoById(@PathVariable Long userId) {
+    public ResponseEntity<UserInfoResponse> getUserInfoById(@PathVariable Integer userId) {
         log.debug("getUserInfoById for {}}", userId);
         User user = userService.findUserByID(userId).orElseThrow(() -> new UserNotFoundException("Not found"));
         UserInfoResponse response = UserInfoResponse.from(user);

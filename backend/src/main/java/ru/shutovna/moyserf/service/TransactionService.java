@@ -8,6 +8,7 @@ import ru.shutovna.moyserf.model.TransactionType;
 import ru.shutovna.moyserf.model.User;
 import ru.shutovna.moyserf.repository.TransactionRepository;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -27,7 +28,7 @@ public class TransactionService implements ITransactionService {
     }
 
     @Override
-    public Optional<Transaction> getTransaction(long id) {
+    public Optional<Transaction> getTransaction(int id) {
         return transactionRepository.findById(id);
     }
 

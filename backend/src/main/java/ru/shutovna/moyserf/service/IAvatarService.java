@@ -14,5 +14,5 @@ public interface IAvatarService {
 
     void rotateAvatar(double angle);
 
-    UrlResource getAvatar(long userId) throws MalformedURLException;
+    UrlResource getAvatar(int userId) throws MalformedURLException;
 }

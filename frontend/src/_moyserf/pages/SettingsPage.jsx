@@ -11,7 +11,7 @@ import useAuthService from "../services/AuthService.jsx";
 import {toast} from "react-toastify";
 
 const updatePasswordSchema = Yup.object().shape({
-    password: Yup.string()
+    oldPassword: Yup.string()
         .min(7, "Пароль должен быть минимум 7 символов")
         .required("Введите пароль"),
     newPassword: Yup.string()
@@ -43,7 +43,7 @@ const SettingsPage = () => {
     const {handleChange, handleSubmit, values, errors, isSubmitting, setSubmitting} = useFormik({
         validationSchema: updatePasswordSchema,
         initialValues: {
-            password: "",
+            oldPassword: "",
             newPassword: "",
             confirmPassword: ""
         },
@@ -104,7 +104,6 @@ const SettingsPage = () => {
                             <Card.Title>
                                 Изменение аватара
                             </Card.Title>
-
                         </Card.Header>
                         <Card.Body>
                             <div>
@@ -144,18 +143,18 @@ const SettingsPage = () => {
                                         <Form.Label htmlFor="reset-password" className="form-label text-default">Текущий
                                             пароль</Form.Label>
                                         <InputGroup>
-                                            <Form.Control value={values.password}
+                                            <Form.Control value={values.oldPassword}
                                                           onChange={handleChange}
-                                                          name="password" type={(passwordshow1) ? 'text' : "password"}
+                                                          name="oldPassword" type={(passwordshow1) ? 'text' : "password"}
                                                           className="form-control-lg" id="reset-password"
-                                                          placeholder="пароль"/>
+                                                          placeholder="старый пароль"/>
                                             <Button variant='light' className="btn"
                                                     onClick={() => setpasswordshow1(!passwordshow1)}>
                                                 <i className={`${passwordshow1 ? 'ri-eye-line' : 'ri-eye-off-line'} align-middle`}
                                                    aria-hidden="true"></i>
                                             </Button>
                                         </InputGroup>
-                                        <div className="text-danger mt-2">{errors.password}</div>
+                                        <div className="text-danger mt-2">{errors.oldPassword}</div>
                                     </Col>
                                     <Col xl={12}>
                                         <Form.Label htmlFor="reset-newpassword" className="form-label text-default">Новый
@@ -192,7 +191,6 @@ const SettingsPage = () => {
                                             </Button>
                                         </InputGroup>
                                         <div className="text-danger mt-2">{errors.confirmPassword}</div>
-
                                     </Col>
                                     <Col xl={12} className=" d-grid mt-2">
                                         <Button onClick={handleSubmit} className="btn btn-lg btn-primary"

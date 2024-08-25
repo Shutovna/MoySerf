@@ -66,7 +66,7 @@ class OrderServiceTest {
         mockSite.setOwner(mockUser);
 
         OrderRequest orderRequest = new OrderRequest();
-        orderRequest.setSiteId(1L);
+        orderRequest.setSiteId(1);
         orderRequest.setViewCount(100);
 
         when(userService.getCurrentUser()).thenReturn(mockUser);
@@ -95,7 +95,7 @@ class OrderServiceTest {
     void testCreateOrder_SiteNotFound() {
         // Arrange
         OrderRequest orderRequest = new OrderRequest();
-        orderRequest.setSiteId(1L);
+        orderRequest.setSiteId(1);
 
         when(siteService.getSiteById(orderRequest.getSiteId())).thenReturn(Optional.empty());
 
@@ -120,7 +120,7 @@ class OrderServiceTest {
         mockSite.setOwner(siteOwner);
 
         OrderRequest orderRequest = new OrderRequest();
-        orderRequest.setSiteId(1L);
+        orderRequest.setSiteId(1);
         orderRequest.setViewCount(100);
 
         when(userService.getCurrentUser()).thenReturn(mockUser);
@@ -141,14 +141,14 @@ class OrderServiceTest {
         // Arrange
         User mockUser = new User();
         Wallet mockWallet = new Wallet();
-        mockWallet.setSum(100 * 100L); // Недостаточно денег
+        mockWallet.setSum(100 * 100); // Недостаточно денег
         mockUser.setWallet(mockWallet);
 
         Site mockSite = new Site();
         mockSite.setOwner(mockUser);
 
         OrderRequest orderRequest = new OrderRequest();
-        orderRequest.setSiteId(1L);
+        orderRequest.setSiteId(1);
         orderRequest.setViewCount(417);
 
         when(userService.getCurrentUser()).thenReturn(mockUser);

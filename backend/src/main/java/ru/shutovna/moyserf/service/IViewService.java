@@ -4,9 +4,9 @@ import ru.shutovna.moyserf.controller.ViewToken;
 import ru.shutovna.moyserf.model.View;
 
 public interface IViewService {
-    View create(long siteId);
+    View create(int siteId);
 
-    ViewToken startView(long siteId);
+    ViewToken startView(int siteId);
 
-    void endView(long siteId, String token);
+    void endView(int siteId, String token);
 }

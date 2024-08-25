@@ -17,7 +17,7 @@ import java.util.Objects;
 public class Site {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    private Integer id;
 
     private String name;
 

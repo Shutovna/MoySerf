@@ -12,6 +12,7 @@ import ru.shutovna.moyserf.model.*;
 import ru.shutovna.moyserf.payload.request.OrderRequest;
 import ru.shutovna.moyserf.repository.OrderRepository;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Locale;
@@ -47,7 +48,7 @@ public class OrderService implements IOrderService {
     }
 
     @Override
-    public Optional<Order> getOrder(long orderId) {
+    public Optional<Order> getOrder(int orderId) {
         return orderRepository.findById(orderId);
     }
 

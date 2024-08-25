@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class MyReferalResponse {
-    private long userId;
+    private Integer userId;
     private String name;
     private long earned;
 }

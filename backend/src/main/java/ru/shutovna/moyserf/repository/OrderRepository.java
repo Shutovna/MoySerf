@@ -6,6 +6,6 @@ import ru.shutovna.moyserf.model.Site;
 
 import java.util.List;
 
-public interface OrderRepository extends JpaRepository<Order, Long> {
+public interface OrderRepository extends JpaRepository<Order, Integer> {
     List<Order> findAllBySiteAndClosedIsFalseOrderByCreatedAtAsc(Site site);
 }

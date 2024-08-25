@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface IWalletService {
-    Optional<Wallet> getWallet(long id);
+    Optional<Wallet> getWallet(int id);
 
     List<Wallet> getWallets();
 

@@ -22,6 +22,6 @@ public class SignUpRequest {
     @NotBlank
     private String password;
 
-    private Long invitorId;
+    private Integer invitorId;
 
 }

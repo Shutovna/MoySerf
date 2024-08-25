@@ -15,6 +15,7 @@ import ru.shutovna.moyserf.security.CurrentUser;
 import ru.shutovna.moyserf.security.UserPrincipal;
 import ru.shutovna.moyserf.service.IUserService;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
@@ -33,8 +34,8 @@ public class UserController {
 
     @GetMapping("/mostActive")
     public ResponseEntity<List<MostActiveUserResponse>> getMostActiveUsers() {
-        List<User> mostActiveUsers = userService.getMostActiveUsers();
-        return ResponseEntity.ok(mostActiveUsers.stream().map(MostActiveUserResponse::fromUser).toList());
+        List<MostActiveUserResponse> mostActiveUsers = userService.getMostActiveUsers();
+        return ResponseEntity.ok().body(mostActiveUsers);
     }
 
     @GetMapping("/getMyReferals")
@@ -47,5 +48,10 @@ public class UserController {
             return new MyReferalResponse(user.getId(), user.getName(), earnedSum);
         }).toList();
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/advertisersCount")
+    public int getAdvertisersCount()  {
+        return userService.getAdvertisersCount();
     }
 }

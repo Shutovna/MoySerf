@@ -15,9 +15,9 @@ public interface ISiteService {
 
     List<Site> getMySites();
 
-    Optional<Site> getSiteById(long id);
+    Optional<Site> getSiteById(int id);
 
     Site createSite(CreateSiteRequest siteRequest);
 
-    Site saveSite(long id, SiteRequest siteRequest);
+    Site saveSite(int id, SiteRequest siteRequest);
 }

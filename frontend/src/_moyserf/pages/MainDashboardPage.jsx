@@ -13,6 +13,7 @@ import face9 from "../../assets/images/faces/9.jpg";
 import {useAuth} from "../auth/AuthProvider.jsx";
 import MostActiveUsers from "../components/MostActiveUsers.jsx";
 import useReferalService from "../services/ReferalService.jsx";
+import AdvertisersCount from "../components/AdvertisersCount.jsx";
 
 const MainDashboardPage = () => {
     const {user} = useAuth();
@@ -100,16 +101,7 @@ const MainDashboardPage = () => {
                                 <Col xl={12}>
                                     <div className="row justify-content-evenly">
                                         <Col xl={3} lg={6} md={6} sm={6} className="mb-3">
-                                            <div className="p-3 text-center rounded-2 bg-white border">
-                                            <span
-                                                className="mb-3 avatar avatar-lg avatar-rounded bg-primary-transparent">
-                                                <i className="fs-24 bx bx-spreadsheet"></i>
-                                            </span>
-                                                <h3 className="fw-semibold mb-0 text-dark">500+</h3>
-                                                <p className="mb-1 fs-14 op-7 text-muted ">
-                                                    Рекламодателей
-                                                </p>
-                                            </div>
+                                            <AdvertisersCount/>
                                         </Col>
                                         <Col xl={3} lg={6} md={6} sm={6} className=" mb-3">
                                             <div className="p-3 text-center rounded-2 bg-white border">

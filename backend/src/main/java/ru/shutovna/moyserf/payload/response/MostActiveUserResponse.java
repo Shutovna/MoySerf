@@ -4,14 +4,16 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import ru.shutovna.moyserf.model.User;
 
+import java.math.BigDecimal;
+
 @Data
 @AllArgsConstructor
 public class MostActiveUserResponse {
     private String name;
     private String email;
-    private long earned;
+    private BigDecimal earned;
 
-    public static MostActiveUserResponse fromUser(User user) {
-        return new MostActiveUserResponse(user.getName(), user.getEmail(), 0);
+    public static MostActiveUserResponse fromUser(User user, BigDecimal earned) {
+        return new MostActiveUserResponse(user.getName(), user.getEmail(), earned);
     }
 }

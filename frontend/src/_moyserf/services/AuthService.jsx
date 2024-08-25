@@ -39,7 +39,7 @@ const useAuthService = () => {
         console.log("updatePassword");
         let body = JSON.stringify({oldPassword, newPassword});
         console.log("body: " + body)
-        return await request(`${API_BASE_URL}/auth/updatePassword`, "POST", body);
+        return await apiRequest(`${API_BASE_URL}/auth/updatePassword`, "POST", body);
     }
 
 

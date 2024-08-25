@@ -9,7 +9,7 @@ import ru.shutovna.moyserf.model.VerificationToken;
 import java.util.Date;
 import java.util.stream.Stream;
 
-public interface VerificationTokenRepository extends JpaRepository<VerificationToken, Long> {
+public interface VerificationTokenRepository extends JpaRepository<VerificationToken, Integer> {
 
     VerificationToken findByToken(String token);
 

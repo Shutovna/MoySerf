@@ -87,7 +87,7 @@ public class SiteController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponse> updateSite(@PathVariable Long id, @RequestBody @Valid SiteRequest siteRequest) {
+    public ResponseEntity<ApiResponse> updateSite(@PathVariable Integer id, @RequestBody @Valid SiteRequest siteRequest) {
         Site updatedSite = siteService.saveSite(id, siteRequest);
         return ResponseEntity.ok()
                 .body(new ApiResponse(true, "Site updated successfully"));

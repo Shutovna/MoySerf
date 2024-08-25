@@ -41,7 +41,7 @@ public class SiteService implements ISiteService {
         List<Site> allSites = getSitesOpenedForView();
         User currentUser = userService.getCurrentUser();
         List<View> views = currentUser.getViews();
-        HashMap<Long, List<View>> siteViews = views.stream().collect(Collectors.groupingBy(
+        HashMap<Integer, List<View>> siteViews = views.stream().collect(Collectors.groupingBy(
                 o -> o.getOrder().getSite().getId(),
                 HashMap::new,
                 Collectors.toList()
@@ -85,7 +85,7 @@ public class SiteService implements ISiteService {
     }
 
     @Override
-    public Site saveSite(long id, SiteRequest siteRequest) {
+    public Site saveSite(int id, SiteRequest siteRequest) {
         Site site = getSiteById(id).orElseThrow(() -> new SiteNotFoundException("Site " + id + " not found"));
 
         User currentUser = userService.getCurrentUser();
@@ -102,7 +102,7 @@ public class SiteService implements ISiteService {
     }
 
     @Override
-    public Optional<Site> getSiteById(long id) {
+    public Optional<Site> getSiteById(int id) {
         return siteRepository.findById(id);
     }
 }

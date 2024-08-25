@@ -5,7 +5,7 @@ import ru.shutovna.moyserf.model.Site;
 
 @Data
 public class MySiteResponse {
-    private long id;
+    private Integer id;
     private String name;
     private String description;
     private String url;

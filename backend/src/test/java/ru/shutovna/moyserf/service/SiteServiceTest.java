@@ -49,7 +49,7 @@ public class SiteServiceTest {
         testUser.setName("testuser");
 
         testSite = new Site();
-        testSite.setId(1L);
+        testSite.setId(1);
         testSite.setName("Test Site");
         testSite.setOwner(testUser);
     }
@@ -105,11 +105,11 @@ public class SiteServiceTest {
         siteRequest.setUrl("http://updatedsite.com");
         siteRequest.setAvatarUrl("http://updatedsite.com/avatar.png");
 
-        when(siteRepository.findById(1L)).thenReturn(Optional.of(testSite));
+        when(siteRepository.findById(1)).thenReturn(Optional.of(testSite));
         when(userService.getCurrentUser()).thenReturn(testUser);
         when(siteRepository.save(any(Site.class))).thenReturn(testSite);
 
-        Site savedSite = siteService.saveSite(1L, siteRequest);
+        Site savedSite = siteService.saveSite(1, siteRequest);
 
         assertNotNull(savedSite);
         assertEquals("Updated Site", savedSite.getName());
@@ -124,10 +124,10 @@ public class SiteServiceTest {
         User anotherUser = new User();
         anotherUser.setName("anotheruser");
 
-        when(siteRepository.findById(1L)).thenReturn(Optional.of(testSite));
+        when(siteRepository.findById(1)).thenReturn(Optional.of(testSite));
         when(userService.getCurrentUser()).thenReturn(anotherUser);
 
-        assertThrows(UnauthorizedException.class, () -> siteService.saveSite(1L, siteRequest));
+        assertThrows(UnauthorizedException.class, () -> siteService.saveSite(1, siteRequest));
     }
 
     @Test
@@ -135,8 +135,8 @@ public class SiteServiceTest {
         SiteRequest siteRequest = new SiteRequest();
         siteRequest.setName("Updated Site");
 
-        when(siteRepository.findById(1L)).thenReturn(Optional.empty());
+        when(siteRepository.findById(1)).thenReturn(Optional.empty());
 
-        assertThrows(SiteNotFoundException.class, () -> siteService.saveSite(1L, siteRequest));
+        assertThrows(SiteNotFoundException.class, () -> siteService.saveSite(1, siteRequest));
     }
 }

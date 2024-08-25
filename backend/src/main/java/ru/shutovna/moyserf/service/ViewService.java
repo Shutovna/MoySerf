@@ -56,7 +56,7 @@ public class ViewService implements IViewService {
     }
 
     @Override
-    public View create(long siteId) {
+    public View create(int siteId) {
         User currentUser = userService.getCurrentUser();
         User systemUser = userService.getSystemUser();
         Site site = siteService.getSiteById(siteId).orElseThrow(() -> new SiteNotFoundException("Site not found"));
@@ -117,7 +117,7 @@ public class ViewService implements IViewService {
     }
 
     @Override
-    public ViewToken startView(long siteId) {
+    public ViewToken startView(int siteId) {
         User currentUser = userService.getCurrentUser();
 
         UserSiteKey key = new UserSiteKey(currentUser.getId(), siteId);
@@ -133,7 +133,7 @@ public class ViewService implements IViewService {
     }
 
     @Override
-    public void endView(long siteId, String token) {
+    public void endView(int siteId, String token) {
         User currentUser = userService.getCurrentUser();
         UserSiteKey key = new UserSiteKey(currentUser.getId(), siteId);
         List<ViewToken> viewTokens = map.get(key);

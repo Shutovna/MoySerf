@@ -6,6 +6,6 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class UserSiteKey {
-    private long userId;
-    private long siteId;
+    private int userId;
+    private int siteId;
 }

@@ -1,8 +1,9 @@
 package ru.shutovna.moyserf.payload.request;
-
+import lombok.Data;
 
 import javax.validation.constraints.Size;
 
+@Data
 public class PasswordRequest {
 
     private String oldPassword;
@@ -11,29 +12,4 @@ public class PasswordRequest {
 
     @Size(min = 7)
     private String newPassword;
-
-    public String getOldPassword() {
-        return oldPassword;
-    }
-
-    public void setOldPassword(String oldPassword) {
-        this.oldPassword = oldPassword;
-    }
-
-    public String getNewPassword() {
-        return newPassword;
-    }
-
-    public void setNewPassword(String newPassword) {
-        this.newPassword = newPassword;
-    }
-
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
-    }
-
 }

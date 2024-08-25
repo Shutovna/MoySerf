@@ -152,7 +152,7 @@ public class AvatarService implements IAvatarService {
     }
 
     @Override
-    public UrlResource getAvatar(long userId) throws MalformedURLException {
+    public UrlResource getAvatar(int userId) throws MalformedURLException {
         User user = userService.findUserByID(userId).orElseThrow(
                 () -> new UserNotFoundException("User " + userId + " not found"));
         if (user.getImageUrl() == null) {

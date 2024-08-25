@@ -16,7 +16,7 @@ public class WalletService implements IWalletService {
     private WalletRepository walletRepository;
 
     @Override
-    public Optional<Wallet> getWallet(long id) {
+    public Optional<Wallet> getWallet(int id) {
         return walletRepository.findById(id);
     }
 

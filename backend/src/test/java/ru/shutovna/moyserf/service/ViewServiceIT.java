@@ -69,19 +69,19 @@ class ViewServiceIT {
     @BeforeEach
     void setUp() {
         testUser = new User();
-        testUser.setId(1L);
+        testUser.setId(1);
         testUser.setWallet(new Wallet());
 
         systemUser = new User();
-        systemUser.setId(2L);
+        systemUser.setId(2);
         systemUser.setWallet(new Wallet());
 
         testSite = new Site();
-        testSite.setId(1L);
+        testSite.setId(1);
         testSite.setUrl("http://example.com");
 
         testWallet = new Wallet();
-        testWallet.setId(1L);
+        testWallet.setId(1);
         testWallet.setSum(100);
 
         pricingStrategy = mock(IPricingStrategy.class);
@@ -89,7 +89,7 @@ class ViewServiceIT {
 
         when(userService.getCurrentUser()).thenReturn(testUser);
         when(userService.getSystemUser()).thenReturn(systemUser);
-        when(siteService.getSiteById(1L)).thenReturn(Optional.of(testSite));
+        when(siteService.getSiteById(1)).thenReturn(Optional.of(testSite));
         when(viewRepository.save(any(View.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
         when(pricingStrategy.getUserSiteViewPrice()).thenReturn(10);
@@ -100,7 +100,7 @@ class ViewServiceIT {
 
     @Test
     void testCreateViewSuccess() {
-        View view = viewService.create(1L);
+        View view = viewService.create(1);
 
         assertNotNull(view);
         assertEquals(testUser, view.getUser());
@@ -113,7 +113,7 @@ class ViewServiceIT {
 
     @Test
     void testStartView() {
-        ViewToken viewToken = viewService.startView(1L);
+        ViewToken viewToken = viewService.startView(1);
 
         assertNotNull(viewToken);
         assertNotNull(viewToken.getToken());
@@ -126,27 +126,27 @@ class ViewServiceIT {
 
     @Test
     void testEndViewSuccess() {
-        ViewToken viewToken = viewService.startView(1L);
-        assertDoesNotThrow(() -> viewService.endView(1L, viewToken.getToken()));
+        ViewToken viewToken = viewService.startView(1);
+        assertDoesNotThrow(() -> viewService.endView(1, viewToken.getToken()));
     }
 
     @Test
     void testEndViewFailureInvalidToken() {
-        ViewToken viewToken = viewService.startView(1L);
+        ViewToken viewToken = viewService.startView(1);
         String invalidToken = UUID.randomUUID().toString();
-        assertThrows(InvalidViewException.class, () -> viewService.endView(1L, invalidToken));
+        assertThrows(InvalidViewException.class, () -> viewService.endView(1, invalidToken));
     }
 
     @Test
     void testEndViewFailureExpiredToken() {
         when(pricingStrategy.getSiteViewTime()).thenReturn(-1); // Simulate an expired token
-        ViewToken viewToken = viewService.startView(1L);
-        assertThrows(InvalidViewException.class, () -> viewService.endView(1L, viewToken.getToken()));
+        ViewToken viewToken = viewService.startView(1);
+        assertThrows(InvalidViewException.class, () -> viewService.endView(1, viewToken.getToken()));
     }
 
     @Test
     void testCreateViewSiteNotFound() {
-        when(siteService.getSiteById(anyLong())).thenReturn(Optional.empty());
-        assertThrows(SiteNotFoundException.class, () -> viewService.create(999L));
+        when(siteService.getSiteById(anyInt())).thenReturn(Optional.empty());
+        assertThrows(SiteNotFoundException.class, () -> viewService.create(999));
     }
 }

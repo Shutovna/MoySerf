@@ -21,7 +21,7 @@ public class ViewController {
     }
 
     @GetMapping("/start-view")
-    public ResponseEntity<ApiResponse> startView(@RequestParam long siteId) {
+    public ResponseEntity<ApiResponse> startView(@RequestParam int siteId) {
         ViewToken viewToken = viewService.startView(siteId);
 
         return ResponseEntity.ok()
@@ -29,7 +29,7 @@ public class ViewController {
     }
 
     @GetMapping("/end-view")
-    public ResponseEntity<ApiResponse> endView(@RequestParam long siteId, @RequestParam String token) {
+    public ResponseEntity<ApiResponse> endView(@RequestParam int siteId, @RequestParam String token) {
         try {
             viewService.endView(siteId, token);
             return ResponseEntity.ok()
