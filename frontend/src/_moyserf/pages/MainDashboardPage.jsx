@@ -13,7 +13,11 @@ import face9 from "../../assets/images/faces/9.jpg";
 import {useAuth} from "../auth/AuthProvider.jsx";
 import MostActiveUsers from "../components/MostActiveUsers.jsx";
 import useReferalService from "../services/ReferalService.jsx";
-import AdvertisersCount from "../components/AdvertisersCount.jsx";
+import AdvertisersCount from "../components/stats/AdvertisersCount.jsx";
+import WorkersCount from "../components/stats/WorkersCount.jsx";
+import TotalIncome from "../components/stats/TotalIncome.jsx";
+import TotalReferalsIncome from "../components/stats/TotalReferalsIncome.jsx";
+import WebSocketComponent from "../components/WebSocketComponent.jsx";
 
 const MainDashboardPage = () => {
     const {user} = useAuth();
@@ -104,40 +108,13 @@ const MainDashboardPage = () => {
                                             <AdvertisersCount/>
                                         </Col>
                                         <Col xl={3} lg={6} md={6} sm={6} className=" mb-3">
-                                            <div className="p-3 text-center rounded-2 bg-white border">
-                                            <span
-                                                className="mb-3 avatar avatar-lg avatar-rounded bg-primary-transparent">
-                                                <i className="fs-24 bx bx-user-plus"></i>
-                                            </span>
-                                                <h3 className="fw-semibold mb-0 text-dark">1600+</h3>
-                                                <p className="mb-1 fs-14 op-7 text-muted ">
-                                                    Работников
-                                                </p>
-                                            </div>
+                                            <WorkersCount/>
                                         </Col>
                                         <Col xl={3} lg={6} md={6} sm={6} className="mb-3">
-                                            <div className="p-3 text-center rounded-2 bg-white border">
-                                            <span
-                                                className="mb-3 avatar avatar-lg avatar-rounded bg-primary-transparent">
-                                                <i className="fs-24 bx bx-money"></i>
-                                            </span>
-                                                <h3 className="fw-semibold mb-0 text-dark">$45.8M</h3>
-                                                <p className="mb-1 fs-14 op-7 text-muted ">
-                                                    Всего заработано
-                                                </p>
-                                            </div>
+                                            <TotalIncome/>
                                         </Col>
                                         <Col xl={3} lg={6} md={6} sm={6} className="mb-3">
-                                            <div className="p-3 text-center rounded-2 bg-white border">
-                                            <span
-                                                className="mb-3 avatar avatar-lg avatar-rounded bg-primary-transparent">
-                                                <i className="fs-24 bx bx-user-circle"></i>
-                                            </span>
-                                                <h3 className="fw-semibold mb-0 text-dark">$10.8M</h3>
-                                                <p className="mb-1 fs-14 op-7 text-muted ">
-                                                    Выплат от рефералов
-                                                </p>
-                                            </div>
+                                            <TotalReferalsIncome/>
                                         </Col>
                                         <Col xl={3} lg={6} md={6} sm={6} className="mb-3">
                                             <div className="p-3 text-center rounded-2 bg-white border">
@@ -147,6 +124,7 @@ const MainDashboardPage = () => {
                                             </span>
                                                 <h3 className="fw-semibold mb-0 text-dark">236</h3>
                                                 <p className="mb-1 fs-14 op-7 text-muted ">Всего онлайн</p>
+                                                <WebSocketComponent/>
                                             </div>
                                         </Col>
                                     </div>

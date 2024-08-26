@@ -13,3 +13,6 @@ export const GITHUB_AUTH_URL = BACKEND_BASE_URL + '/oauth2/authorize/github?redi
 export const VERIFICATION_TOKEN_INVALID = "invalidToken";
 export const VERIFICATION_TOKEN_EXPIRED = "expired";
 export const VERIFICATION_TOKEN_VALID = "valid";
+
+//для websocket
+window.global = window;

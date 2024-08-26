@@ -9,10 +9,6 @@ const useUserService = () => {
         return await apiRequest(`${API_BASE_URL}/users/mostActive`, "GET", null);
     }
 
-    const getAdvertisersCount = async () => {
-        return await apiRequest(`${API_BASE_URL}/users/advertisersCount`, "GET", null);
-    }
-
-    return {findMostActiveUsers, getAdvertisersCount};
+    return {findMostActiveUsers};
 };
 export default useUserService;

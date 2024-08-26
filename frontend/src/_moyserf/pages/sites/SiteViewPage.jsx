@@ -1,7 +1,7 @@
 import {useEffect, useRef, useState} from "react";
-import "../../assets/css/_myserf.css"
+import "../../../assets/css/_myserf.css"
 import {useSearchParams} from "react-router-dom";
-import useViewService from "../services/ViewService.jsx";
+import useViewService from "../../services/ViewService.jsx";
 import {useNavigate} from "react-router-dom";
 
 const SiteViewPage = () => {

@@ -29,7 +29,7 @@ public interface IUserService {
 
     User save(User user);
 
-    List<Object[]> getAllUsersTotalIncome();
 
-    int getAdvertisersCount();
+
+
 }

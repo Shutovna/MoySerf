@@ -1,9 +1,9 @@
 import {Fragment, useEffect, useState} from "react";
 import {Accordion, Button, Card, Col, Form, Pagination, Row} from 'react-bootstrap';
-import Pageheader from "../../components/pageheader/pageheader.jsx";
+import Pageheader from "../../../components/pageheader/pageheader.jsx";
 import {Link} from "react-router-dom";
-import useSiteService from "../services/SiteService.jsx";
-import useOrderService from "../services/OrderService.jsx";
+import useSiteService from "../../services/SiteService.jsx";
+import useOrderService from "../../services/OrderService.jsx";
 import {toast} from "react-toastify";
 
 const SiteList = () => {

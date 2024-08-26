@@ -5,7 +5,7 @@ import ImageViewer from "../components/ImageViewer.jsx";
 import {Button, Card, Col, InputGroup, Row, Form} from "react-bootstrap";
 import {Link, useNavigate} from "react-router-dom";
 import {useFormik} from "formik";
-import {checkRememberAndSave} from "../components/RememberMe.jsx";
+import {checkRememberAndSave} from "../auth/RememberMe.jsx";
 import * as Yup from "yup";
 import useAuthService from "../services/AuthService.jsx";
 import {toast} from "react-toastify";

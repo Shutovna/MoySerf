@@ -1,9 +1,9 @@
 import React, {Fragment, useEffect, useState} from "react";
 import {Card, Col, Row} from "react-bootstrap";
 import {Link} from "react-router-dom";
-import useSiteService from "../services/SiteService.jsx";
-import useAvatarService from "../services/AvatarService.jsx";
-import ImageViewer from "../components/ImageViewer.jsx";
+import useSiteService from "../../services/SiteService.jsx";
+import useAvatarService from "../../services/AvatarService.jsx";
+import ImageViewer from "../../components/ImageViewer.jsx";
 
 const SerfListPage = () => {
     const {findSitesForView} = useSiteService();

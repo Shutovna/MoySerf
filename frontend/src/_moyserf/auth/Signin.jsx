@@ -5,10 +5,10 @@ import * as Yup from "yup";
 import desktoplogo from "../../assets/images/brand-logos/desktop-logo.png";
 import desktopdarklogo from "../../assets/images/brand-logos/desktop-dark.png";
 import {Link} from 'react-router-dom';
-import {useAuth} from "../auth/AuthProvider.jsx";
-import Spinner from "./Spinner.jsx";
+import {useAuth} from "./AuthProvider.jsx";
+import Spinner from "../components/Spinner.jsx";
 import useAuthService from "../services/AuthService.jsx";
-import Oauth2Links from "./OAuth2Links.jsx";
+import Oauth2Links from "./oauth2/OAuth2Links.jsx";
 import RememberMe, {checkRememberAndSave, restoreRemembered} from "./RememberMe.jsx";
 import {toast} from "react-toastify";
 

@@ -8,8 +8,8 @@ import {ThemeChanger} from "../../redux/action.jsx";
 import useAuthService from "../services/AuthService.jsx";
 import * as Yup from "yup";
 import {useFormik} from "formik";
-import Spinner from "./Spinner.jsx";
-import Oauth2Links from "./OAuth2Links.jsx";
+import Spinner from "../components/Spinner.jsx";
+import Oauth2Links from "./oauth2/OAuth2Links.jsx";
 import {toast} from "react-toastify";
 import log from "eslint-plugin-react/lib/util/log.js";
 

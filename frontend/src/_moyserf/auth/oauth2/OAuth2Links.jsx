@@ -1,5 +1,5 @@
 import {Link} from "react-router-dom";
-import {GOOGLE_AUTH_URL} from "../constants/index.js";
+import {GOOGLE_AUTH_URL} from "../../constants/index.js";
 
 export default function Oauth2Links(props) {
     return <>

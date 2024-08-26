@@ -8,8 +8,8 @@ import useAuthService from "../services/AuthService.jsx";
 import {useFormik} from "formik";
 import {LocalStorageBackup} from "../../components/common/switcher/switcherdata/switcherdata.jsx";
 import {ThemeChanger} from "../../redux/action.jsx";
-import Oauth2Links from "./OAuth2Links.jsx";
-import Spinner from "./Spinner.jsx";
+import Oauth2Links from "./oauth2/OAuth2Links.jsx";
+import Spinner from "../components/Spinner.jsx";
 import RememberMe, {checkRememberAndSave, restoreRemembered} from "./RememberMe.jsx";
 import {toast} from "react-toastify";
 

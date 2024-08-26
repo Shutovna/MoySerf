@@ -31,8 +31,9 @@ import java.util.stream.Collectors;
 @Transactional
 @Slf4j
 public class UserService implements IUserService {
-    @PersistenceContext
-    private EntityManager em;
+    @Autowired
+    private IStatisticsService statisticsService;
+    ;
 
     @Autowired
     private UserRepository userRepository;
@@ -94,15 +95,16 @@ public class UserService implements IUserService {
 
     @Override
     public List<MostActiveUserResponse> getMostActiveUsers() {
-        Map<Integer, BigDecimal> totalIncomes = getAllUsersTotalIncome().stream().collect(Collectors.toMap(
-                key -> (Integer) key[0], val -> (BigDecimal) val[1]));
+        Map<Integer, BigDecimal> totalIncomes = statisticsService.getUsersTotalIncome(Constants.MAX_MOST_ACTIVE_USERS)
+                .stream().collect(Collectors.toMap(
+                        key -> (Integer) key[0], val -> (BigDecimal) val[1]));
 
         List<MostActiveUserResponse> result = findAllUsers().stream().filter(user ->
                         totalIncomes.containsKey(user.getId()))
                 .map(user -> MostActiveUserResponse.fromUser(user, totalIncomes.get(user.getId())))
                 .toList();
 
-        log.debug("getMostActiveUsers:" + result);
+        log.debug("getMostActiveUsers:{}", result);
         return result;
     }
 
@@ -146,22 +148,5 @@ public class UserService implements IUserService {
     @Override
     public User save(User user) {
         return userRepository.save(user);
-    }
-
-    @Override
-    public List<Object[]> getAllUsersTotalIncome() {
-        Query query = em.createNativeQuery(
-                "select t.user_id user_id, sum(t.sum) sum\n" +
-                        "from transactions t \n" +
-                        "where t.type in('USER_EARNED_SITE_VIEW', 'USER_EARNED_REFERAL_SITE_VIEW')\n" +
-                        "group by t.user_id\n" +
-                        "order by sum desc\n" +
-                        "limit 5\n");
-        return query.getResultList();
-    }
-
-    @Override
-    public int getAdvertisersCount() {
-        return userRepository.countAdvertisers();
     }
 }

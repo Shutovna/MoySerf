@@ -1,10 +1,10 @@
 import * as Yup from "yup";
 import {useFormik} from "formik";
 import {Fragment, useState} from "react";
-import Pageheader from "../../components/pageheader/pageheader.jsx";
+import Pageheader from "../../../components/pageheader/pageheader.jsx";
 import {Alert, Button, Card, Col, Form, Row} from 'react-bootstrap';
-import Spinner from "../components/Spinner.jsx";
-import useSiteService from "../services/SiteService.jsx";
+import Spinner from "../../components/Spinner.jsx";
+import useSiteService from "../../services/SiteService.jsx";
 import {useNavigate} from "react-router-dom";
 import {toast} from "react-toastify";
 

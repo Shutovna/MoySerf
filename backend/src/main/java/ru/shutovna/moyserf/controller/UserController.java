@@ -50,8 +50,5 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/advertisersCount")
-    public int getAdvertisersCount()  {
-        return userService.getAdvertisersCount();
-    }
+
 }

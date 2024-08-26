@@ -1,8 +1,8 @@
-import useUserService from "../services/UserService.jsx"
 import {useEffect, useState} from "react";
+import useStatsService from "../../services/StatsService.jsx";
 
 const AdvertisersCount = () => {
-    const {getAdvertisersCount} = useUserService();
+    const {getAdvertisersCount} = useStatsService();
     const [advertisersCount, setAdvertisersCount] = useState(0);
 
     useEffect(() => {

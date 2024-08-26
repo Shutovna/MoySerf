@@ -20,4 +20,6 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     Boolean existsByEmail(String email);
 
+    @Query("SELECT count(u) FROM User u")
+    int countWorkers();
 }
