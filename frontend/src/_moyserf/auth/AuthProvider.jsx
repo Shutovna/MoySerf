@@ -16,7 +16,7 @@ const AuthProvider = ({children}) => {
             let res = await request(`${API_BASE_URL}/auth/signin`, "POST", JSON.stringify(data));
             console.log("loginAction auth response: " + JSON.stringify(res));
 
-            if (res.accessToken) {
+            if (res) {
                 setAuthInfo(res.accessToken, res.userInfo)
                 navigate("/cab/main");
             }
@@ -24,14 +24,6 @@ const AuthProvider = ({children}) => {
             console.error(err);
         }
     };
-
-    useEffect(() => {
-        localStorage.setItem(USER_INFO, JSON.stringify(user));
-    }, [user]);
-
-    useEffect(() => {
-        localStorage.setItem(ACCESS_TOKEN, token);
-    }, [token]);
 
     const logOut = () => {
         clearAuthInfo();
@@ -41,6 +33,8 @@ const AuthProvider = ({children}) => {
     const setAuthInfo = (token, user) => {
         setToken(token);
         setUser(user);
+        localStorage.setItem(USER_INFO, JSON.stringify(user));
+        localStorage.setItem(ACCESS_TOKEN, token);
     }
 
     const clearAuthInfo = () => {
