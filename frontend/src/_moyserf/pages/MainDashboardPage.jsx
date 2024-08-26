@@ -17,7 +17,6 @@ import AdvertisersCount from "../components/stats/AdvertisersCount.jsx";
 import WorkersCount from "../components/stats/WorkersCount.jsx";
 import TotalIncome from "../components/stats/TotalIncome.jsx";
 import TotalReferalsIncome from "../components/stats/TotalReferalsIncome.jsx";
-import WebSocketComponent from "../components/WebSocketComponent.jsx";
 
 const MainDashboardPage = () => {
     const {user} = useAuth();
@@ -124,7 +123,6 @@ const MainDashboardPage = () => {
                                             </span>
                                                 <h3 className="fw-semibold mb-0 text-dark">236</h3>
                                                 <p className="mb-1 fs-14 op-7 text-muted ">Всего онлайн</p>
-                                                <WebSocketComponent/>
                                             </div>
                                         </Col>
                                     </div>

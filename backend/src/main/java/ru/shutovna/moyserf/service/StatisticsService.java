@@ -36,7 +36,8 @@ public class StatisticsService implements IStatisticsService {
         Query query = em.createNativeQuery("select sum(t.sum) \n" +
                 "from transactions t\n" +
                 "where t.type in('USER_EARNED_REFERAL_SITE_VIEW')");
-        return ((BigDecimal)query.getSingleResult()).longValue();
+        Object result = query.getSingleResult();
+        return result == null ? 0 : ((BigDecimal) result).longValue();
     }
 
     @Override

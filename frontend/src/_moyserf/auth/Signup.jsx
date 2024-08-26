@@ -29,7 +29,6 @@ const signupSchema = Yup.object().shape({
 });
 
 
-
 const Signup = () => {
     const {signup, getUserInfoById} = useAuthService();
     const navigate = useNavigate();
@@ -75,19 +74,17 @@ const Signup = () => {
     const [passwordshow1, setpasswordshow1] = useState(false);
     const [passwordshow2, setpasswordshow2] = useState(false);
 
-    function getInvitor() {
-
-    }
-
     useEffect(() => {
-        const fetch = async () => {
-            await getUserInfoById(invitorId).then((info) => {
-                setInvitorName(info.name);
+        if (invitorId) {
+            const fetch = async () => {
+                await getUserInfoById(invitorId).then((info) => {
+                    setInvitorName(info.name);
 
-            }).catch(err => console.log(err));
+                }).catch(err => console.log(err));
+            }
+
+            fetch();
         }
-
-        fetch();
 
     }, []);
 
@@ -108,7 +105,10 @@ const Signup = () => {
                                 <p className="h5 fw-semibold mb-2 text-center">Регистрация</p>
                                 <p className="mb-4 text-muted op-7 fw-normal text-center">Добро пожаловать!
                                     Присоединяйтесь к нам и создайте бесплатный аккаунт</p>
-                                <p className="mb-4 op-7 fw-normal text-center">Вас пригласил: {invitorName}</p>
+                                {invitorId ?
+                                    <p className="mb-4 op-7 fw-normal text-center">Вас пригласил: {invitorName}</p>
+                                    : ""
+                                }
 
                                 <div className="row gy-3">
                                     <Col xl={12}>
