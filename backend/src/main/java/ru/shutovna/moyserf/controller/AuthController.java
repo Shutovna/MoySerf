@@ -166,7 +166,7 @@ public class AuthController {
 
     @GetMapping("/userInfo")
     public ResponseEntity<UserInfoResponse> getUserInfo(@AuthenticationPrincipal UserDetails userDetails) {
-        log.debug("getUserInfo for AuthenticationPrincipal: " + userDetails);
+        log.debug("getUserInfo for AuthenticationPrincipal: {}", userDetails);
         String email = userDetails.getUsername();
 
         User user = userService.findUserByEmail(email).orElseThrow();

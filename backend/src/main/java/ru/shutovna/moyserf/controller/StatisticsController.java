@@ -32,4 +32,19 @@ public class StatisticsController {
     public long getTotalReferalsIncome() {
         return statisticsService.getTotalReferalsIncome();
     }
+
+    @GetMapping("/userViewCount")
+    public int getUserViewCount()  {
+        return statisticsService.getUserViewCount();
+    }
+
+    @GetMapping("/userEarned")
+    public long getUserEarned()  {
+        return statisticsService.getUserEarned();
+    }
+
+    @GetMapping("/userEarnedByReferals")
+    public long getUserEarnedByReferals()  {
+        return statisticsService.getUserEarnedByReferals();
+    }
 }

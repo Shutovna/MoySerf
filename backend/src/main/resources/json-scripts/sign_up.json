@@ -1,8 +1,0 @@
-{
-  "firstName": "Vasya",
-  "lastName": "Pupkin",
-  "password": "password123",
-  "matchingPassword": "password123",
-  "email": "Pupkin@mail.ru",
-  "isUsing2FA": "false"
-}

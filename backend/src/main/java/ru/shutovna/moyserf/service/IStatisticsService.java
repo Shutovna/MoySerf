@@ -12,4 +12,10 @@ public interface IStatisticsService {
     int getWorkersCount();
 
     List<Object[]> getUsersTotalIncome(Integer limit);
+
+    int getUserViewCount();
+
+    long getUserEarned();
+
+    long getUserEarnedByReferals();
 }

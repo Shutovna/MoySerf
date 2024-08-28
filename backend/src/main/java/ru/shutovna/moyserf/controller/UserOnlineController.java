@@ -13,14 +13,14 @@ public class UserOnlineController {
 
     @MessageMapping("/userConnected")
     @SendTo("/topic/usersOnline")
-    public int userConnected(@Payload int userId) {
+    public int userConnected() {
         userCount++;
         return userCount;
     }
 
     @MessageMapping("/userDisconnected")
     @SendTo("/topic/usersOnline")
-    public int userDisconnected(@Payload int userId) {
+    public int userDisconnected() {
         userCount--;
         return userCount;
     }

@@ -20,6 +20,19 @@ const useStatsService = () => {
         return await apiRequest(`${API_BASE_URL}/stats/totalReferalsIncome`, "GET", null);
     }
 
-    return {getAdvertisersCount, getWorkersCount, getTotalIncome, getTotalReferalsIncome};
+    const getUserViewCount = async () => {
+        return await apiRequest(`${API_BASE_URL}/stats/userViewCount`, "GET", null);
+    }
+
+    const getUserEarned = async () => {
+        return await apiRequest(`${API_BASE_URL}/stats/userEarned`, "GET", null);
+    }
+
+    const getUserEarnedByReferals = async () => {
+        return await apiRequest(`${API_BASE_URL}/stats/userEarnedByReferals`, "GET", null);
+    }
+
+    return {getAdvertisersCount, getWorkersCount, getTotalIncome, getTotalReferalsIncome, getUserViewCount, getUserEarned,
+        getUserEarnedByReferals};
 };
 export default useStatsService;

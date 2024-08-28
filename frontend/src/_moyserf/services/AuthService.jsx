@@ -11,9 +11,9 @@ const useAuthService = () => {
         return await request(`${API_BASE_URL}/auth/signup`, "POST", JSON.stringify(signupRequest));
     }
 
-    const getUserInfo = async (token) => {
+    const getUserInfo = (token) => {
         console.log("getUserInfo for  " + token);
-        return await apiRequest(`${API_BASE_URL}/auth/userInfo`);
+        return apiRequest(`${API_BASE_URL}/auth/userInfo`);
     }
 
     const getUserInfoById = async (userId) => {

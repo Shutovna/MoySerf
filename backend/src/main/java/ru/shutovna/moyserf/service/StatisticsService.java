@@ -3,6 +3,7 @@ package ru.shutovna.moyserf.service;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ru.shutovna.moyserf.model.User;
 import ru.shutovna.moyserf.repository.UserRepository;
 
 import javax.persistence.EntityManager;
@@ -60,5 +61,39 @@ public class StatisticsService implements IStatisticsService {
                         "order by sum desc\n" +
                         (limit == null ? "" : "limit " + limit + "\n"));
         return query.getResultList();
+    }
+
+    @Override
+    public int getUserViewCount() {
+        User currentUser = userService.getCurrentUser();
+        return currentUser.getViews().size();
+    }
+
+    @Override
+    public long getUserEarned() {
+        User currentUser = userService.getCurrentUser();
+        Query query = em.createNativeQuery(
+                "select sum(t.sum) sum\n" +
+                        "from transactions t \n" +
+                        "where t.type in('USER_EARNED_SITE_VIEW', 'USER_EARNED_REFERAL_SITE_VIEW')\n" +
+                        "and t.user_id = ?");
+        query.setParameter(1, currentUser.getId());
+
+        Object result = query.getSingleResult();
+        return result == null ? 0 : ((BigDecimal) result).longValue();
+    }
+
+    @Override
+    public long getUserEarnedByReferals() {
+        User currentUser = userService.getCurrentUser();
+        Query query = em.createNativeQuery(
+                "select sum(t.sum) sum\n" +
+                        "from transactions t \n" +
+                        "where t.type in('USER_EARNED_REFERAL_SITE_VIEW')\n" +
+                        "and t.user_id = ?");
+        query.setParameter(1, currentUser.getId());
+
+        Object result = query.getSingleResult();
+        return result == null ? 0 : ((BigDecimal) result).longValue();
     }
 }

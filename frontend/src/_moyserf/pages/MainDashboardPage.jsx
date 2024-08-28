@@ -19,11 +19,14 @@ import TotalIncome from "../components/stats/TotalIncome.jsx";
 import TotalReferalsIncome from "../components/stats/TotalReferalsIncome.jsx";
 import OnlineUsers from "../components/OnlineUsers.jsx";
 import TransactionsTable from "../components/TransactionsTable.jsx";
+import UserViewCount from "../components/stats/UserViewCount.jsx";
+import UserEarned from "../components/stats/UserEarned.jsx";
+import UserEarnedByReferals from "../components/stats/UserEarnedByReferals.jsx";
 
 const MainDashboardPage = () => {
     const {user} = useAuth();
     const {getReferalLink} = useReferalService();
-    const [referalLink, setReferalLink] = useState(getReferalLink());
+    const [referalLink, setReferalLink] = useState(0);
 
     // for User search function
     const [Data, setData] = useState(Dealsstatistics);
@@ -32,14 +35,18 @@ const MainDashboardPage = () => {
     const clipboardJS = null;
 
     const copyToClipboard = (text) => {
-        navigator.clipboard.writeText(text)
-            .then(() => {
-                console.log('Текст скопирован в буфер обмена!' + text);
-            })
-            .catch(err => {
-                console.error('Не удалось скопировать текст: ', err);
-            });
+            navigator.clipboard.writeText(text)
+                .then(() => {
+                    console.log('Текст скопирован в буфер обмена!' + text);
+                })
+                .catch(err => {
+                    console.error('Не удалось скопировать текст: ', err);
+                });
     };
+
+    useEffect(() => {
+        setReferalLink(getReferalLink);
+    }, [user]);
 
     useEffect(() => {
         const script = document.createElement('script');
@@ -216,112 +223,13 @@ const MainDashboardPage = () => {
                         <Col xl={8} className="col-xl-8">
                             <Row>
                                 <Col xxl={6} lg={6} md={6}>
-                                    <Card className="custom-card overflow-hidden">
-                                        <Card.Body>
-                                            <div className="d-flex align-items-top justify-content-between">
-                                                <div>
-                                                    <span className="avatar avatar-md avatar-rounded bg-primary">
-                                                        <i className="ti ti-users fs-16"></i>
-                                                    </span>
-                                                </div>
-                                                <div className="flex-fill ms-3">
-                                                    <div
-                                                        className="d-flex align-items-center justify-content-between flex-wrap">
-                                                        <div>
-                                                            <p className="text-muted mb-0">Просмотрено Вами</p>
-                                                            <h4 className="fw-semibold mt-1">1,02,890</h4>
-                                                        </div>
-                                                        <div id="crm-total-customers">
-                                                            <Totalcustomers/>
-                                                        </div>
-                                                    </div>
-                                                    <div
-                                                        className="d-flex align-items-center justify-content-between mt-1">
-                                                        <div>
-                                                            <Link className="text-primary" to="#">View All<i
-                                                                className="ti ti-arrow-narrow-right ms-2 fw-semibold d-inline-block"></i></Link>
-                                                        </div>
-                                                        <div className="text-end">
-                                                            <p className="mb-0 text-success fw-semibold">+40%</p>
-                                                            <span className="text-muted op-7 fs-11">this month</span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </Card.Body>
-                                    </Card>
+                                    <UserViewCount/>
                                 </Col>
                                 <Col xxl={6} lg={6} md={6}>
-                                    <Card className="custom-card overflow-hidden">
-                                        <Card.Body>
-                                            <div className="d-flex align-items-top justify-content-between">
-                                                <div>
-                                                    <span className="avatar avatar-md avatar-rounded bg-secondary">
-                                                        <i className="ti ti-wallet fs-16"></i>
-                                                    </span>
-                                                </div>
-                                                <div className="flex-fill ms-3">
-                                                    <div
-                                                        className="d-flex align-items-center justify-content-between flex-wrap">
-                                                        <div>
-                                                            <p className="text-muted mb-0">Заработано Вами</p>
-                                                            <h4 className="fw-semibold mt-1">$56,562</h4>
-                                                        </div>
-                                                        <div id="crm-total-revenue">
-                                                            <Totalrevenue/>
-                                                        </div>
-                                                    </div>
-                                                    <div
-                                                        className="d-flex align-items-center justify-content-between mt-1">
-                                                        <div>
-                                                            <Link className="text-secondary" to="#">View All<i
-                                                                className="ti ti-arrow-narrow-right ms-2 fw-semibold d-inline-block"></i></Link>
-                                                        </div>
-                                                        <div className="text-end">
-                                                            <p className="mb-0 text-success fw-semibold">+25%</p>
-                                                            <span className="text-muted op-7 fs-11">this month</span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </Card.Body>
-                                    </Card>
+                                    <UserEarned/>
                                 </Col>
                                 <Col xxl={6} lg={6} md={6}>
-                                    <Card className="custom-card overflow-hidden">
-                                        <Card.Body>
-                                            <div className="d-flex align-items-top justify-content-between">
-                                                <div>
-                                                    <span className="avatar avatar-md avatar-rounded bg-success">
-                                                        <i className="ti ti-wave-square fs-16"></i>
-                                                    </span>
-                                                </div>
-                                                <div className="flex-fill ms-3">
-                                                    <div
-                                                        className="d-flex align-items-center justify-content-between flex-wrap">
-                                                        <div>
-                                                            <p className="text-muted mb-0">Заработано на рефералах</p>
-                                                            <h4 className="fw-semibold mt-1">12.08%</h4>
-                                                        </div>
-                                                        <div id="crm-conversion-ratio">
-                                                            <Conversionratio/>
-                                                        </div>
-                                                    </div>
-                                                    <div
-                                                        className="d-flex align-items-center justify-content-between mt-1">
-                                                        <div>
-                                                            <Link className="text-success" to="#">View All<i
-                                                                className="ti ti-arrow-narrow-right ms-2 fw-semibold d-inline-block"></i></Link>
-                                                        </div>
-                                                        <div className="text-end">
-                                                            <p className="mb-0 text-danger fw-semibold">-12%</p>
-                                                            <span className="text-muted op-7 fs-11">this month</span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </Card.Body>
-                                    </Card>
+                                        <UserEarnedByReferals/>
                                 </Col>
                                 <Col xxl={6} lg={6} md={6} className="col-xxl-6 col-lg-6 col-md-6">
                                     <Card className="custom-card overflow-hidden">

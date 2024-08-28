@@ -21,7 +21,7 @@ const WebSocketProvider = ({children}) => {
                 client.publish(
                     {
                         destination: '/app/userConnected',
-                        body: user.id
+                        //body: user.id
                     });
             },
             onStompError: function (frame) {
@@ -32,28 +32,20 @@ const WebSocketProvider = ({children}) => {
 
         client.activate();
 
-        function sendBeacon() {
-            const blob = new Blob([JSON.stringify(user.id)], { type: 'application/json' });
 
-            // Отправляем данные при закрытии вкладки
-            navigator.sendBeacon('/userDisconnect');
-
-        }
 
         window.addEventListener('beforeunload', function (event) {
             // Вызов функции для отправки baecon
             client.publish({
                 destination: '/app/userDisconnected',
-                body: user.id
+                //body: user.id
             });
-
-            sendBeacon();
         });
 
         return () => {
             client.publish({
                 destination: '/app/userDisconnected',
-                body: user.id
+                //body: user.id
             });
             client.deactivate();
         };
