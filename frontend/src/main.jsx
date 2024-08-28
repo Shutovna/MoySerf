@@ -44,6 +44,7 @@ import {ToastContainer} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import SiteViewPage from "./_moyserf/pages/sites/SiteViewPage.jsx";
 import SettingsPage from "./_moyserf/pages/SettingsPage.jsx";
+import WebSocketProvider from "./_moyserf/components/WebSocketProvider.jsx";
 
 ReactDOM.createRoot(document.getElementById('root')).render(
     <React.Fragment>
@@ -62,94 +63,94 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         />
         <BrowserRouter>
             <AuthProvider>
-                <React.Suspense fallback={<Loader/>}>
-                    <Routes>
-                        <Route path={`/view-site`} element={<SiteViewPage/>}/>
+                <WebSocketProvider>
+                    <React.Suspense fallback={<Loader/>}>
+                        <Routes>
+                            <Route path={`/view-site`} element={<SiteViewPage/>}/>
 
-                        <Route path="/" element={<Landinglayout/>}>
-                            <Route index element={<LandingPage/>}/>
-                        </Route>
-
-                        <Route path={`/oauth2/redirect`}
-                               element={<OAuth2RedirectHandler/>}/>
-
-                        <Route path={`${import.meta.env.BASE_URL}`} element={<Authenticationlayout/>}>
-                            <Route path={`${import.meta.env.BASE_URL}auth/signin`}
-                                   element={<Signin/>}/>
-                            <Route path={`${import.meta.env.BASE_URL}auth/signup`}
-                                   element={<Signup/>}/>
-                            <Route path={`${import.meta.env.BASE_URL}auth/registrationConfirm`}
-                                   element={<RegistrationConfirm/>}/>
-                            <Route path={`${import.meta.env.BASE_URL}auth/savePassword`}
-                                   element={<SavePassword/>}/>
-                            <Route path={`${import.meta.env.BASE_URL}auth/badVerificationToken`}
-                                   element={<BadVerificationToken/>}/>
-
-                        </Route>
-
-                        <Route element={<PrivateRoute/>}>
-
-                            <Route path={"/cab"} element={<App/>}>
-                                <Route index element={<MainDashboardPage/>}/>
-                                <Route path={`/cab/main`} element={<MainDashboardPage/>}/>
-                                <Route path={`/cab/learning`} element={<DevelopingPage/>}/>
-                                <Route path={`/cab/serf`} element={<SerfListPage/>}/>
-                                <Route path={`/cab/serf-video`} element={<DevelopingPage/>}/>
-                                <Route path={`/cab/vip`} element={<VIPPage/>}/>
-                                <Route path={`/cab/adv`} element={<SiteList/>}/>
-                                <Route path={`/cab/adv/add`} element={<SiteAdd/>}/>
-                                <Route path={`/cab/wallet`} element={<DevelopingPage/>}/>
-                                <Route path={`/cab/referals`} element={<ReferalPage/>}/>
-                                <Route path={`/cab/blog/read`} element={<Blog/>}/>
-                                <Route path={`/cab/blog/create`} element={<Createblog/>}/>
-                                <Route path={`/cab/chat`} element={<DevelopingPage/>}/>
-                                <Route path={`/cab/faq`} element={<FAQPage/>}/>
-                                <Route path={`/cab/settings`} element={<SettingsPage/>}/>
-                                <Route path={`/cab/quit`} element={<Logout/>}/>
+                            <Route path="/" element={<Landinglayout/>}>
+                                <Route index element={<LandingPage/>}/>
                             </Route>
+
+                            <Route path={`/oauth2/redirect`}
+                                   element={<OAuth2RedirectHandler/>}/>
 
                             <Route path={`${import.meta.env.BASE_URL}`} element={<Authenticationlayout/>}>
+                                <Route path={`${import.meta.env.BASE_URL}auth/signin`}
+                                       element={<Signin/>}/>
+                                <Route path={`${import.meta.env.BASE_URL}auth/signup`}
+                                       element={<Signup/>}/>
+                                <Route path={`${import.meta.env.BASE_URL}auth/registrationConfirm`}
+                                       element={<RegistrationConfirm/>}/>
+                                <Route path={`${import.meta.env.BASE_URL}auth/savePassword`}
+                                       element={<SavePassword/>}/>
+                                <Route path={`${import.meta.env.BASE_URL}auth/badVerificationToken`}
+                                       element={<BadVerificationToken/>}/>
 
-                                <Route path={`${import.meta.env.BASE_URL}authentication/comingsoon`}
-                                       element={<Comingsoon/>}/>
-                                <Route path={`${import.meta.env.BASE_URL}authentication/createpassword/basic`}
-                                       element={<Basic/>}/>
-                                <Route path={`${import.meta.env.BASE_URL}authentication/createpassword/cover`}
-                                       element={<Cover/>}/>
-
-                                <Route
-                                    path={`${import.meta.env.BASE_URL}authentication/lockscreen/lockscreenbasic`}
-                                    element={<Lockscreenbasic/>}/>
-                                <Route
-                                    path={`${import.meta.env.BASE_URL}authentication/lockscreen/lockscreencover`}
-                                    element={<Lockscreencover/>}/>
-
-                                <Route
-                                    path={`${import.meta.env.BASE_URL}authentication/resetpassword/resetbasic`}
-                                    element={<Resetbasic/>}/>
-                                <Route
-                                    path={`${import.meta.env.BASE_URL}authentication/resetpassword/resetcover`}
-                                    element={<Resetcover/>}/>
-
-                                <Route
-                                    path={`${import.meta.env.BASE_URL}authentication/twostepverification/twostepbasic`}
-                                    element={<Twostepbasic/>}/>
-                                <Route
-                                    path={`${import.meta.env.BASE_URL}authentication/twostepverification/twostepcover`}
-                                    element={<Twostepcover/>}/>
-
-                                <Route path={`${import.meta.env.BASE_URL}authentication/undermaintenance`}
-                                       element={<Undermaintenance/>}/>
                             </Route>
 
-                            <Route path={`${import.meta.env.BASE_URL}error/401error`} element={<Error401/>}/>
-                            <Route path={`${import.meta.env.BASE_URL}error/404error`} element={<Error404/>}/>
-                            <Route path={`${import.meta.env.BASE_URL}error/500error`} element={<Error500/>}/>
-                        </Route>
+                            <Route element={<PrivateRoute/>}>
 
+                                <Route path={"/cab"} element={<App/>}>
+                                    <Route index element={<MainDashboardPage/>}/>
+                                    <Route path={`/cab/main`} element={<MainDashboardPage/>}/>
+                                    <Route path={`/cab/learning`} element={<DevelopingPage/>}/>
+                                    <Route path={`/cab/serf`} element={<SerfListPage/>}/>
+                                    <Route path={`/cab/serf-video`} element={<DevelopingPage/>}/>
+                                    <Route path={`/cab/vip`} element={<VIPPage/>}/>
+                                    <Route path={`/cab/adv`} element={<SiteList/>}/>
+                                    <Route path={`/cab/adv/add`} element={<SiteAdd/>}/>
+                                    <Route path={`/cab/wallet`} element={<DevelopingPage/>}/>
+                                    <Route path={`/cab/referals`} element={<ReferalPage/>}/>
+                                    <Route path={`/cab/blog/read`} element={<Blog/>}/>
+                                    <Route path={`/cab/blog/create`} element={<Createblog/>}/>
+                                    <Route path={`/cab/chat`} element={<DevelopingPage/>}/>
+                                    <Route path={`/cab/faq`} element={<FAQPage/>}/>
+                                    <Route path={`/cab/settings`} element={<SettingsPage/>}/>
+                                    <Route path={`/cab/quit`} element={<Logout/>}/>
+                                </Route>
 
-                    </Routes>
-                </React.Suspense>
+                                <Route path={`${import.meta.env.BASE_URL}`} element={<Authenticationlayout/>}>
+
+                                    <Route path={`${import.meta.env.BASE_URL}authentication/comingsoon`}
+                                           element={<Comingsoon/>}/>
+                                    <Route path={`${import.meta.env.BASE_URL}authentication/createpassword/basic`}
+                                           element={<Basic/>}/>
+                                    <Route path={`${import.meta.env.BASE_URL}authentication/createpassword/cover`}
+                                           element={<Cover/>}/>
+
+                                    <Route
+                                        path={`${import.meta.env.BASE_URL}authentication/lockscreen/lockscreenbasic`}
+                                        element={<Lockscreenbasic/>}/>
+                                    <Route
+                                        path={`${import.meta.env.BASE_URL}authentication/lockscreen/lockscreencover`}
+                                        element={<Lockscreencover/>}/>
+
+                                    <Route
+                                        path={`${import.meta.env.BASE_URL}authentication/resetpassword/resetbasic`}
+                                        element={<Resetbasic/>}/>
+                                    <Route
+                                        path={`${import.meta.env.BASE_URL}authentication/resetpassword/resetcover`}
+                                        element={<Resetcover/>}/>
+
+                                    <Route
+                                        path={`${import.meta.env.BASE_URL}authentication/twostepverification/twostepbasic`}
+                                        element={<Twostepbasic/>}/>
+                                    <Route
+                                        path={`${import.meta.env.BASE_URL}authentication/twostepverification/twostepcover`}
+                                        element={<Twostepcover/>}/>
+
+                                    <Route path={`${import.meta.env.BASE_URL}authentication/undermaintenance`}
+                                           element={<Undermaintenance/>}/>
+                                </Route>
+
+                                <Route path={`${import.meta.env.BASE_URL}error/401error`} element={<Error401/>}/>
+                                <Route path={`${import.meta.env.BASE_URL}error/404error`} element={<Error404/>}/>
+                                <Route path={`${import.meta.env.BASE_URL}error/500error`} element={<Error500/>}/>
+                            </Route>
+                        </Routes>
+                    </React.Suspense>
+                </WebSocketProvider>
             </AuthProvider>
         </BrowserRouter>
     </React.Fragment>
