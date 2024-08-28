@@ -1,6 +1,7 @@
 import {Card, Dropdown} from "react-bootstrap";
 import useUserService from "../services/UserService.jsx";
 import {useEffect, useState} from "react";
+import {kopeykaToRuble} from "../util/Util.jsx";
 
 const MostActiveUsers = () => {
     const {findMostActiveUsers} = useUserService();
@@ -39,7 +40,7 @@ const MostActiveUsers = () => {
                                     <span
                                         className="text-muted fs-12">{user.email}</span>
                                 </div>
-                                <div className="fw-semibold fs-15">{user.earned}</div>
+                                <div className="fw-semibold fs-15">{kopeykaToRuble(user.earned)}&#8381;</div>
                             </div>
                         </li>
                     })

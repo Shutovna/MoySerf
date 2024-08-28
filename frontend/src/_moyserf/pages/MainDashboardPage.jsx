@@ -18,6 +18,7 @@ import WorkersCount from "../components/stats/WorkersCount.jsx";
 import TotalIncome from "../components/stats/TotalIncome.jsx";
 import TotalReferalsIncome from "../components/stats/TotalReferalsIncome.jsx";
 import OnlineUsers from "../components/OnlineUsers.jsx";
+import TransactionsTable from "../components/TransactionsTable.jsx";
 
 const MainDashboardPage = () => {
     const {user} = useAuth();
@@ -146,7 +147,8 @@ const MainDashboardPage = () => {
                             </a>
                         </div>
                         <input id={"referalLink"}
-                               value={referalLink} readOnly={true} type="text" className="form-control" placeholder="Реферальная ссылка"
+                               value={referalLink} readOnly={true} type="text" className="form-control"
+                               placeholder="Реферальная ссылка"
                                aria-label="Реферальная ссылка"
                                aria-describedby="basic-addon1"/>
                     </div>
@@ -361,107 +363,7 @@ const MainDashboardPage = () => {
                             </Row>
                         </Col>
                         <Col xl={12}>
-                            <Card className="custom-card">
-                                <Card.Header className=" justify-content-between">
-                                    <Card.Title>
-                                        Статистика операций
-                                    </Card.Title>
-                                    <div className="d-flex flex-wrap gap-2">
-                                        <div>
-                                            <input className="form-control form-control-sm" type="text"
-                                                   placeholder="Search Here" aria-label=".form-control-sm example"
-                                                   onChange={(ele) => {
-                                                       myfunction(ele.target.value);
-                                                   }}/>
-                                        </div>
-                                        <Dropdown>
-                                            <Dropdown.Toggle variant=''
-                                                             className="btn btn-primary btn-sm btn-wave waves-effect waves-light no-caret"
-                                                             data-bs-toggle="dropdown" aria-expanded="false">
-                                                Sort By<i
-                                                className="ri-arrow-down-s-line align-middle ms-1 d-inline-block"></i>
-                                            </Dropdown.Toggle>
-                                            <Dropdown.Menu>
-                                                <Dropdown.Item href="#">New</Dropdown.Item>
-                                                <Dropdown.Item href="#">Popular</Dropdown.Item>
-                                                <Dropdown.Item href="#">Relevant</Dropdown.Item>
-                                            </Dropdown.Menu>
-                                        </Dropdown>
-                                    </div>
-                                </Card.Header>
-                                <Card.Body>
-                                    <div className="table-responsive">
-                                        <table className="table text-nowrap table-hover border table-bordered">
-                                            <thead>
-                                            <tr>
-                                                <th scope="row" className="ps-4"><input className="form-check-input"
-                                                                                        type="checkbox"
-                                                                                        id="checkboxNoLabel1" value=""
-                                                                                        aria-label="..."/></th>
-                                                <th scope="col">Sales Rep</th>
-                                                <th scope="col">Category</th>
-                                                <th scope="col">Mail</th>
-                                                <th scope="col">Location</th>
-                                                <th scope="col">Date</th>
-                                                <th scope="col">Action</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            {Data.map((idx) => (
-                                                <tr key={Math.random()}>
-                                                    <th scope="row" className="ps-4">
-                                                        <input className="form-check-input" type="checkbox" id={idx.id}
-                                                               defaultChecked={idx.checked === 'defaultChecked'}
-                                                               value="" aria-label="..."/></th>
-                                                    <td>
-                                                        <div className="d-flex align-items-center fw-semibold">
-                                                                <span className="avatar avatar-sm me-2 avatar-rounded">
-                                                                    <img src={idx.src} alt="img"/>
-                                                                </span>{idx.name}
-                                                        </div>
-                                                    </td>
-                                                    <td>{idx.role}</td>
-                                                    <td>{idx.mail}</td>
-                                                    <td>
-                                                        <span className={`badge bg-${idx.color}`}>{idx.location}</span>
-                                                    </td>
-                                                    <td>{idx.date}</td>
-                                                    <td>
-                                                        <div className="hstack gap-2 fs-15">
-                                                            <Link aria-label="anchor" to="#"
-                                                                  className="btn btn-icon btn-wave waves-effect waves-light btn-sm btn-success-light"><i
-                                                                className="ri-download-2-line"></i></Link>
-                                                            <Link aria-label="anchor" to="#"
-                                                                  className="btn btn-icon btn-wave waves-effect waves-light btn-sm btn-primary-light"><i
-                                                                className="ri-edit-line"></i></Link>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            ))}
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </Card.Body>
-                                <Card.Footer className="">
-                                    <div className="d-flex align-items-center">
-                                        <div>
-                                            Showing 5 Entries <i className="bi bi-arrow-right ms-2 fw-semibold"></i>
-                                        </div>
-                                        <div className="ms-auto">
-                                            <nav aria-label="Page navigation" className="pagination-style-4">
-                                                <Pagination className="pagination mb-0">
-                                                    <Pagination.Item disabled href="#">Prev</Pagination.Item>
-                                                    <Pagination.Item active href="#">1</Pagination.Item>
-                                                    <Pagination.Item href="#">2</Pagination.Item>
-                                                    <Pagination.Item className="pagination-next" href="#">
-                                                        next
-                                                    </Pagination.Item>
-                                                </Pagination>
-                                            </nav>
-                                        </div>
-                                    </div>
-                                </Card.Footer>
-                            </Card>
+                            <TransactionsTable/>
                         </Col>
                     </Row>
                 </Col>

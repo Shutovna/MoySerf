@@ -97,8 +97,8 @@ const SettingsPage = () => {
 
     return (
         <>
-            <Row className="row row-cols-6">
-                <Col>
+            <Row >
+                <Col xxl={4} xl={5} lg={5} md={6} sm={8} className="col-12">
                     <Card className="custom-card">
                         <Card.Header className="justify-content-between">
                             <Card.Title>
@@ -127,7 +127,8 @@ const SettingsPage = () => {
                     </Card>
                 </Col>
             </Row>
-            <Row className="row row-cols-6"> <Col>
+            <Row >
+                <Col xxl={4} xl={5} lg={5} md={6} sm={8} className="col-12">
                 <Card className="custom-card">
                     <Card.Header className="justify-content-between">
                         <Card.Title>

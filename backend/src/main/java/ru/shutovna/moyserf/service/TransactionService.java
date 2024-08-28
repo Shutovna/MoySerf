@@ -43,4 +43,10 @@ public class TransactionService implements ITransactionService {
         transaction.setUser(user);
         return transactionRepository.save(transaction);
     }
+
+    @Override
+    public List<Transaction> getMyTransactions() {
+        User currentUser = userService.getCurrentUser();
+        return transactionRepository.findAllByUserOrderByCreatedAtDesc(currentUser);
+    }
 }

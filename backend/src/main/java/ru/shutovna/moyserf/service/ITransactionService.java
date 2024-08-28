@@ -14,4 +14,6 @@ public interface ITransactionService {
     Optional<Transaction> getTransaction(int id);
 
     Transaction createTransaction(TransactionType type, String description, long sum, User user);
+
+    List<Transaction> getMyTransactions();
 }
