@@ -28,7 +28,7 @@ const UserEarnedByReferals = () => {
                         className="d-flex align-items-center justify-content-between flex-wrap">
                         <div>
                             <p className="text-muted mb-0">Заработано на рефералах</p>
-                            <h4 className="fw-semibold mt-1">{earned} &#8381;</h4>
+                            <h4 className="fw-semibold mt-1">{kopeykaToRuble(earned)} &#8381;</h4>
                         </div>
                         <div id="crm-conversion-ratio">
                             <Conversionratio/>

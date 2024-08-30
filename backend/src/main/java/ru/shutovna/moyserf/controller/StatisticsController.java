@@ -14,7 +14,6 @@ public class StatisticsController {
 
     @GetMapping("/advertisersCount")
     public int getAdvertisersCount()  {
-
         return statisticsService.getAdvertisersCount();
     }
 

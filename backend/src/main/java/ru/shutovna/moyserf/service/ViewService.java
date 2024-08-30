@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.shutovna.moyserf.controller.UserSiteKey;
 import ru.shutovna.moyserf.controller.ViewToken;
+import ru.shutovna.moyserf.error.AlreadyViewedException;
 import ru.shutovna.moyserf.error.InvalidViewException;
 import ru.shutovna.moyserf.error.SiteNotFoundException;
 import ru.shutovna.moyserf.model.*;
@@ -119,6 +120,19 @@ public class ViewService implements IViewService {
     @Override
     public ViewToken startView(int siteId) {
         User currentUser = userService.getCurrentUser();
+
+        //если есть просмотр за последние 24 часа
+        int siteViewTime = pricingStrategyFactory.getPricingStrategy().getSiteViewTime();
+        if (currentUser.getViews().stream().anyMatch(view -> {
+            Site s = view.getOrder().getSite();
+            boolean alreadyViewed = s.getId().equals(siteId) && view.getViewedAt().isAfter(LocalDateTime.now().minusHours(siteViewTime));
+            if (alreadyViewed) {
+                log.debug("Site {} already viewed", siteId);
+            }
+            return alreadyViewed;
+        })) {
+            throw new AlreadyViewedException("Site " + siteId + " already viewed");
+        }
 
         UserSiteKey key = new UserSiteKey(currentUser.getId(), siteId);
 

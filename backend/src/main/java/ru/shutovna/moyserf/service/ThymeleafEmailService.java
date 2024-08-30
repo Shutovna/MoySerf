@@ -48,6 +48,7 @@ public class ThymeleafEmailService implements EmailService {
             helper.setText(emailContent, true);
 
             javaMailSender.send(message);
+            log.info("Confirmation email sent to " + recipientEmail);
         } catch (Exception e) {
             log.warn("Failed to send confirmation email to " + recipientEmail);
             throw new EmailSendException(e);

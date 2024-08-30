@@ -58,6 +58,13 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
         return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
     }
 
+    @ExceptionHandler({ AlreadyViewedException.class })
+    public ResponseEntity<Object> handleAlreadyViewed(final RuntimeException ex, final WebRequest request) {
+        logger.error("400 Status Code", ex);
+        final GenericResponse bodyOfResponse = new GenericResponse(messages.getMessage("message.already.viewed", null, request.getLocale()), "Already viewed");
+        return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+    }
+
     // 401
     @ExceptionHandler({ BadCredentialsException.class })
     public ResponseEntity<Object> badCredentials(final RuntimeException ex, final WebRequest request) {

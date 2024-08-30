@@ -1,5 +1,5 @@
 import React, {Fragment, useEffect, useState} from "react";
-import {Card, Col, Row} from "react-bootstrap";
+import {Button, Card, Col, Row} from "react-bootstrap";
 import {Link} from "react-router-dom";
 import useSiteService from "../../services/SiteService.jsx";
 import useAvatarService from "../../services/AvatarService.jsx";
@@ -10,7 +10,7 @@ const SerfListPage = () => {
     const [sites, setSites] = useState(null)
     const {getAvatar} = useAvatarService();
 
-    useEffect(() => {
+    function refreshData() {
         findSitesForView().then((res) => {
             console.log(res.sites);
             setSites(res.sites);
@@ -18,6 +18,10 @@ const SerfListPage = () => {
             .catch((error) => {
                 console.log(error)
             })
+    }
+
+    useEffect(() => {
+        refreshData();
     }, []);
 
     return <Fragment>
@@ -30,6 +34,10 @@ const SerfListPage = () => {
                         </Card.Title>
                     </Card.Header>
                     <Card.Body>
+                        <Button onClick={refreshData} className="btn btn-success label-btn label-end mb-1">
+                            Обновить
+                            <i className="ri-thumb-up-line label-btn-icon ms-2"></i>
+                        </Button>
                         <div className="table-responsive">
                             <table className="table table-bordered text-nowrap">
                                 <thead>

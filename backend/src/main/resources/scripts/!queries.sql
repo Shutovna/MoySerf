@@ -10,3 +10,6 @@ where w.user_id = (select user_id from users where email='system@moyserf.ru');
 update wallets
 set sum=100*100
 where user_id = (select user_id from users where email='system@moyserf.ru');
+
+--Изменение времени просмотра всех сайтов на 24 часа назад
+update views set viewed_at = NOW() - INTERVAL '1 day';
