@@ -23,6 +23,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @Service
 @Transactional
 @Slf4j
+//todo Добавить несколько проверок токена
 public class ViewService implements IViewService {
     protected static final ConcurrentHashMap<UserSiteKey, List<ViewToken>> map = new ConcurrentHashMap<>();
 

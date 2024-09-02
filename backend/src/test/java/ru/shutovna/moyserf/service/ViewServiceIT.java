@@ -15,6 +15,7 @@ import ru.shutovna.moyserf.controller.ViewToken;
 import ru.shutovna.moyserf.error.InvalidViewException;
 import ru.shutovna.moyserf.error.SiteNotFoundException;
 import ru.shutovna.moyserf.model.*;
+import ru.shutovna.moyserf.payload.request.OrderRequest;
 import ru.shutovna.moyserf.repository.ViewRepository;
 
 import java.time.LocalDateTime;
@@ -79,6 +80,7 @@ class ViewServiceIT {
         testSite = new Site();
         testSite.setId(1);
         testSite.setUrl("http://example.com");
+        testSite.setOwner(testUser);
 
         testWallet = new Wallet();
         testWallet.setId(1);
@@ -101,8 +103,11 @@ class ViewServiceIT {
     @Test
     void testCreateViewSuccess() {
         View view = viewService.create(1);
+        Order order = orderService.createOrder(new OrderRequest(testSite.getId(), 100));
+        view.setOrder(order);
 
         assertNotNull(view);
+        assertNotNull(order);
         assertEquals(testUser, view.getUser());
         assertEquals(testSite, view.getOrder().getSite());
 

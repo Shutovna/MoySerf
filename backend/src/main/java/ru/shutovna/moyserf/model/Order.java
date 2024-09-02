@@ -1,6 +1,7 @@
 package ru.shutovna.moyserf.model;
 
 import javax.persistence.*;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -49,9 +50,9 @@ public class Order {
                 ", viewCount=" + viewCount +
                 ", createdAt=" + createdAt +
                 ", closed=" + closed +
-                ", user=" + user.getEmail() +
+                ", user=" + (user == null ? "" : user.getEmail()) +
                 ", site=" + site +
-                ", transaction=" + transaction.getId() +
+                ", transaction=" + (transaction == null ? "" : transaction.getId()) +
                 '}';
     }
 }

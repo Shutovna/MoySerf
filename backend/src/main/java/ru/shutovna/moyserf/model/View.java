@@ -36,10 +36,10 @@ public class View {
     public String toString() {
         return "View{" +
                 "id=" + id +
-                ", user=" + user.getEmail() +
-                ", order=" + order.getId() +
+                ", user=" + (user == null ? "" : user.getEmail()) +
+                ", order=" + (order == null ? "" : order.getId()) +
                 ", viewedAt=" + viewedAt +
-                ", transaction=" + transaction.getId() +
+                ", transaction=" + (transaction == null ? "" : transaction.getId()) +
                 '}';
     }
 }

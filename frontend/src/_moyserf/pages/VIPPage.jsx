@@ -46,9 +46,9 @@ const VIPPage = () => {
                                             <tr key={Math.random()}>
 
                                                 <td>Отчисления от рекламодателей</td>
-                                                <td>1 рубль от 25 рублей</td>
-                                                <td>2.5 рублей от 25 рублей</td>
-                                                <td>5 рублей от 25 рублей</td>
+                                                <td>1 рубль от 24 рублей</td>
+                                                <td>2.5 рублей от 24 рублей</td>
+                                                <td>4 рубля от 24 рублей</td>
                                             </tr>
 
 
@@ -122,21 +122,31 @@ const VIPPage = () => {
                                                 <td>раз в 10 часов</td>
                                                 <td>раз в 8 часов</td>
                                             </tr>
+                                            <tr key={Math.random()}>
+
+                                                <td>VIP заканчивается по достижении</td>
+                                                <td>600 рублей</td>
+                                                <td>1200 рублей</td>
+                                                <td>1800 рублей</td>
+                                            </tr>
 
 
                                             <tr key={Math.random()}>
                                                 <td></td>
                                                 <td><Button variant='' type="button"
                                                             className="btn btn-primary btn-wave">
-                                                    <i className="ri-filter-3-fill me-2 align-middle d-inline-block"></i>Купить VIP
+                                                    <i className="ri-filter-3-fill me-2 align-middle d-inline-block"></i>Купить
+                                                    VIP
                                                 </Button></td>
                                                 <td><Button variant='' type="button"
                                                             className="btn btn-primary btn-wave">
-                                                    <i className="ri-filter-3-fill me-2 align-middle d-inline-block"></i>Купить VIP
+                                                    <i className="ri-filter-3-fill me-2 align-middle d-inline-block"></i>Купить
+                                                    VIP
                                                 </Button></td>
                                                 <td><Button variant='' type="button"
                                                             className="btn btn-primary btn-wave">
-                                                    <i className="ri-filter-3-fill me-2 align-middle d-inline-block"></i>Купить VIP
+                                                    <i className="ri-filter-3-fill me-2 align-middle d-inline-block"></i>Купить
+                                                    VIP
                                                 </Button></td>
                                             </tr>
 

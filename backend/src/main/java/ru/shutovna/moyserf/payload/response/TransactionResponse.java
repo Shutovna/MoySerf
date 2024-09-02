@@ -12,14 +12,4 @@ public class TransactionResponse {
     private String type;
     private long sum;
     private LocalDateTime createdDate;
-
-    public static TransactionResponse fromTransaction(Transaction transaction) {
-        TransactionResponse response = new TransactionResponse();
-        response.setId(transaction.getId());
-        response.setDescription(transaction.getDescription());
-        response.setType(transaction.getType().toString());
-        response.setSum(transaction.getSum());
-        response.setCreatedDate(transaction.getCreatedAt());
-        return response;
-    }
 }
