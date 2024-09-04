@@ -4,25 +4,22 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.MessageSource;
-import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.*;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 import ru.shutovna.moyserf.model.*;
-import ru.shutovna.moyserf.payload.request.CreateSiteRequest;
 import ru.shutovna.moyserf.payload.request.OrderRequest;
 import ru.shutovna.moyserf.payload.response.ApiResponse;
 import ru.shutovna.moyserf.repository.OrderRepository;
 import ru.shutovna.moyserf.repository.SiteRepository;
 import ru.shutovna.moyserf.repository.TransactionRepository;
-import ru.shutovna.moyserf.repository.ViewRepository;
-import ru.shutovna.moyserf.service.*;
+import ru.shutovna.moyserf.service.IPricingStrategy;
+import ru.shutovna.moyserf.service.IPricingStrategyFactory;
+import ru.shutovna.moyserf.service.ViewServiceUtil;
 import ru.shutovna.moyserf.util.Constants;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Locale;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
@@ -37,13 +34,8 @@ public class ViewControllerIT extends BaseTestWithUser {
     private OrderRepository orderRepository;
 
     @Autowired
-    private IViewService viewService;
-
-    @Autowired
     private IPricingStrategyFactory pricingStrategyFactory;
 
-    @Autowired
-    private MessageSource messages;
     @Autowired
     private TransactionRepository transactionRepository;
 
@@ -55,7 +47,7 @@ public class ViewControllerIT extends BaseTestWithUser {
     }
 
     @Test
-    public void testView() throws InterruptedException {
+    public void testView() {
         User siteOwner = testUser;
 
         Site site = TestUtil.createSite(1);
@@ -63,7 +55,7 @@ public class ViewControllerIT extends BaseTestWithUser {
         siteRepository.save(site);
 
         Transaction orderTransaction = new Transaction();
-        orderTransaction.setSum(2000L * pricingStrategyFactory.getPricingStrategy().getSiteViewPrice());
+        orderTransaction.setSum(2000L * getPricingStrategy().getSiteViewPrice());
         orderTransaction.setDescription("desc");
         orderTransaction.setType(TransactionType.ORDER_SITE_VIEW);
         orderTransaction.setUser(siteOwner);
@@ -77,16 +69,17 @@ public class ViewControllerIT extends BaseTestWithUser {
         order.setCreatedAt(LocalDateTime.now());
         order.setClosed(false);
         order.setTransaction(orderTransaction);
-        order = orderRepository.save(order);
+        orderRepository.save(order);
 
         // Отправляем POST-запрос
-        HttpEntity<OrderRequest> entity = new HttpEntity<OrderRequest>(null, authHeaders);
+        HttpEntity<OrderRequest> entity = new HttpEntity<>(null, authHeaders);
         ResponseEntity<ApiResponse> response = restTemplate.exchange("/api/views/start-view?siteId=" + site.getId(),
                 HttpMethod.GET, entity, ApiResponse.class);
 
         // Проверяем статус ответа и сообщение
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         ApiResponse body = response.getBody();
+        assert body != null;
         String token = body.getMessage();
         assertThat(body).isNotNull();
         assertThat(body.isSuccess()).isEqualTo(true);
@@ -95,10 +88,10 @@ public class ViewControllerIT extends BaseTestWithUser {
         List<Order> orders = orderRepository.findAll();
         assertThat(orders.size()).isEqualTo(1);
 
-        Thread.sleep(5000L);
+        ViewServiceUtil.viewTokenMinusViewTime(siteOwner, site, getPricingStrategy().getSiteViewTime());
 
-        entity = new HttpEntity<OrderRequest>(null, authHeaders);
-        response = restTemplate.exchange(String.format("/api/views/end-view?siteId=%d&token=%s", site.getId(), token),
+        entity = new HttpEntity<>(null, authHeaders);
+        restTemplate.exchange(String.format("/api/views/end-view?siteId=%d&token=%s", site.getId(), token),
                 HttpMethod.GET, entity, ApiResponse.class);
 
         List<Transaction> transactions = transactionRepository.findAll();
@@ -107,28 +100,32 @@ public class ViewControllerIT extends BaseTestWithUser {
         Transaction dbOrderTransaction = transactions.get(0);
         assertThat(dbOrderTransaction.getType()).isEqualTo(TransactionType.ORDER_SITE_VIEW);
         assertThat(dbOrderTransaction.getUser()).isEqualTo(testUser);
-        assertThat(dbOrderTransaction.getSum()).isEqualTo(2000L * pricingStrategyFactory.getPricingStrategy().getSiteViewPrice());
+        assertThat(dbOrderTransaction.getSum()).isEqualTo(2000L * getPricingStrategy().getSiteViewPrice());
 
         Transaction dbUserTransaction = transactions.get(1);
         assertThat(dbUserTransaction.getType()).isEqualTo(TransactionType.USER_EARNED_SITE_VIEW);
-        assertThat(dbUserTransaction.getSum()).isEqualTo(pricingStrategyFactory.getPricingStrategy().getUserSiteViewPrice());
+        assertThat(dbUserTransaction.getSum()).isEqualTo(getPricingStrategy().getUserSiteViewPrice());
 
         Transaction dbSystemTransaction = transactions.get(2);
         assertThat(dbSystemTransaction.getType()).isEqualTo(TransactionType.SYSTEM_EARENED_SITE_VIEW);
-        assertThat(dbSystemTransaction.getSum()).isEqualTo(pricingStrategyFactory.getPricingStrategy().getSystemSiteViewPrice());
+        assertThat(dbSystemTransaction.getSum()).isEqualTo(getPricingStrategy().getSystemSiteViewPrice());
 
 
         testWallet = walletRepository.findById(testWallet.getId()).orElseThrow();
-        assertThat(testWallet.getSum()).isEqualTo(1000 * 100 + pricingStrategyFactory.getPricingStrategy().getUserSiteViewPrice());
+        assertThat(testWallet.getSum()).isEqualTo(1000 * 100 + getPricingStrategy().getUserSiteViewPrice());
 
         User systemUser = userRepository.findById(Constants.SYSTEM_USER_ID).orElseThrow();
         Wallet systemWallet = systemUser.getWallet();
-        assertThat(systemWallet.getSum()).isEqualTo(pricingStrategyFactory.getPricingStrategy().getSystemSiteViewPrice());
+        assertThat(systemWallet.getSum()).isEqualTo(getPricingStrategy().getSystemSiteViewPrice());
 
     }
 
+    private IPricingStrategy getPricingStrategy() {
+        return pricingStrategyFactory.getPricingStrategy();
+    }
+
     @Test
-    public void testViewWithReferal() throws InterruptedException {
+    public void testViewWithReferal() {
         User siteOwner = testUser;
 
         User systemUser = userRepository.findById(Constants.SYSTEM_USER_ID).orElseThrow();
@@ -145,7 +142,7 @@ public class ViewControllerIT extends BaseTestWithUser {
         siteRepository.save(site);
 
         Transaction orderTransaction = new Transaction();
-        IPricingStrategy pricingStrategy = pricingStrategyFactory.getPricingStrategy();
+        IPricingStrategy pricingStrategy = getPricingStrategy();
         orderTransaction.setSum(2000L * pricingStrategy.getSiteViewPrice());
         orderTransaction.setDescription("desc");
         orderTransaction.setType(TransactionType.ORDER_SITE_VIEW);
@@ -172,6 +169,7 @@ public class ViewControllerIT extends BaseTestWithUser {
         // Проверяем статус ответа и сообщение
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         ApiResponse body = response.getBody();
+        assert body != null;
         String token = body.getMessage();
         assertThat(body).isNotNull();
         assertThat(body.isSuccess()).isEqualTo(true);
@@ -180,10 +178,10 @@ public class ViewControllerIT extends BaseTestWithUser {
         List<Order> orders = orderRepository.findAll();
         assertThat(orders.size()).isEqualTo(1);
 
-        Thread.sleep(5000L);
+        ViewServiceUtil.viewTokenMinusViewTime(referalUser, site, getPricingStrategy().getSiteViewTime());
 
-        entity = new HttpEntity<OrderRequest>(null, authHeaders);
-        response = restTemplate.exchange(String.format("/api/views/end-view?siteId=%d&token=%s", site.getId(), token),
+        entity = new HttpEntity<>(null, authHeaders);
+        restTemplate.exchange(String.format("/api/views/end-view?siteId=%d&token=%s", site.getId(), token),
                 HttpMethod.GET, entity, ApiResponse.class);
 
         List<Transaction> transactions = transactionRepository.findAll();

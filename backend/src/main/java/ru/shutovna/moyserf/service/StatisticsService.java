@@ -96,4 +96,29 @@ public class StatisticsService implements IStatisticsService {
         Object result = query.getSingleResult();
         return result == null ? 0 : ((BigDecimal) result).longValue();
     }
+
+    @Override
+    public int getMyReferalsCount() {
+        return userService.getMyReferals().size();
+    }
+
+    @Override
+    public long getMyReferalsIncome() {
+        User currentUser = userService.getCurrentUser();
+        Query query = em.createNativeQuery(
+                "select sum(t.sum) sum\n" +
+                        "from transactions t\n" +
+                        "where t.type in('USER_EARNED_SITE_VIEW', 'USER_EARNED_REFERAL_SITE_VIEW')\n" +
+                        "and t.user_id in(select id from users where invitor_id = ?)");
+        query.setParameter(1, currentUser.getId());
+
+        Object result = query.getSingleResult();
+        return result == null ? 0 : ((BigDecimal) result).longValue();
+    }
+
+    @Override
+    public int getMyReferalsViewCount() {
+        List<User> referals = userService.getMyReferals();
+        return referals.stream().mapToInt(user -> user.getViews().size()).sum();
+    }
 }

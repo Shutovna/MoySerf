@@ -18,4 +18,10 @@ public interface IStatisticsService {
     long getUserEarned();
 
     long getUserEarnedByReferals();
+
+    int getMyReferalsCount();
+
+    long getMyReferalsIncome();
+
+    int getMyReferalsViewCount();
 }

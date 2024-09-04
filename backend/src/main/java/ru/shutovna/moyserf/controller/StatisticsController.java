@@ -13,17 +13,17 @@ public class StatisticsController {
     private IStatisticsService statisticsService;
 
     @GetMapping("/advertisersCount")
-    public int getAdvertisersCount()  {
+    public int getAdvertisersCount() {
         return statisticsService.getAdvertisersCount();
     }
 
     @GetMapping("/workersCount")
-    public int getWorkersCount()  {
+    public int getWorkersCount() {
         return statisticsService.getWorkersCount();
     }
 
     @GetMapping("/totalIncome")
-    public long getTotalIncome()  {
+    public long getTotalIncome() {
         return statisticsService.getTotalIncome();
     }
 
@@ -33,17 +33,32 @@ public class StatisticsController {
     }
 
     @GetMapping("/userViewCount")
-    public int getUserViewCount()  {
+    public int getUserViewCount() {
         return statisticsService.getUserViewCount();
     }
 
     @GetMapping("/userEarned")
-    public long getUserEarned()  {
+    public long getUserEarned() {
         return statisticsService.getUserEarned();
     }
 
     @GetMapping("/userEarnedByReferals")
-    public long getUserEarnedByReferals()  {
+    public long getUserEarnedByReferals() {
         return statisticsService.getUserEarnedByReferals();
+    }
+
+    @GetMapping("/myReferalsCount")
+    public int getMyReferalsCount() {
+        return statisticsService.getMyReferalsCount();
+    }
+
+    @GetMapping("/myReferalsIncome")
+    public long getMyReferalsIncome() {
+        return statisticsService.getMyReferalsIncome();
+    }
+
+    @GetMapping("/myReferalsVieewCount")
+    public long getMyReferalsViewCount() {
+        return statisticsService.getMyReferalsViewCount();
     }
 }
