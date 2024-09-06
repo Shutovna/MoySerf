@@ -1,9 +1,10 @@
 import {useEffect, useState} from "react";
 import useStatsService from "../../services/StatsService.jsx";
 import {Card, Row} from "react-bootstrap";
+import useUserStatsService from "../../services/UserStatsService.jsx";
 
 const MyReferalsCount = () => {
-    const {getMyReferalsCount} = useStatsService();
+    const {getMyReferalsCount} = useUserStatsService();
     const [referalsCount, setReferalsCount] = useState(0);
 
     useEffect(() => {

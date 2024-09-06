@@ -2,9 +2,10 @@ import {Card, Row} from "react-bootstrap";
 import useStatsService from "../../services/StatsService.jsx";
 import {useEffect, useState} from "react";
 import {kopeykaToRuble} from "../../util/Util.jsx";
+import useUserStatsService from "../../services/UserStatsService.jsx";
 
 const MyReferalsIncome = () => {
-    const {getMyReferalsIncome} = useStatsService();
+    const {getMyReferalsIncome} = useUserStatsService();
     const [income, setIncome] = useState(0);
 
     useEffect(() => {

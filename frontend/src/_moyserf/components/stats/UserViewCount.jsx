@@ -3,9 +3,10 @@ import {Totalcustomers} from "../../../container/dashboards/crm/crmdata.jsx";
 import {Link} from "react-router-dom";
 import useStatsService from "../../services/StatsService.jsx";
 import {useEffect, useState} from "react";
+import useUserStatsService from "../../services/UserStatsService.jsx";
 
 const UserViewCount = () => {
-    const {getUserViewCount} = useStatsService();
+    const {getUserViewCount} = useUserStatsService();
     const [viewCount, setViewCount] = useState(0);
 
     useEffect(() => {

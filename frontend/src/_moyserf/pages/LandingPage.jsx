@@ -14,6 +14,12 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import {GOOGLE_AUTH_URL} from "../constants/index.js";
 import Oauth2Links from "../auth/oauth2/OAuth2Links.jsx";
+import AdvertisersCount from "../components/stats/AdvertisersCount.jsx";
+import WorkersCount from "../components/stats/WorkersCount.jsx";
+import UserEarned from "../components/stats/UserEarned.jsx";
+import TotalIncome from "../components/stats/TotalIncome.jsx";
+import TotalReferalsIncome from "../components/stats/TotalReferalsIncome.jsx";
+import OnlineUsers from "../components/OnlineUsers.jsx";
 
 // import required modules
 
@@ -175,62 +181,19 @@ const LandingPage = ({ThemeChanger}) => {
                             <Col xl={12}>
                                 <div className="row justify-content-evenly">
                                     <Col xl={2} lg={4} md={6} sm={6} className="col-12 mb-3">
-                                        <div className="p-3 text-center rounded-2 bg-white border">
-                                            <span
-                                                className="mb-3 avatar avatar-lg avatar-rounded bg-primary-transparent">
-                                                <i className="fs-24 bx bx-spreadsheet"></i>
-                                            </span>
-                                            <h3 className="fw-semibold mb-0 text-dark">500+</h3>
-                                            <p className="mb-1 fs-14 op-7 text-muted ">
-                                                Рекламодателей
-                                            </p>
-                                        </div>
+                                        <AdvertisersCount/>
                                     </Col>
                                     <Col xl={2} lg={4} md={6} sm={6} className=" col-12 mb-3">
-                                        <div className="p-3 text-center rounded-2 bg-white border">
-                                            <span
-                                                className="mb-3 avatar avatar-lg avatar-rounded bg-primary-transparent">
-                                                <i className="fs-24 bx bx-user-plus"></i>
-                                            </span>
-                                            <h3 className="fw-semibold mb-0 text-dark">1600+</h3>
-                                            <p className="mb-1 fs-14 op-7 text-muted ">
-                                                Работников
-                                            </p>
-                                        </div>
+                                        <WorkersCount/>
                                     </Col>
                                     <Col xl={2} lg={4} md={6} sm={6} className=" col-12 mb-3">
-                                        <div className="p-3 text-center rounded-2 bg-white border">
-                                            <span
-                                                className="mb-3 avatar avatar-lg avatar-rounded bg-primary-transparent">
-                                                <i className="fs-24 bx bx-money"></i>
-                                            </span>
-                                            <h3 className="fw-semibold mb-0 text-dark">$45.8M</h3>
-                                            <p className="mb-1 fs-14 op-7 text-muted ">
-                                                Всего заработано
-                                            </p>
-                                        </div>
+                                        <TotalIncome/>
                                     </Col>
                                     <Col xl={2} lg={4} md={6} sm={6} className="col-12 mb-3">
-                                        <div className="p-3 text-center rounded-2 bg-white border">
-                                            <span
-                                                className="mb-3 avatar avatar-lg avatar-rounded bg-primary-transparent">
-                                                <i className="fs-24 bx bx-user-circle"></i>
-                                            </span>
-                                            <h3 className="fw-semibold mb-0 text-dark">$10.8M</h3>
-                                            <p className="mb-1 fs-14 op-7 text-muted ">
-                                                Выплат от рефералов
-                                            </p>
-                                        </div>
+                                        <TotalReferalsIncome/>
                                     </Col>
                                     <Col xl={2} lg={4} md={6} sm={6} className="col-12 mb-3">
-                                        <div className="p-3 text-center rounded-2 bg-white border">
-                                            <span
-                                                className="mb-3 avatar avatar-lg avatar-rounded bg-primary-transparent">
-                                                <i className="fs-24 bx bx-user-circle"></i>
-                                            </span>
-                                            <h3 className="fw-semibold mb-0 text-dark">236</h3>
-                                            <p className="mb-1 fs-14 op-7 text-muted ">Всего онлайн</p>
-                                        </div>
+                                        <OnlineUsers/>
                                     </Col>
                                 </div>
 

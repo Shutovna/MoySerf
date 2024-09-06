@@ -4,9 +4,10 @@ import {Link} from "react-router-dom";
 import useStatsService from "../../services/StatsService.jsx";
 import {useEffect, useState} from "react";
 import {kopeykaToRuble} from "../../util/Util.jsx";
+import useUserStatsService from "../../services/UserStatsService.jsx";
 
 const UserEarnedByReferals = () => {
-    const {getUserEarnedByReferals} = useStatsService();
+    const {getUserEarnedByReferals} = useUserStatsService();
     const [earned, setEarned] = useState(0);
 
     useEffect(() => {
