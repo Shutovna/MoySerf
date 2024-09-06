@@ -57,7 +57,7 @@ public class StatisticsController {
         return statisticsService.getMyReferalsIncome();
     }
 
-    @GetMapping("/myReferalsVieewCount")
+    @GetMapping("/myReferalsViewCount")
     public long getMyReferalsViewCount() {
         return statisticsService.getMyReferalsViewCount();
     }

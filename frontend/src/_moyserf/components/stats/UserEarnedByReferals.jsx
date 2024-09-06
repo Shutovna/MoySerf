@@ -1,5 +1,5 @@
 import {Card} from "react-bootstrap";
-import {Conversionratio, Totalcustomers, Totalrevenue} from "../../../container/dashboards/crm/crmdata.jsx";
+import {Conversionratio} from "../../../container/dashboards/crm/crmdata.jsx";
 import {Link} from "react-router-dom";
 import useStatsService from "../../services/StatsService.jsx";
 import {useEffect, useState} from "react";
@@ -19,9 +19,9 @@ const UserEarnedByReferals = () => {
         <Card.Body>
             <div className="d-flex align-items-top justify-content-between">
                 <div>
-                                                    <span className="avatar avatar-md avatar-rounded bg-success">
-                                                        <i className="ti ti-wave-square fs-16"></i>
-                                                    </span>
+                    <span className="avatar avatar-md avatar-rounded bg-success">
+                        <i className="ti ti-wave-square fs-16"></i>
+                    </span>
                 </div>
                 <div className="flex-fill ms-3">
                     <div
