@@ -12,6 +12,8 @@ import landingpage1 from "../../assets/images/myserf/austin-distel-VvAcrVa56fc-u
 // Import Swiper styles
 import 'swiper/css';
 import 'swiper/css/pagination';
+import {GOOGLE_AUTH_URL} from "../constants/index.js";
+import Oauth2Links from "../auth/oauth2/OAuth2Links.jsx";
 
 // import required modules
 
@@ -255,15 +257,7 @@ const LandingPage = ({ThemeChanger}) => {
 
                         <h2 className="fw-semibold mb-2">Зарегистрироваться через</h2>
                         <div className="btn-list text-center">
-                            <Button variant='light' className="btn btn-icon">
-                                <i className="ri-facebook-line fw-bold text-dark op-7"></i>
-                            </Button>
-                            <Button variant='light' className="btn btn-icon">
-                                <i className="ri-google-line fw-bold text-dark op-7"></i>
-                            </Button>
-                            <Button variant='light' className="btn btn-icon">
-                                <i className="ri-twitter-line fw-bold text-dark op-7"></i>
-                            </Button>
+                            <Oauth2Links/>
                         </div>
                         <div className="row justify-content-center mb-5">
                             <div className="col-xl-7">

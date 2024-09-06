@@ -137,7 +137,10 @@ const Signin = () => {
                                             to={`${import.meta.env.BASE_URL}auth/signup`}
                                             className="text-primary">Зарегистрируйтесь</Link></p>
                                     </div>
-                                    <Oauth2Links setShowSpinner={(val)=>setShowSpinner(val)} />
+                                    <div className="text-center my-3 authentication-barrier">
+                                        <span>ИЛИ</span>
+                                    </div>
+                                    <Oauth2Links setShowSpinner={(val) => setShowSpinner(val)}/>
                                 </Card.Body>
                             </Card>
                         </form>
