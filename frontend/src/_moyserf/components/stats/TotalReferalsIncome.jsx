@@ -1,5 +1,6 @@
 import useStatsService from "../../services/StatsService.jsx";
 import {useEffect, useState} from "react";
+import {kopeykaToRuble} from "../../util/Util.jsx";
 
 const TotalReferalsIncome = () => {
     const {getTotalReferalsIncome} = useStatsService();
@@ -16,7 +17,7 @@ const TotalReferalsIncome = () => {
                 className="mb-3 avatar avatar-lg avatar-rounded bg-primary-transparent">
                 <i className="fs-24 bx bx-user-circle"></i>
             </span>
-        <h3 className="fw-semibold mb-0 text-dark">{income} коп.</h3>
+        <h3 className="fw-semibold mb-0 text-dark">{kopeykaToRuble(income)}&#8381;</h3>
         <p className="mb-1 fs-14 op-7 text-muted ">
             Выплат от рефералов
         </p>

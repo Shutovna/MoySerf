@@ -23,7 +23,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
-@Sql("classpath:scripts/delete_all_data.sql")
+@Sql("classpath:scripts/удалить все данные.sql")
 public class OrderControllerIT extends BaseTestWithUser{
     @Autowired
     private SiteRepository siteRepository;

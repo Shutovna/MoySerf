@@ -17,7 +17,7 @@ const AdvertisersCount = () => {
                     className="mb-3 avatar avatar-lg avatar-rounded bg-primary-transparent">
                     <i className="fs-24 bx bx-spreadsheet"></i>
                 </span>
-            <h3 className="fw-semibold mb-0 text-dark">{advertisersCount}+</h3>
+            <h3 className="fw-semibold mb-0 text-dark">{advertisersCount}</h3>
             <p className="mb-1 fs-14 op-7 text-muted ">
                 Рекламодателей
             </p>
