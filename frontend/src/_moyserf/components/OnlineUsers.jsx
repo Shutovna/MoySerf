@@ -1,7 +1,7 @@
-import {useWebSocket} from "./WebSocketProvider.jsx";
+import {useUsersOnline} from "./UsersOnlineProvider.jsx";
 
-const WebSocketComponent = () => {
-    const {usersOnline} = useWebSocket();
+const OnlineUsers = () => {
+    const {usersOnline} = useUsersOnline();
     return (
         <div className="p-3 text-center rounded-2 bg-white border">
                                             <span
@@ -14,4 +14,4 @@ const WebSocketComponent = () => {
     );
 };
 
-export default WebSocketComponent;
+export default OnlineUsers;

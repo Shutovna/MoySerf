@@ -44,7 +44,7 @@ import {ToastContainer} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import SiteViewPage from "./_moyserf/pages/sites/SiteViewPage.jsx";
 import SettingsPage from "./_moyserf/pages/SettingsPage.jsx";
-import WebSocketProvider from "./_moyserf/components/WebSocketProvider.jsx";
+import UsersOnlineProvider from "./_moyserf/components/UsersOnlineProvider.jsx";
 
 ReactDOM.createRoot(document.getElementById('root')).render(
     <React.Fragment>
@@ -63,7 +63,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         />
         <BrowserRouter>
             <AuthProvider>
-                <WebSocketProvider>
+                <UsersOnlineProvider>
                     <React.Suspense fallback={<Loader/>}>
                         <Routes>
                             <Route path={`/view-site`} element={<SiteViewPage/>}/>
@@ -150,7 +150,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
                             </Route>
                         </Routes>
                     </React.Suspense>
-                </WebSocketProvider>
+                </UsersOnlineProvider>
             </AuthProvider>
         </BrowserRouter>
     </React.Fragment>

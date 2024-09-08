@@ -74,6 +74,14 @@ CREATE TABLE "transactions" (
 );
 ALTER TABLE "transactions" OWNER TO "postgres";
 
+CREATE TABLE "user_session" (
+                                "session_id" varchar(255) NOT NULL,
+                                "username" varchar(255),
+                                "loginTime" timestamp,
+                                "lastActiveTime" timestamp,
+                                PRIMARY KEY ("session_id")
+);
+
 CREATE TABLE "users" (
                          "id" int4 NOT NULL,
                          "email" varchar(255) COLLATE "pg_catalog"."default" NOT NULL,

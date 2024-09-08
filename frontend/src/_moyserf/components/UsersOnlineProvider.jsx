@@ -3,9 +3,9 @@ import SockJS from "sockjs-client";
 import {Client} from "@stomp/stompjs";
 import {useAuth} from "../auth/AuthProvider.jsx";
 
-const WebSocketContext = createContext(null);
+const UsersOnlineContext = createContext(null);
 
-const WebSocketProvider = ({children}) => {
+const UsersOnlineProvider = ({children}) => {
     const [usersOnline, setUsersOnline] = useState(0);
     const {user} = useAuth();
 
@@ -52,15 +52,15 @@ const WebSocketProvider = ({children}) => {
     }, []);
 
     return (
-        <WebSocketContext.Provider
+        <UsersOnlineContext.Provider
             value={{usersOnline}}>
             {children}
-        </WebSocketContext.Provider>
+        </UsersOnlineContext.Provider>
     );
 
 };
-export default WebSocketProvider;
+export default UsersOnlineProvider;
 
-export const useWebSocket = () => {
-    return useContext(WebSocketContext);
+export const useUsersOnline = () => {
+    return useContext(UsersOnlineContext);
 };
