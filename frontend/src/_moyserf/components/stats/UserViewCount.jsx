@@ -30,21 +30,8 @@ const UserViewCount = () => {
                             <p className="text-muted mb-0">Просмотрено Вами</p>
                             <h4 className="fw-semibold mt-1">{viewCount}</h4>
                         </div>
-                        <div id="crm-total-customers">
-                            <Totalcustomers/>
-                        </div>
                     </div>
-                    <div
-                        className="d-flex align-items-center justify-content-between mt-1">
-                        <div>
-                            <Link className="text-primary" to="#">View All<i
-                                className="ti ti-arrow-narrow-right ms-2 fw-semibold d-inline-block"></i></Link>
-                        </div>
-                        <div className="text-end">
-                            <p className="mb-0 text-success fw-semibold">+40%</p>
-                            <span className="text-muted op-7 fs-11">this month</span>
-                        </div>
-                    </div>
+
                 </div>
             </div>
         </Card.Body>

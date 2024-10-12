@@ -22,7 +22,7 @@ import TransactionsTable from "../components/TransactionsTable.jsx";
 import UserViewCount from "../components/stats/UserViewCount.jsx";
 import UserEarned from "../components/stats/UserEarned.jsx";
 import UserEarnedByReferals from "../components/stats/UserEarnedByReferals.jsx";
-import CurrentEvents from "../components/CurrentEvents.jsx";
+import WebSocketNotification from "../components/WebSocketNotificaton.jsx";
 
 const MainDashboardPage = () => {
     const {user} = useAuth();
@@ -84,7 +84,7 @@ const MainDashboardPage = () => {
 
             <div className="d-md-flex d-block align-items-center justify-content-between my-4 page-header-breadcrumb">
                 <div>
-                    <h1 className={"fw-semibold mb-3"}>Сайт для заработка на простых действиях в Интернете</h1>
+                    <h1 className={"fw-semibold mb-3 text-primary"}>Сайт для заработка на простых действиях в Интернете</h1>
                     <h2 className="fw-semibold fs-30 mb-0">Приветствуем Вас, {user.name}!</h2>
                 </div>
             </div>
@@ -93,7 +93,7 @@ const MainDashboardPage = () => {
 
             <Row>
                 <Col className="col-5">
-                    <div className="fs-6 mb-3">
+                    <div className="fs-5 mb-3">
                         <div className={"fw-semibold fs-5"}> Уважаемые участники проекта!</div>
                         <br/> Для того, чтобы проект мог существовать и
                         развиваться, в интересах всех пользователей мы должны понимать, что есть необходимость во
@@ -164,7 +164,7 @@ const MainDashboardPage = () => {
 
                 <Row>
                     <Col>
-                       <CurrentEvents/>
+                       {<WebSocketNotification/>}
                     </Col>
                     <Col className={"w-25"}>
                         <Card className="custom-card">
@@ -227,20 +227,6 @@ const MainDashboardPage = () => {
                                                         <div>
                                                             <p className="text-muted mb-0">Заработано на VIP</p>
                                                             <h4 className="fw-semibold mt-1">2,543</h4>
-                                                        </div>
-                                                        <div id="crm-total-deals">
-                                                            <Totaldeals/>
-                                                        </div>
-                                                    </div>
-                                                    <div
-                                                        className="d-flex align-items-center justify-content-between mt-1">
-                                                        <div>
-                                                            <Link className="text-warning" to="#">View All<i
-                                                                className="ti ti-arrow-narrow-right ms-2 fw-semibold d-inline-block"></i></Link>
-                                                        </div>
-                                                        <div className="text-end">
-                                                            <p className="mb-0 text-success fw-semibold">+19%</p>
-                                                            <span className="text-muted op-7 fs-11">this month</span>
                                                         </div>
                                                     </div>
                                                 </div>

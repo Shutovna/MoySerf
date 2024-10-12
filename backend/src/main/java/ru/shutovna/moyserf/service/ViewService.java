@@ -43,10 +43,12 @@ public class ViewService implements IViewService {
 
     private final MessageSource messages;
 
+    private final NotificationEventPublisher eventPublisher;
+
     public ViewService(IUserService userService, ViewRepository viewRepository,
                        ITransactionService transactionService, IPricingStrategyFactory pricingStrategyFactory,
                        ISiteService siteService, IOrderService orderService, IWalletService walletService,
-                       MessageSource messages) {
+                       MessageSource messages, NotificationEventPublisher eventPublisher) {
         this.userService = userService;
         this.viewRepository = viewRepository;
         this.transactionService = transactionService;
@@ -55,6 +57,7 @@ public class ViewService implements IViewService {
         this.orderService = orderService;
         this.walletService = walletService;
         this.messages = messages;
+        this.eventPublisher = eventPublisher;
     }
 
     @Override
@@ -171,10 +174,11 @@ public class ViewService implements IViewService {
                     log.warn(message);
                 } else {
                     //Создаем просмотр
-                    create(key.getSiteId());
+                    View view = create(key.getSiteId());
                     map.remove(key);
                     success = true;
                     message = "Successfully ended view " + key;
+                    eventPublisher.publishEvent(currentUser, view.getTransaction().getDescription());
                     log.info(message);
                 }
             } else {
