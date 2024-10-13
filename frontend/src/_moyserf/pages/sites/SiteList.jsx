@@ -125,7 +125,7 @@ const SiteList = () => {
                         <Card.Body className="card-body d-sm-flex align-items-center justify-content-between">
                             <Link to={`${import.meta.env.BASE_URL}cab/adv/add`}
                                   className="btn btn-success-light m-1">
-                                <i className="ri-eye-line me-2 align-middle d-inline-block"></i>+Добавить сайт</Link>
+                                <i className="ri-eye-line me-2 align-middle d-inline-block bx bx-news fs-24"></i>+Добавить сайт</Link>
                         </Card.Body>
                     </Card>
                 </Col>

@@ -19,9 +19,9 @@ const UserViewCount = () => {
         <Card.Body>
             <div className="d-flex align-items-top justify-content-between">
                 <div>
-                                                    <span className="avatar avatar-md avatar-rounded bg-primary">
-                                                        <i className="ti ti-users fs-16"></i>
-                                                    </span>
+                    <span className="avatar avatar-md avatar-rounded bg-primary">
+                        <i className="ti bx bxs-happy-heart-eyes fs-24"></i>
+                    </span>
                 </div>
                 <div className="flex-fill ms-3">
                     <div

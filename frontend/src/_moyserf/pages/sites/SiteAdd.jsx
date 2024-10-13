@@ -87,7 +87,7 @@ const SiteAdd = () => {
                                                     </Col>
                                                     <Col xl={12}>
                                                         <Form.Label htmlFor="site-url-add"
-                                                                    className="form-label">URL сайта</Form.Label>
+                                                                    className="form-label">URL сайта (реферальная ссылка)</Form.Label>
                                                         <Form.Control onChange={handleChange}
                                                                       value={values.url}
                                                                       name="url"

@@ -20,9 +20,9 @@ const UserEarned = () => {
         <Card.Body>
             <div className="d-flex align-items-top justify-content-between">
                 <div>
-                                                    <span className="avatar avatar-md avatar-rounded bg-secondary">
-                                                        <i className="ti ti-wallet fs-16"></i>
-                                                    </span>
+                    <span className="avatar avatar-md avatar-rounded bg-secondary">
+                        <i className="ti bx bx-credit-card fs-24"></i>
+                    </span>
                 </div>
                 <div className="flex-fill ms-3">
                     <div

@@ -5,31 +5,23 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-import java.time.Instant;
 
 @Getter
 @Setter
 @Entity
-@Table(name = "vips")
-public class Vip {
+@Table(name = "vips_actions")
+public class VipsAction {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
-
-   /* @Enumerated(EnumType.STRING)
-    private String type;
-*/
-    @NotNull
-    @Column(name = "started_at", nullable = false)
-    private Instant startedAt;
-
-    @Column(name = "ended_at")
-    private Instant endedAt;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "transaction_id", nullable = false)
     private Transaction transaction;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "vip_id")
+    private Vip vip;
 
 }

@@ -21,7 +21,7 @@ const UserEarnedByReferals = () => {
             <div className="d-flex align-items-top justify-content-between">
                 <div>
                     <span className="avatar avatar-md avatar-rounded bg-success">
-                        <i className="ti ti-wave-square fs-16"></i>
+                        <i className="ti bi bi-person-plus-fill fs-24"></i>
                     </span>
                 </div>
                 <div className="flex-fill ms-3">

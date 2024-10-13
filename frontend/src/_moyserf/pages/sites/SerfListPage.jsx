@@ -36,7 +36,7 @@ const SerfListPage = () => {
                     <Card.Body>
                         <Button onClick={refreshData} className="btn btn-success label-btn label-end mb-1">
                             Обновить
-                            <i className="ri-thumb-up-line label-btn-icon ms-2"></i>
+                            <i className="bx bx-refresh fs-30 label-btn-icon ms-2"></i>
                         </Button>
                         <div className="table-responsive">
                             <table className="table table-bordered text-nowrap">

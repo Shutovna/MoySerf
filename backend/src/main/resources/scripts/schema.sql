@@ -61,6 +61,12 @@ CREATE TABLE "sites" (
 );
 ALTER TABLE "sites" OWNER TO "postgres";
 
+CREATE TABLE "subscriptions" (
+                                 "id" int4 NOT NULL,
+                                 "transaction_id" int4 NOT NULL,
+                                 PRIMARY KEY ("id")
+);
+
 CREATE TABLE "transactions" (
                                 "id" int4 NOT NULL,
                                 "completed" bool,
@@ -131,7 +137,6 @@ CREATE TABLE "vips" (
                         "started_at" timestamp(6) NOT NULL,
                         "ended_at" timestamp(6),
                         "transaction_id" int4 NOT NULL,
-                        "user_id" int4 NOT NULL,
                         CONSTRAINT "vips_pkey" PRIMARY KEY ("id")
 );
 ALTER TABLE "vips" OWNER TO "postgres";
@@ -139,8 +144,6 @@ ALTER TABLE "vips" OWNER TO "postgres";
 CREATE TABLE "vips_actions" (
                                 "id" int4 NOT NULL,
                                 "vip_id" int4,
-                                "type" varchar(100) COLLATE "pg_catalog"."default" NOT NULL,
-                                "created_at" timestamp(6) NOT NULL,
                                 "transaction_id" int8 NOT NULL,
                                 CONSTRAINT "vips_actions_pkey" PRIMARY KEY ("id")
 );
@@ -163,6 +166,7 @@ ALTER TABLE "roles_privileges" ADD CONSTRAINT "fk_roles_previliges_previliges" F
 ALTER TABLE "roles_privileges" ADD CONSTRAINT "fk_roles_previliges_roles" FOREIGN KEY ("role_id") REFERENCES "roles" ("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
 ALTER TABLE "sites" ADD CONSTRAINT "fk_sites_users" FOREIGN KEY ("owner_id") REFERENCES "users" ("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
 ALTER TABLE "transactions" ADD CONSTRAINT "fk_transactions_users" FOREIGN KEY ("user_id") REFERENCES "users" ("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE "transactions" ADD CONSTRAINT "fk_transactions_subscriptions_1" FOREIGN KEY ("id") REFERENCES "subscriptions" ("transaction_id");
 ALTER TABLE "users" ADD CONSTRAINT "fk_users_users" FOREIGN KEY ("invitor_id") REFERENCES "users" ("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
 ALTER TABLE "users_roles" ADD CONSTRAINT "fk_users_roles_roles" FOREIGN KEY ("role_id") REFERENCES "roles" ("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
 ALTER TABLE "users_roles" ADD CONSTRAINT "fk_users_roles_users" FOREIGN KEY ("user_id") REFERENCES "users" ("id") ON DELETE NO ACTION ON UPDATE NO ACTION;

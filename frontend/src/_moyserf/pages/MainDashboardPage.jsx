@@ -218,7 +218,7 @@ const MainDashboardPage = () => {
                                             <div className="d-flex align-items-top justify-content-between">
                                                 <div>
                                                     <span className="avatar avatar-md avatar-rounded bg-warning">
-                                                        <i className="ti ti-briefcase fs-16"></i>
+                                                        <i className="ti bx bx-line-chart fs-24"></i>
                                                     </span>
                                                 </div>
                                                 <div className="flex-fill ms-3">

@@ -12,7 +12,7 @@ export const MENUITEMS = [
                 path: `${import.meta.env.BASE_URL}cab/main`
             },
             {
-                icon: (<i className="side-menu__icon bx bx-home"></i>),
+                icon: (<i className="side-menu__icon bx bx-glasses"></i>),
                 type: 'link',
                 Name: '',
                 active: false,
@@ -21,17 +21,9 @@ export const MENUITEMS = [
                 path: `${import.meta.env.BASE_URL}cab/learning`
             },
             {
-                title: "Заработать",
+                title: " Заработать",
                 icon: (
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="side-menu__icon"
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                    >
-                        <path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/>
-                    </svg>
+                    (<i className='side-menu__icon bx bx-credit-card'></i>)
                 ),
                 badge: '',
                 badgetxt: '12',
@@ -62,7 +54,7 @@ export const MENUITEMS = [
         menutitle: "",
         Items: [
             {
-                icon: (<i className="side-menu__icon bx bx-home"></i>),
+                icon: (<i className="side-menu__icon bx bx-line-chart"></i>),
                 type: 'link',
                 Name: '',
                 active: false,
@@ -74,7 +66,7 @@ export const MENUITEMS = [
                 class: 'badge bg-danger-transparent ms-2',
             },
             {
-                icon: (<i className="side-menu__icon bx bx-home"></i>),
+                icon: (<i className="side-menu__icon bx bx bx-news"></i>),
                 type: 'link',
                 Name: '',
                 active: false,
@@ -83,7 +75,7 @@ export const MENUITEMS = [
                 path: `${import.meta.env.BASE_URL}cab/adv`,
             },
             {
-                icon: (<i className="side-menu__icon bx bx-home"></i>),
+                icon: (<i className="side-menu__icon bx bx-ruble"></i>),
                 type: 'link',
                 Name: '',
                 active: false,
@@ -91,7 +83,7 @@ export const MENUITEMS = [
                 title: 'Кошелек',
                 path: `${import.meta.env.BASE_URL}cab/wallet`,
             }, {
-                icon: (<i className="side-menu__icon bx bx-home"></i>),
+                icon: (<i className="side-menu__icon bi bi-person-plus-fill"></i>),
                 type: 'link',
                 Name: '',
                 active: false,
@@ -100,7 +92,7 @@ export const MENUITEMS = [
                 path: `${import.meta.env.BASE_URL}cab/referals`,
             },
             {
-                icon: (<i className="side-menu__icon bx bx-home"></i>),
+                icon: (<i className="side-menu__icon bx bxs-pencil"></i>),
                 type: 'sub',
                 Name: '',
                 active: false,
@@ -128,7 +120,7 @@ export const MENUITEMS = [
                 ],
             },
             {
-                icon: (<i className="side-menu__icon bx bx-home"></i>),
+                icon: (<i className="side-menu__icon bx bx-chat"></i>),
                 type: 'link',
                 Name: '',
                 active: false,
@@ -139,7 +131,7 @@ export const MENUITEMS = [
                 class: 'badge bg-warning-transparent ms-2',
                 path: `${import.meta.env.BASE_URL}cab/chat`,
             }, {
-                icon: (<i className="side-menu__icon bx bx-home"></i>),
+                icon: (<i className="side-menu__icon bx bx-question-mark"></i>),
                 type: 'link',
                 Name: '',
                 active: false,
@@ -147,7 +139,7 @@ export const MENUITEMS = [
                 title: 'Частые вопросы',
                 path: `${import.meta.env.BASE_URL}cab/faq`,
             },{
-                icon: (<i className="side-menu__icon bx bx-home"></i>),
+                icon: (<i className="side-menu__icon bx bxs-cog"></i>),
                 type: 'link',
                 Name: '',
                 active: false,
@@ -155,7 +147,7 @@ export const MENUITEMS = [
                 title: 'Настройки',
                 path: `${import.meta.env.BASE_URL}cab/settings`,
             }, {
-                icon: (<i className="side-menu__icon bx bx-home"></i>),
+                icon: (<i className="side-menu__icon bx bxs-door-open"></i>),
                 type: 'link',
                 Name: '',
                 active: false,
